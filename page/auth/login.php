@@ -1,3 +1,40 @@
+<?php
+session_start();
+
+$conn = new PDO('mysql:host=localhost;dbname=bicf;charset=utf8;', 'root', '');
+
+if (isset($_POST['submit'])) {
+    if (!empty($_POST['username']) && !empty($_POST['password'])) {
+		$username = htmlspecialchars($_POST['username']);
+        $mdpSoumis = $_POST['password'];
+
+		$recupUser = $conn->prepare('SELECT * FROM user WHERE username = ?');
+        $recupUser->execute(array($username));
+
+		if($recupUser->rowCount() > 0)	{
+			$user = $recupUser->fetch();
+            $mdpDansLaBase = $user['password'];
+
+			// Vérifiez si le mot de passe soumis correspond au mot de passe dans la base de données
+            if (password_verify($mdpSoumis, $mdpDansLaBase)) {
+                $_SESSION['username'] = $pseudo;
+                $_SESSION['id'] = $user['id'];
+                header('location: ../screen/user/user_page.php');
+				exit();
+            } else {
+                echo "Mauvais identifiant ou mot de passe";
+            }
+        } else {
+            echo "Mauvais identifiant ou mot de passe";
+        }
+        
+    }else{
+        echo 'Veuillez remplir tous les champs';
+    }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,16 +71,16 @@
 											connecter</p>
 									</div>
 									<div class="card-body">
-										<form role="form">
+										<form action="" role="form" method="post">
 											<label>Nom d'utlisateur</label>
 											<div class="mb-3">
-												<input type="email" class="form-control" placeholder="Nom d'utlisateur"
-													aria-label="Email" aria-describedby="email-addon">
+												<input type="text" class="form-control" placeholder="Nom d'utlisateur"
+													aria-label="Email" aria-describedby="email-addon" name="username" autocomplete="off">
 											</div>
 											<label>Mot de passe</label>
 											<div class="mb-3">
 												<input type="password" class="form-control" placeholder="Mot de passe"
-													aria-label="Password" aria-describedby="password-addon">
+													aria-label="Password" aria-describedby="password-addon" name="password" autocomplete="off">
 											</div>
 
 											<div class="form-check form-switch ">
@@ -52,7 +89,7 @@
 												<label class="form-check-label" for="rememberMe">Se souvenir de moi</label>
 											</div>
 											<div class="text-center">
-												<button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0">Se connecter</button>
+												<button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0" name="submit">Se connecter</button>
 											</div>
 										</form>
 									</div>

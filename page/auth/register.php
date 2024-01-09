@@ -1,16 +1,15 @@
 <?php
 
-@include '../config.php';
+session_start();
 
-
+$conn = new PDO('mysql:host=localhost;dbname=bicf;charset=utf8;', 'root', '');
 
 if (isset($_POST['submit'])) {
-
-    $nom_user = $_POST['nom_user'];
-    $prenom_user = $_POST['prenom'];
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $cpassword = $_POST['cpassword'];
+    $nom_user = htmlspecialchars($_POST['nom_user']);
+    $prenom_user = htmlspecialchars($_POST['prenom']);
+    $username = htmlspecialchars($_POST['username']);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $cpassword = password_hash($_POST['cpassword'], PASSWORD_DEFAULT);
     $actorType = $_POST['user_type'];
     $sexe_user = $_POST['user_sexe'];
     $age_user = $_POST['user_age'];
@@ -38,24 +37,50 @@ if (isset($_POST['submit'])) {
     $email_user = $_POST['email'];
     $ActivZone_user = $_POST['proximity'];
 
-    $select = "SELECT * FROM user WHERE username = '$username' && password = '$password' ";
+    $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, user_type, actorStatu_user, budget_user, agentType_user, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $user_type, $actorStatu_user, $budget_user, $agentType_user, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
 
-    $result = mysqli_query($conn, $select);
+    $recupUser = $conn->prepare('SELECT * FROM user WHERE nom_user = ? AND prenom_user = ? AND username = ? AND password = ? AND actorType = ? AND sexe_user = ? AND age_user = ? AND socialStatus_user = ? AND entreSize = ? AND Servtype = ? AND orgaType = ? AND orgaType2 = ? AND comType = ? AND menaType = ? AND menaStat = ? AND user_type = ? AND actorStatu_user = ? AND budget_user = ? AND agentType_user = ? AND activSector_user = ? AND indus_user = ? AND bat_user = ? AND comm_user = ? AND serv_user = ? AND pays_user = ? AND tel_user = ? AND local_user = ? AND adress_user = ? AND email_user = ? AND ActivZone_user = ?');
+    $recupUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $user_type, $actorStatu_user, $budget_user, $agentType_user, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
 
-    if (mysqli_num_rows($result) > 0) {
-
-        $error[] = "Ce nom d'utlisateur exite déja !";
-    } else {
-        if ($password != $cpassword) {
-            $error[] = "Les deux mot de passes de correspondent pas !";
-        } else {
-            $insert = "INSERT INTO user (nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType,  menaType, menaStat, user_type, actorStatu_user, budget_user, agentType_user, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) 
-            VALUES ('$nom_user', '$prenom_user', '$username', '$password', '$actorType', '$sexe_user', '$age_user', '$socialStatus_user', '$entreSize', '$Servtype', '$orgaType', '$orgaType2', '$comType',  '$menaType', '$menaStat', '$user_type', '$actorStatu_user', '$budget_user', '$agentType_user', '$activSector_user', '$indus_user', '$bat_user', '$comm_user', '$serv_user', '$pays_user', '$tel_user', '$local_user', '$adress_user', '$email_user', '$ActivZone_user')";
-            mysqli_query($conn, $insert);
-            header('location:login.php');
-        };
+    if ($recupUser->rowCount() > 0) {
+        $userData = $recupUser->fetch();
+        $_SESSION['nom_user'] = $userData['nom_user'];
+        $_SESSION['prenom_user'] = $userData['prenom_user'];
+        $_SESSION['username'] = $userData['username'];
+        $_SESSION['password'] = $userData['password'];
+        $_SESSION['actorType'] = $userData['actorType'];
+        $_SESSION['sexe_user'] = $userData['sexe_user'];
+        $_SESSION['age_user'] = $userData['age_user'];
+        $_SESSION['socialStatus_user'] = $userData['socialStatus_user'];
+        $_SESSION['entreSize'] = $userData['entreSize'];
+        $_SESSION['Servtype'] = $userData['Servtype'];
+        $_SESSION['orgaType'] = $userData['orgaType'];
+        $_SESSION['orgaType2'] = $userData['orgaType2'];
+        $_SESSION['comType'] = $userData['comType'];
+        $_SESSION['menaType'] = $userData['menaType'];
+        $_SESSION['menaStat'] = $userData['menaStat'];
+        $_SESSION['user_type'] = $userData['user_type'];
+        $_SESSION['actorStatu_user'] = $userData['actorStatu_user'];
+        $_SESSION['budget_user'] = $userData['budget_user'];
+        $_SESSION['agentType_user'] = $userData['agentType_user'];
+        $_SESSION['activSector_user'] = $userData['activSector_user'];
+        $_SESSION['indus_user'] = $userData['indus_user'];
+        $_SESSION['bat_user'] = $userData['bat_user'];
+        $_SESSION['comm_user'] = $userData['comm_user'];
+        $_SESSION['serv_user'] = $userData['serv_user'];
+        $_SESSION['pays_user'] = $userData['pays_user'];
+        $_SESSION['tel_user'] = $userData['tel_user'];
+        $_SESSION['local_user'] = $userData['local_user'];
+        $_SESSION['adress_user'] = $userData['adress_user'];
+        $_SESSION['email_user'] = $userData['email_user'];
+        $_SESSION['ActivZone_user'] = $userData['ActivZone_user'];
+        $_SESSION['id'] = $userData['id'];
     }
-};
+
+    header('location: login.php');
+    exit();
+}
 
 
 ?>
