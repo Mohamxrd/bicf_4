@@ -1,8 +1,8 @@
 <?php
 
-session_start();
+@include('../config.php');
 
-$conn = new PDO('mysql:host=localhost;dbname=bicf;charset=utf8;', 'root', '');
+$errorMsg = '';
 
 if (isset($_POST['submit'])) {
     $nom_user = htmlspecialchars($_POST['nom_user']);

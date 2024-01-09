@@ -1,36 +1,39 @@
 <?php
-session_start();
 
-$conn = new PDO('mysql:host=localhost;dbname=bicf;charset=utf8;', 'root', '');
+@include('../config.php');
+
+$errorMsg = '';
 
 if (isset($_POST['submit'])) {
-    if (!empty($_POST['username']) && !empty($_POST['password'])) {
+	if (!empty($_POST['username']) && !empty($_POST['password'])) {
 		$username = htmlspecialchars($_POST['username']);
-        $mdpSoumis = $_POST['password'];
+		$mdpSoumis = $_POST['password'];
 
 		$recupUser = $conn->prepare('SELECT * FROM user WHERE username = ?');
-        $recupUser->execute(array($username));
+		$recupUser->execute(array($username));
 
-		if($recupUser->rowCount() > 0)	{
+		if ($recupUser->rowCount() > 0) {
 			$user = $recupUser->fetch();
-            $mdpDansLaBase = $user['password'];
+			$mdpDansLaBase = $user['password'];
 
 			// Vérifiez si le mot de passe soumis correspond au mot de passe dans la base de données
-            if (password_verify($mdpSoumis, $mdpDansLaBase)) {
-                $_SESSION['username'] = $pseudo;
-                $_SESSION['id'] = $user['id'];
-                header('location: ../screen/user/user_page.php');
+			if (password_verify($mdpSoumis, $mdpDansLaBase)) {
+				$_SESSION['username'] = $pseudo;
+				$_SESSION['id'] = $user['id'];
+
+				if()
+
+				header('location: ../screen/user/user_page.php');
 				exit();
-            } else {
-                echo "Mauvais identifiant ou mot de passe";
-            }
-        } else {
-            echo "Mauvais identifiant ou mot de passe";
-        }
-        
-    }else{
-        echo 'Veuillez remplir tous les champs';
-    }
+			} else {
+				$errorMsg = "Mauvais identifiant ou mot de passe";
+			}
+		} else {
+			$errorMsg = "Mauvais identifiant ou mot de passe";
+		}
+	} else {
+		$errorMsg = 'Veuillez remplir tous les champs';
+	}
 }
 ?>
 
@@ -45,7 +48,7 @@ if (isset($_POST['submit'])) {
 
 
 	<link rel="stylesheet" type="text/css" href="../../css/util.css">
-	<link rel="stylesheet" type="text/css" href="../../css/main.css">
+	<link rel="stylesheet" type="text/css" href="../../css/main2.css">
 
 	<link href="../../css/nucleo-icons.css" rel="stylesheet" />
 	<link href="../../css/nucleo-svg.css" rel="stylesheet" />
@@ -74,18 +77,22 @@ if (isset($_POST['submit'])) {
 										<form action="" role="form" method="post">
 											<label>Nom d'utlisateur</label>
 											<div class="mb-3">
-												<input type="text" class="form-control" placeholder="Nom d'utlisateur"
-													aria-label="Email" aria-describedby="email-addon" name="username" autocomplete="off">
+												<input type="text" class="form-control" placeholder="Nom d'utlisateur" aria-label="Email" aria-describedby="email-addon" name="username" autocomplete="off">
 											</div>
+											<?php
+											
+											if (!empty($errorMsg)) {
+												echo '<div class="error-msg">' . $errorMsg . '</div>';
+											}
+											?>
+
 											<label>Mot de passe</label>
 											<div class="mb-3">
-												<input type="password" class="form-control" placeholder="Mot de passe"
-													aria-label="Password" aria-describedby="password-addon" name="password" autocomplete="off">
+												<input type="password" class="form-control" placeholder="Mot de passe" aria-label="Password" aria-describedby="password-addon" name="password" autocomplete="off">
 											</div>
 
 											<div class="form-check form-switch ">
-												<input class="form-check-input" type="checkbox" id="rememberMe"
-													checked="">
+												<input class="form-check-input" type="checkbox" id="rememberMe" checked="">
 												<label class="form-check-label" for="rememberMe">Se souvenir de moi</label>
 											</div>
 											<div class="text-center">
@@ -94,16 +101,16 @@ if (isset($_POST['submit'])) {
 										</form>
 									</div>
 
+
+
 									<div class="card-footer text-center ">
 										<p class="text-sm mx-auto m-0">
 											Mot de passe oublié ?
-											<a href="javascript:;"
-												class="text-info text-gradient font-weight-bold ">Cliquez ici</a>
+											<a href="javascript:;" class="text-info text-gradient font-weight-bold ">Cliquez ici</a>
 										</p>
 										<p class="mb-4 text-sm mx-auto m-0">
 											Vouys n'avez pas de compte ?
-											<a href="register.php"
-												class="text-info text-gradient font-weight-bold">Créer un compte</a>
+											<a href="register.php" class="text-info text-gradient font-weight-bold">Créer un compte</a>
 										</p>
 									</div>
 
@@ -111,8 +118,7 @@ if (isset($_POST['submit'])) {
 							</div>
 							<div class="col-md-6">
 								<div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
-									<div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
-										style="background-image:url('../../images/bg-02.jpg')"></div>
+									<div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image:url('../../images/bg-02.jpg')"></div>
 								</div>
 							</div>
 						</div>
