@@ -14,16 +14,27 @@ if (isset($_POST['submit'])) {
 
 		if ($recupUser->rowCount() > 0) {
 			$user = $recupUser->fetch();
+
 			$mdpDansLaBase = $user['password'];
 
 			// Vérifiez si le mot de passe soumis correspond au mot de passe dans la base de données
 			if (password_verify($mdpSoumis, $mdpDansLaBase)) {
-				$_SESSION['username'] = $pseudo;
-				$_SESSION['id'] = $user['id'];
 
-				if()
+				if ($user['user_type'] == 'Demandeur' || $user['user_type'] == 'Fournisseur' || $user['user_type'] == 'Livreur' || $user['user_type'] == 'investisseur') {
+					$_SESSION['username'] = $user['username'];
+					$_SESSION['nom_user'] = $user['nom_user'];
+					header('location: ../screen/user/user_page.php');
+				} elseif ($user['user_type'] == 'Agent') {
+					$_SESSION['username'] = $user['username'];
+					$_SESSION['nom_user'] = $user['nom_user'];
+					header('location: ../screen/dashbord/admin.php');
+				}
 
-				header('location: ../screen/user/user_page.php');
+
+
+
+
+
 				exit();
 			} else {
 				$errorMsg = "Mauvais identifiant ou mot de passe";
@@ -77,10 +88,10 @@ if (isset($_POST['submit'])) {
 										<form action="" role="form" method="post">
 											<label>Nom d'utlisateur</label>
 											<div class="mb-3">
-												<input type="text" class="form-control" placeholder="Nom d'utlisateur" aria-label="Email" aria-describedby="email-addon" name="username" autocomplete="off">
+												<input type="text" class="form-control" placeholder="Nom d'utlisateur" aria- label="Email" aria-describedby="email-addon" name="username" autocomplete="off">
 											</div>
 											<?php
-											
+
 											if (!empty($errorMsg)) {
 												echo '<div class="error-msg">' . $errorMsg . '</div>';
 											}

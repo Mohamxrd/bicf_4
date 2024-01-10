@@ -1,12 +1,27 @@
+<?php
+@include('../../config.php');
+
+session_start();
+
+if(!isset($_SESSION['nom_user'])){
+    header('location: ../../auth/login.php');
+}
+
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dashboard</title>
-    <link rel="stylesheet" href="../../../css/main.css">
-    <link rel="stylesheet" type="text/css" href="../../css/main.css">
+    <title>User page</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/main2.css">
+   
 
     <link href="../../css/nucleo-icons.css" rel="stylesheet" />
     <link href="../../css/nucleo-svg.css" rel="stylesheet" />
@@ -18,7 +33,7 @@
     <div class="container_admin">
         <div class="content">
             <h3>Salut, <span>User</span></h3>
-            <h1>Bienvenu <span>UserName</span></h1>
+            <h1>Bienvenu <span><?php echo $_SESSION['nom_user'] ?></span></h1>
             <p>Ceci est la page de d'un utlisateur</p>
             <a href="../../auth/login.php" class="btn">Se connecter</a>
             <a href="../../auth/register.php" class="btn">Créer un compte</a>

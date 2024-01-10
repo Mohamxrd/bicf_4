@@ -208,7 +208,7 @@ userTypeSelect.addEventListener("change", (event) => {
   const selectedOption = event.target.value;
 
   switch (selectedOption) {
-    case "option1":
+    case "Personne physique":
       showInputFields1(
         "block",
         "block",
@@ -222,7 +222,7 @@ userTypeSelect.addEventListener("change", (event) => {
         "none"
       );
       break;
-    case "option2":
+    case "Personne morale":
       showInputFields1(
         "none",
         "none",
@@ -236,7 +236,7 @@ userTypeSelect.addEventListener("change", (event) => {
         "none"
       );
       break;
-    case "option3":
+    case "Service public":
       showInputFields1(
         "none",
         "none",
@@ -250,7 +250,7 @@ userTypeSelect.addEventListener("change", (event) => {
         "none"
       );
       break;
-    case "option4":
+    case "Organisme":
       showInputFields1(
         "none",
         "none",
@@ -264,7 +264,7 @@ userTypeSelect.addEventListener("change", (event) => {
         "none"
       );
       break;
-    case "option5":
+    case "Comunauté":
       showInputFields1(
         "none",
         "none",
@@ -278,7 +278,7 @@ userTypeSelect.addEventListener("change", (event) => {
         "none"
       );
       break;
-    case "option6":
+    case "Menage":
       showInputFields1(
         "none",
         "none",
@@ -319,19 +319,19 @@ accountType.addEventListener("change", (event) => {
 
   // Afficher ou masquer les éléments en fonction de la valeur sélectionnée
   switch (selectedOption) {
-    case "option1":
+    case "Demandeur":
       showInputFields2("none", "none", "none", "none");
       break;
-    case "option2":
+    case "Fournisseur":
       showInputFields2("block", "none", "none", "none");
       break;
-    case "option3":
+    case "Livreur":
       showInputFields2("none", "block", "none", "none");
       break;
-    case "option4":
+    case "investisseur":
       showInputFields2("none", "none", "block", "none");
       break;
-    case "option5":
+    case "Agent":
       showInputFields2("none", "none", "none", "block");
       break;
     default:
@@ -374,16 +374,16 @@ sectorActivitySelector.addEventListener("change", (event) => {
 
   // Show the relevant selector based on the selected option
   switch (selectedOption) {
-    case "option1":
+    case "Industrie":
       showInputFields(industrySelector, "block");
       break;
-    case "option2":
+    case "Construction":
       showInputFields(buildingTypeInput, "block");
       break;
-    case "option3":
+    case "Commerce":
       showInputFields(commerceSectorSelector, "block");
       break;
-    case "option4":
+    case "Service":
       showInputFields(transportSectorSelector, "block");
       break;
     default:
@@ -399,7 +399,7 @@ fetch("https://restcountries.com/v3.1/all")
 
     // Ajouter la Côte d'Ivoire en tant que première option
     const optionIvoryCoast = document.createElement("option");
-    optionIvoryCoast.value = "option1";
+    optionIvoryCoast.value = "Cote d'ivoire";
     optionIvoryCoast.textContent = "Côte d'Ivoire";
     countryDropdown.appendChild(optionIvoryCoast);
 
@@ -440,4 +440,17 @@ function populateCountryDropdown() {
 }
 
 populateCountryDropdown();
+
+
+
+function clearOptionValues(inputId) {
+  const selectElement = document.getElementById(inputId);
+  const options = selectElement.options;
+
+  for (let i = 0; i < options.length; i++) {
+    options[i].value = '';
+  }
+}
+
+
 

@@ -6,6 +6,8 @@
  session_unset();
  session_destroy();
 
+ $_SESSION = array();
+
  header('location:auth/login.php');
 
 ?>

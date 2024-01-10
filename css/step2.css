@@ -298,11 +298,11 @@ a:hover {
 .input_wrap label span{
     color: crimson;
 }
-.error_msg{
-    color: crimson;
-    font-size: 15px;
-    text-align: center;
-    display: none;
+.error-msg{
+    color: crimson ;
+    font-size: 15px ;
+    text-align: center ;
+    display: none ;
 }
 .pass_error{
     color: crimson;
@@ -315,4 +315,10 @@ a:hover {
     font-size: 15px;
     text-align: center;
     display: none;
+}
+.error-message{
+	color: crimson ;
+    font-size: 15px ;
+    text-align: center ;
+	margin: 10px 0;
 }

@@ -1,85 +1,65 @@
 <?php
 
+
 @include('../config.php');
 
 $errorMsg = '';
 
 if (isset($_POST['submit'])) {
-    $nom_user = htmlspecialchars($_POST['nom_user']);
-    $prenom_user = htmlspecialchars($_POST['prenom']);
+
+
+
     $username = htmlspecialchars($_POST['username']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $cpassword = password_hash($_POST['cpassword'], PASSWORD_DEFAULT);
-    $actorType = $_POST['user_type'];
-    $sexe_user = $_POST['user_sexe'];
-    $age_user = $_POST['user_age'];
-    $socialStatus_user = $_POST['user_status'];
-    $entreSize = $_POST['user_comp_size'];
-    $Servtype = $_POST['user_serv'];
-    $orgaType = $_POST['user_orgtyp1'];
-    $orgaType2 = $_POST['user_orgtyp2'];
-    $comType = $_POST['user_com'];
-    $menaType = $_POST['user_mena1'];
-    $menaStat = $_POST['user_mena2'];
-    $user_type = $_POST['account_type'];
-    $actorStatu_user = $_POST['actor_type'];
-    $budget_user = $_POST['actor_budg'];
-    $agentType_user = $_POST['agent_account'];
-    $activSector_user = $_POST['sector_activity'];
-    $indus_user = $_POST['industry'];
-    $bat_user = $_POST['building_type'];
-    $comm_user = $_POST['commerce_sector'];
-    $serv_user = $_POST['transport_sector'];
-    $pays_user = $_POST['country'];
-    $tel_user = $_POST['phone'];
-    $local_user = $_POST['local'];
-    $adress_user = $_POST['adress_geo'];
-    $email_user = $_POST['email'];
-    $ActivZone_user = $_POST['proximity'];
 
-    $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, user_type, actorStatu_user, budget_user, agentType_user, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-    $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $user_type, $actorStatu_user, $budget_user, $agentType_user, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
+    $checkUsername = $conn->prepare('SELECT * FROM user WHERE username = ?');
+    $checkUsername->execute([$username]);
 
-    $recupUser = $conn->prepare('SELECT * FROM user WHERE nom_user = ? AND prenom_user = ? AND username = ? AND password = ? AND actorType = ? AND sexe_user = ? AND age_user = ? AND socialStatus_user = ? AND entreSize = ? AND Servtype = ? AND orgaType = ? AND orgaType2 = ? AND comType = ? AND menaType = ? AND menaStat = ? AND user_type = ? AND actorStatu_user = ? AND budget_user = ? AND agentType_user = ? AND activSector_user = ? AND indus_user = ? AND bat_user = ? AND comm_user = ? AND serv_user = ? AND pays_user = ? AND tel_user = ? AND local_user = ? AND adress_user = ? AND email_user = ? AND ActivZone_user = ?');
-    $recupUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $user_type, $actorStatu_user, $budget_user, $agentType_user, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
+    if ($checkUsername->rowCount() > 0) {
+        // Le nom d'utilisateur existe déjà, afficher un message d'erreur
+        $errorMsg = "Le nom d'utilisateur existe déjà !";
+    } else {
+        try {
+            $nom_user = htmlspecialchars($_POST['nom_user']);
+            $prenom_user = htmlspecialchars($_POST['prenom']);
+            $username = htmlspecialchars($_POST['username']);
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $cpassword = password_hash($_POST['cpassword'], PASSWORD_DEFAULT);
+            $actorType = $_POST['user_type'];
+            $sexe_user = $_POST['user_sexe'];
+            $age_user = $_POST['user_age'];
+            $socialStatus_user = $_POST['user_status'];
+            $entreSize = $_POST['user_comp_size'];
+            $Servtype = $_POST['user_serv'];
+            $orgaType = $_POST['user_orgtyp1'];
+            $orgaType2 = $_POST['user_orgtyp2'];
+            $comType = $_POST['user_com'];
+            $menaType = $_POST['user_mena1'];
+            $menaStat = $_POST['user_mena2'];
+            $user_type = $_POST['account_type'];
+            $actorStatu_user = $_POST['actor_type'];
+            $budget_user = $_POST['actor_budg'];
+            $agentType_user = $_POST['agent_account'];
+            $activSector_user = $_POST['sector_activity'];
+            $indus_user = $_POST['industry'];
+            $bat_user = $_POST['building_type'];
+            $comm_user = $_POST['commerce_sector'];
+            $serv_user = $_POST['transport_sector'];
+            $pays_user = $_POST['country'];
+            $tel_user = $_POST['phone'];
+            $local_user = $_POST['local'];
+            $adress_user = $_POST['adress_geo'];
+            $email_user = $_POST['email'];
+            $ActivZone_user = $_POST['proximity'];
 
-    if ($recupUser->rowCount() > 0) {
-        $userData = $recupUser->fetch();
-        $_SESSION['nom_user'] = $userData['nom_user'];
-        $_SESSION['prenom_user'] = $userData['prenom_user'];
-        $_SESSION['username'] = $userData['username'];
-        $_SESSION['password'] = $userData['password'];
-        $_SESSION['actorType'] = $userData['actorType'];
-        $_SESSION['sexe_user'] = $userData['sexe_user'];
-        $_SESSION['age_user'] = $userData['age_user'];
-        $_SESSION['socialStatus_user'] = $userData['socialStatus_user'];
-        $_SESSION['entreSize'] = $userData['entreSize'];
-        $_SESSION['Servtype'] = $userData['Servtype'];
-        $_SESSION['orgaType'] = $userData['orgaType'];
-        $_SESSION['orgaType2'] = $userData['orgaType2'];
-        $_SESSION['comType'] = $userData['comType'];
-        $_SESSION['menaType'] = $userData['menaType'];
-        $_SESSION['menaStat'] = $userData['menaStat'];
-        $_SESSION['user_type'] = $userData['user_type'];
-        $_SESSION['actorStatu_user'] = $userData['actorStatu_user'];
-        $_SESSION['budget_user'] = $userData['budget_user'];
-        $_SESSION['agentType_user'] = $userData['agentType_user'];
-        $_SESSION['activSector_user'] = $userData['activSector_user'];
-        $_SESSION['indus_user'] = $userData['indus_user'];
-        $_SESSION['bat_user'] = $userData['bat_user'];
-        $_SESSION['comm_user'] = $userData['comm_user'];
-        $_SESSION['serv_user'] = $userData['serv_user'];
-        $_SESSION['pays_user'] = $userData['pays_user'];
-        $_SESSION['tel_user'] = $userData['tel_user'];
-        $_SESSION['local_user'] = $userData['local_user'];
-        $_SESSION['adress_user'] = $userData['adress_user'];
-        $_SESSION['email_user'] = $userData['email_user'];
-        $_SESSION['ActivZone_user'] = $userData['ActivZone_user'];
-        $_SESSION['id'] = $userData['id'];
+            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, user_type, actorStatu_user, budget_user, agentType_user, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $user_type, $actorStatu_user, $budget_user, $agentType_user, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
+
+            header('location: login.php');
+            exit();
+        } catch (PDOException $e) {
+            $errorMsg = "Erreur lors de l'insertion dans la base de données : " . $e->getMessage();
+        }
     }
-
-    header('location: login.php');
-    exit();
 }
 
 
@@ -162,7 +142,14 @@ if (isset($_POST['submit'])) {
                         </div>
                         <div class="pass_error">Les mots de passe ne correspondent pas</div>
                         <div class="pass_lengh">Votre mot de passe doit contenir au moins 8 carractères et une majuscule</div>
-                        <div class="error_msg">Veillez remplire tout les champs obligatoires</div>
+                        <div class="error-msg">Veillez remplire tout les champs obligatoires</div>
+
+                        <?php
+
+                        if (!empty($errorMsg)) {
+                            echo '<div class="error-message">' . $errorMsg . '</div>';
+                        }
+                        ?>
 
                     </div>
 
@@ -174,102 +161,102 @@ if (isset($_POST['submit'])) {
                         <div class="input_wrap">
                             <label for="user_type">Type d'acteur</label>
                             <select name="user_type" id="user_type" class="input">
-                                <option selected value="option1">Personne physique</option>
-                                <option value="option2">Personne morale</option>
-                                <option value="option3">Service public</option>
-                                <option value="option4">Organisme</option>
-                                <option value="option5">Comunauté</option>
-                                <option value="option6">Menage</option>
+                                <option selected value="Personne physique">Personne physique</option>
+                                <option value="Personne morale">Personne morale</option>
+                                <option value="Service public">Service public</option>
+                                <option value="Organisme">Organisme</option>
+                                <option value="Comunauté">Comunauté</option>
+                                <option value="Menage">Menage</option>
                             </select>
                         </div>
 
                         <div class="input_wrap" id="user_sexe_input">
                             <label for="user_sexe">Sexe</label>
                             <select name="user_sexe" id="user_type" class="input">
-                                <option selected value="option1">Masculin</option>
-                                <option value="option2">Feminin</option>
+                                <option selected value="Masculin">Masculin</option>
+                                <option value="Feminin">Feminin</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_age_input">
                             <label for="user_age">Tranche d'age</label>
                             <select name="user_age" id="user_age" class="input">
-                                <option selected value="option1">Adolescent</option>
-                                <option value="option2">Jeune</option>
-                                <option value="option3">3ème Age</option>
+                                <option selected value="Adolescent">Adolescent</option>
+                                <option value="Jeune">Jeune</option>
+                                <option value="3ème Age">3ème Age</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_status_input">
                             <label for="user_status">Status social</label>
                             <select name="user_status" id="user_staus" class="input">
-                                <option selected value="option1">Salarié</option>
-                                <option value="option2">Travailleur</option>
-                                <option value="option3">Autonome</option>
-                                <option value="option4">Etudiant</option>
-                                <option value="option5">Sans emploi</option>
+                                <option selected value="Salarié">Salarié</option>
+                                <option value="Travailleur">Travailleur</option>
+                                <option value="Autonome">Autonome</option>
+                                <option value="Etudiant">Etudiant</option>
+                                <option value="Sans emploi">Sans emploi</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_comp_size_input" style="display: none">
                             <label for="user_comp_size">Taille d'entreprise</label>
                             <select name="user_comp_size" id="user_comp_size" class="input">
-                                <option selected value="option1">Grande entreprise</option>
-                                <option value="option2">Moyenne entreprise</option>
-                                <option value="option3">Petite entreprise</option>
-                                <option value="option4">Mini entreprise</option>
-                                <option value="option5">Micro entreprise</option>
+                                <option selected value="Grande entreprise">Grande entreprise</option>
+                                <option value="Moyenne entreprise">Moyenne entreprise</option>
+                                <option value="Petite entreprise">Petite entreprise</option>
+                                <option value="Mini entreprise">Mini entreprise</option>
+                                <option value="Micro entreprise">Micro entreprise</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_serv_input" style="display: none">
                             <label for="user_serv">Type de service</label>
                             <select name="user_serv" id="user_serv" class="input">
-                                <option selected value="option1">Service ministeriel</option>
-                                <option value="option2">Administration publique</option>
-                                <option value="option3">Collectivité territoriale</option>
+                                <option selected value="Service ministeriel">Service ministeriel</option>
+                                <option value="dministration publique">Administration publique</option>
+                                <option value="Collectivité territoriale">Collectivité territoriale</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_orgtyp1_input" style="display: none">
                             <label for="user_orgtyp1">Type d'organimes</label>
                             <select name="user_orgtyp1" id="user_orgtyp1" class="input">
-                                <option selected value="option1">National</option>
-                                <option value="option2">International</option>
+                                <option selected value="National">National</option>
+                                <option value="International">International</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_orgtyp2_input" style="display: none">
                             <label for="user_orgtyp2">Choisir</label>
                             <select name="user_orgtyp2" id="user_orgtyp2" class="input">
-                                <option selected value="option1">ONG</option>
-                                <option value="option2">Institution</option>
-                                <option value="option3">Programme</option>
-                                <option value="option4">Projet</option>
+                                <option selected value="ONG">ONG</option>
+                                <option value="Institution">Institution</option>
+                                <option value="Programme">Programme</option>
+                                <option value="Projet">Projet</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_com_input" style="display: none">
                             <label for="user_com">Type de communauté</label>
                             <select name="user_com" id="user_com" class="input">
-                                <option selected value="option1">Localité</option>
-                                <option value="option2">Communauté</option>
-                                <option value="option3">Syndicat</option>
-                                <option value="option4">Mutuelle</option>
-                                <option value="option5">Association</option>
-                                <option value="option6">Club</option>
+                                <option selected value="Localité">Localité</option>
+                                <option value="Communauté">Communauté</option>
+                                <option value="Syndicat">Syndicat</option>
+                                <option value="Mutuelle">Mutuelle</option>
+                                <option value="Association">Association</option>
+                                <option value="Club">Club</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_mena1_input" style="display: none">
                             <label for="user_mena1">Type de menage</label>
                             <select name="user_mena1" id="user_mena1" class="input">
-                                <option selected value="option1">Urbain</option>
-                                <option value="option2">Rural</option>
+                                <option selected value="Urbain">Urbain</option>
+                                <option value="Rural">Rural</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="user_mena2_input" style="display: none">
                             <label for="user_mena2">Status</label>
                             <select name="user_mena2" id="user_mena2" class="input">
-                                <option selected value="option1">Salarié</option>
-                                <option value="option2">Entreprise</option>
-                                <option value="option3">Commerçant</option>
-                                <option value="option4">Producteur agricole</option>
-                                <option value="option5">Artisant</option>
-                                <option value="option6">Ouvrier</option>
-                                <option value="option7">Autre</option>
+                                <option selected value="Salarié">Salarié</option>
+                                <option value="Entreprise">Entreprise</option>
+                                <option value="Commerçant">Commerçant</option>
+                                <option value="Producteur agricole">Producteur agricole</option>
+                                <option value="Artisant">Artisant</option>
+                                <option value="Ouvrier">Ouvrier</option>
+                                <option value="Autre">Autre</option>
                             </select>
                         </div>
                     </div>
@@ -282,53 +269,53 @@ if (isset($_POST['submit'])) {
                         <div class="input_wrap">
                             <label for="account_type">Type d'acteur</label>
                             <select name="account_type" id="account_type" class="input">
-                                <option selected value="option1">Demandeur</option>
-                                <option value="option2">Fournisseur</option>
-                                <option value="option3">Livreur</option>
-                                <option value="option4">investisseur</option>
-                                <option value="option5">Agent</option>
+                                <option selected value="Demandeur">Demandeur</option>
+                                <option value="Fournisseur">Fournisseur</option>
+                                <option value="Livreur">Livreur</option>
+                                <option value="investisseur">investisseur</option>
+                                <option value="Agent">Agent</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="actor_type_input">
                             <label for="actor_type">Status acteur</label>
                             <select name="actor_type" id="actor_type" class="input">
-                                <option selected value="option1">Facbricant</option>
-                                <option value="option2">Producteur</option>
-                                <option value="option3">Importateur</option>
-                                <option value="option4">Grossiste</option>
-                                <option value="option5">Semi-grossiste</option>
-                                <option value="option6">Detaillant</option>
+                                <option selected value="Facbricant">Facbricant</option>
+                                <option value="Producteur">Producteur</option>
+                                <option value="Importateur">Importateur</option>
+                                <option value="Grossiste">Grossiste</option>
+                                <option value="Semi-grossiste">Semi-grossiste</option>
+                                <option value="Detaillant">Detaillant</option>
                             </select>
                         </div>
 
                         <div class="input_wrap" id="actor_type_input2">
                             <label for="actor_type2">Status acteur</label>
                             <select name="actor_type2" id="actor_type2" class="input">
-                                <option selected value="option1">Importateur</option>
-                                <option value="option2">Grossiste</option>
-                                <option value="option3">Semi-grossiste</option>
-                                <option value="option4">Detaillant</option>
+                                <option selected value="Importateur">Importateur</option>
+                                <option value="Grossiste">Grossiste</option>
+                                <option value="Semi-grossiste">Semi-grossiste</option>
+                                <option value="Detaillant">Detaillant</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="actor_budg_input">
                             <label for="actor_budg">Budget (Fcfa)</label>
                             <select name="actor_budg" id="actor_bidg" class="input">
-                                <option selected value="option1">10 000 - 100 000</option>
-                                <option value="option2">101 000 - 1 000 000</option>
-                                <option value="option3">1 001 000 - 10 000 000</option>
-                                <option value="option4">10 001 000 - 100 000 000</option>
-                                <option value="option5">100 001 000 - 1 Milliard</option>
-                                <option value="option6">1 Milliard et plus</option>
+                                <option selected value="10 000 - 100 000">10 000 - 100 000</option>
+                                <option value="101 000 - 1 000 000">101 000 - 1 000 000</option>
+                                <option value="1 001 000 - 10 000 000">1 001 000 - 10 000 000</option>
+                                <option value="10 001 000 - 100 000 000">10 001 000 - 100 000 000</option>
+                                <option value="100 001 000 - 1 Milliard">100 001 000 - 1 Milliard</option>
+                                <option value="1 Milliard et plus">1 Milliard et plus</option>
                             </select>
                         </div>
                         <div class="input_wrap" id="agent_account_input">
                             <label for="agent_account">Type d'Agent</label>
                             <select name="agent_account" id="agent_account" class="input">
-                                <option selected value="option1">Commercial</option>
-                                <option value="option2">Superviseur principale</option>
-                                <option value="option3">Superviseur generale</option>
-                                <option value="option4">Fondé de pouvoir</option>
-                                <option value="option5">Super adminitrateur</option>
+                                <option selected value="Commercial">Commercial</option>
+                                <option value="uperviseur principale">Superviseur principale</option>
+                                <option value="Superviseur generale">Superviseur generale</option>
+                                <option value="Fondé de pouvoir">Fondé de pouvoir</option>
+                                <option value="Super adminitrateur">Super adminitrateur</option>
                             </select>
                         </div>
                     </div>
@@ -342,54 +329,54 @@ if (isset($_POST['submit'])) {
                         <div class="input_wrap" id="sector_activity_selector">
                             <label for="sector_activity">Choisissez votre secteur d'activité</label>
                             <select name="sector_activity" id="sector_activity" class="input">
-                                <option selected value="option1">Industrie</option>
-                                <option value="option2">Construction</option>
-                                <option value="option3">Commerce</option>
-                                <option value="option4">Service</option>
-                                <option value="option5">Autre</option>
+                                <option selected value="Industrie">Industrie</option>
+                                <option value="Construction">Construction</option>
+                                <option value="Commerce">Commerce</option>
+                                <option value="Service">Service</option>
+                                <option value="Autre">Autre</option>
                             </select>
                         </div>
 
                         <div class="input_wrap" id="industry_selector">
                             <label for="industry">Choisissez votre industrie</label>
                             <select name="industry" id="industry" class="input">
-                                <option selected value="option1">Alimentaires</option>
-                                <option value="option2">Boissons</option>
-                                <option value="option3">Tabac</option>
-                                <option value="option4">Bois</option>
-                                <option value="option5">Papier</option>
-                                <option value="option6">Imprimerie</option>
-                                <option value="option7">Chimique</option>
-                                <option value="option8">Pharmaceutique</option>
-                                <option value="option9">Caoutchouc et plastique</option>
-                                <option value="option10">Produits non métalliques</option>
-                                <option value="option11">
+                                <option selected value="Alimentaires">Alimentaires</option>
+                                <option value="Boissons">Boissons</option>
+                                <option value="Tabac">Tabac</option>
+                                <option value="Bois">Bois</option>
+                                <option value="Papier">Papier</option>
+                                <option value="Imprimerie">Imprimerie</option>
+                                <option value="Chimique">Chimique</option>
+                                <option value="Pharmaceutique">Pharmaceutique</option>
+                                <option value="Caoutchouc et plastique">Caoutchouc et plastique</option>
+                                <option value="Produits non métalliques">Produits non métalliques</option>
+                                <option value="Métallurgie et produits métalliques">
                                     Métallurgie et produits métalliques
                                 </option>
-                                <option value="option12">Machines et équipements</option>
-                                <option value="option13">Matériels de transport</option>
-                                <option value="option14">
+                                <option value="Machines et équipements">Machines et équipements</option>
+                                <option value="Matériels de transport">Matériels de transport</option>
+                                <option value="Réparation et installation de machines et d'équipements">
                                     Réparation et installation de machines et d'équipements
                                 </option>
-                                <option value="option15">Distribution d'électricité</option>
-                                <option value="option16">Distribution de gaz</option>
+                                <option value="Distribution d'électricité">Distribution d'électricité</option>
+                                <option value="istribution de gaz">Distribution de gaz</option>
                             </select>
                         </div>
 
                         <div class="input_wrap" id="building_type_input">
                             <label for="building_type">Choisissez le type de bâtiment</label>
                             <select name="building_type" id="building_type" class="input">
-                                <option selected value="option1">Habitation</option>
-                                <option value="option2">Usine</option>
-                                <option value="option3">Pont & Chaussée</option>
+                                <option selected value="Habitation">Habitation</option>
+                                <option value="Usine">Usine</option>
+                                <option value="Pont & Chaussée">Pont & Chaussée</option>
                             </select>
                         </div>
 
                         <div class="input_wrap" id="commerce_sector_selector">
                             <label for="commerce_sector">Choisissez votre secteur d'activité</label>
                             <select name="commerce_sector" id="commerce_sector" class="input">
-                                <option selected value="option1">Commerce</option>
-                                <option value="option2">
+                                <option selected value="Commerce">Commerce</option>
+                                <option value="Réparation d'automobiles et de motocycles">
                                     Réparation d'automobiles et de motocycles
                                 </option>
                             </select>
@@ -398,34 +385,34 @@ if (isset($_POST['submit'])) {
                         <div class="input_wrap" id="transport_sector_selector">
                             <label for="transport_sector">Choisissez votre secteur d'activité</label>
                             <select name="transport_sector" id="transport_sector" class="input">
-                                <option selected value="option1">
+                                <option selected value="Transports et entreposage">
                                     Transports et entreposage
                                 </option>
-                                <option value="option2">Hébergement et restauration</option>
-                                <option value="option3">
+                                <option value="Hébergement et restauration">Hébergement et restauration</option>
+                                <option value="Activités financières et d'assurance">
                                     Activités financières et d'assurance
                                 </option>
-                                <option value="option4">Activités immobilières</option>
-                                <option value="option5">Service juridiques</option>
-                                <option value="option6">Service comptables</option>
-                                <option value="option7">Service de gestion</option>
-                                <option value="option8">Service d'architecture</option>
-                                <option value="option9">Service d'ingénierie</option>
-                                <option value="option10">
+                                <option value="Activités immobilières">Activités immobilières</option>
+                                <option value="Service juridiques">Service juridiques</option>
+                                <option value="Service comptables">Service comptables</option>
+                                <option value="Service de gestion">Service de gestion</option>
+                                <option value="Service d'architecture">Service d'architecture</option>
+                                <option value="Service d'ingénierie">Service d'ingénierie</option>
+                                <option value="Service de contrôle et d'analyses techniques">
                                     Service de contrôle et d'analyses techniques
                                 </option>
-                                <option value="option11">
+                                <option value="Autres activités spécialisées, scientifiques et techniques">
                                     Autres activités spécialisées, scientifiques et techniques
                                 </option>
-                                <option value="option12">Services administratifs</option>
-                                <option value="option13">Service de soutien</option>
-                                <option value="option14">Administration publique</option>
-                                <option value="option15">Enseignement</option>
-                                <option value="option16">Service santé humaine</option>
-                                <option value="option17">
+                                <option value="Services administratifs">Services administratifs</option>
+                                <option value="Service de soutien">Service de soutien</option>
+                                <option value="Administration publique">Administration publique</option>
+                                <option value="Enseignement">Enseignement</option>
+                                <option value="Service santé humaine">Service santé humaine</option>
+                                <option value="Arts, spectacles et activités récréatives">
                                     Arts, spectacles et activités récréatives
                                 </option>
-                                <option value="option18">Autres activités de services</option>
+                                <option value="Autres activités de services">Autres activités de services</option>
                             </select>
                         </div>
                     </div>
@@ -461,13 +448,13 @@ if (isset($_POST['submit'])) {
                         <div class="input_wrap">
                             <label for="proximity">Zone d'activité</label>
                             <select name="proximity" id="proximity" class="input">
-                                <option selected value="option1">Proximité</option>
-                                <option value="option2">Locale</option>
-                                <option value="option3">Nationale</option>
-                                <option value="option4">Sous Régionale</option>
-                                <option value="option5">Continentale</option>
-                                <option value="option6">Internationale</option>
-                                <option value="option7">Mondiale</option>
+                                <option selected value="Proximité">Proximité</option>
+                                <option value="Locale">Locale</option>
+                                <option value="Nationale">Nationale</option>
+                                <option value="Sous Régionale">Sous Régionale</option>
+                                <option value="Continentale">Continentale</option>
+                                <option value="Internationale">Internationale</option>
+                                <option value="Mondiale">Mondiale</option>
                             </select>
                         </div>
                     </div>
@@ -517,6 +504,8 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </form>
+
+
         <div class="text-center">
             <span class="txt2"> Vous avec deja un compte ? </span>
             <a href="login.php">Se connecter</a>
@@ -531,7 +520,11 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <script type="text/javascript" src="../../js/setp.js"></script>
+    
+
+    <script type="text/javascript" src="../../js/step.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </body>
 
 </html>
