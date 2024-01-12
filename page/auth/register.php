@@ -24,6 +24,8 @@ if (isset($_POST['submit'])) {
             $username = htmlspecialchars($_POST['username']);
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $cpassword = password_hash($_POST['cpassword'], PASSWORD_DEFAULT);
+
+            
             $actorType = $_POST['user_type'];
             $sexe_user = $_POST['user_sexe'];
             $age_user = $_POST['user_age'];
@@ -37,6 +39,7 @@ if (isset($_POST['submit'])) {
             $menaStat = $_POST['user_mena2'];
             $user_type = $_POST['account_type'];
             $actorStatu_user = $_POST['actor_type'];
+            $actorStatu_user2 = $_POST['actor_type2'];
             $budget_user = $_POST['actor_budg'];
             $agentType_user = $_POST['agent_account'];
             $activSector_user = $_POST['sector_activity'];
@@ -51,8 +54,37 @@ if (isset($_POST['submit'])) {
             $email_user = $_POST['email'];
             $ActivZone_user = $_POST['proximity'];
 
-            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, user_type, actorStatu_user, budget_user, agentType_user, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $user_type, $actorStatu_user, $budget_user, $agentType_user, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
+           // $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
+
+            if($actorType == "Personne physique"){
+                $entreSize = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
+            } elseif($actorType == "Personne morale"){
+                $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
+            } elseif($actorType == "Service public"){
+                $entreSize = $socialStatus_user = $age_user = $sexe_user  = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
+            }elseif($actorType == "Organisme"){
+                $entreSize = $socialStatus_user = $age_user = $sexe_user  = $comType = $menaType = $menaStat = null;
+            }elseif($actorType == "Comunauté"){
+                $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2  = $menaType = $menaStat = null;
+            }elseif($actorType == "Menage"){
+                $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2    = null;
+            } 
+
+            // $actorStatu_user = $budget_user = $agentType_user = $activSector_user = $agentType_user = null;
+
+            if($user_type == "Demandeur"){
+                 $budget_user = $agentType_user = $activSector_user = null;
+            }elseif($user_type == "Fournisseur"){
+                $budget_user =  $actorStatu_user  = $agentType_user = null;
+            }elseif($user_type == "Livreur"){
+                $actorStatu_user = $budget_user   = $agentType_user = null;
+            }elseif($user_type == "investisseur"){
+                $activSector_user = $actorStatu_user  = $agentType_user = null;
+            }
+
+
+            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, user_type, actorStatu_user, actorStatu_user2, budget_user, agentType_user, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $user_type, $actorStatu_user,$actorStatu_user2, $budget_user, $agentType_user, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
 
             header('location: login.php');
             exit();
@@ -520,10 +552,10 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    
 
-    <script type="text/javascript" src="../../js/step.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script type="text/javascript" src="../../js/step2.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 
 </body>
 

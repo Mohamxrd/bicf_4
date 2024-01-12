@@ -1,4 +1,4 @@
-/// Change 
+/// Change
 
 var form_1 = document.querySelector(".form_1");
 var form_2 = document.querySelector(".form_2");
@@ -145,10 +145,9 @@ form_5_back_btn.addEventListener("click", function () {
   form_5_progessbar.classList.remove("active");
 });
 
-// btn_done.addEventListener("click", function () {
-//     modal_wrapper.classList.add("active");
-
-// });
+btn_done.addEventListener("click", function () {
+  modal_wrapper.classList.add("active");
+});
 
 shadow.addEventListener("click", function () {
   modal_wrapper.classList.remove("active");
@@ -190,6 +189,17 @@ function showInputFields1(
   userCom.style.display = com;
   userMena1.style.display = mena1;
   userMena2.style.display = mena2;
+
+   // userSexeInput.value = null;
+      // userAgeInput.value = null;
+      // userStatus.value = null;
+      // userCompSizeInput.value = null;
+      // userServInput.value = null;
+      // userOrgtyp1.value = null;
+      // userOrgtyp2.value = null;
+      // userCom.value = null;
+      // userMena1.value = null;
+      // userMena2.value = null;
 }
 
 showInputFields1(
@@ -221,6 +231,9 @@ userTypeSelect.addEventListener("change", (event) => {
         "none",
         "none"
       );
+     
+      
+
       break;
     case "Personne morale":
       showInputFields1(
@@ -440,17 +453,3 @@ function populateCountryDropdown() {
 }
 
 populateCountryDropdown();
-
-
-
-function clearOptionValues(inputId) {
-  const selectElement = document.getElementById(inputId);
-  const options = selectElement.options;
-
-  for (let i = 0; i < options.length; i++) {
-    options[i].value = '';
-  }
-}
-
-
-

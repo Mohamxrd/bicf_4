@@ -117,7 +117,7 @@ if (isset($_POST['submit'])) {
 									<div class="card-footer text-center ">
 										<p class="text-sm mx-auto m-0">
 											Mot de passe oublié ?
-											<a href="javascript:;" class="text-info text-gradient font-weight-bold ">Cliquez ici</a>
+											<a href="send_pass.php" class="text-info text-gradient font-weight-bold ">Cliquez ici</a>
 										</p>
 										<p class="mb-4 text-sm mx-auto m-0">
 											Vouys n'avez pas de compte ?
@@ -143,7 +143,7 @@ if (isset($_POST['submit'])) {
 				<div class="row">
 					<div class="col-lg-8 mb-4 mx-auto text-center">
 						<a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
-							Compagnie
+							Contact
 						</a>
 						<a href="javascript:;" target="_blank" class="text-secondary me-xl-5 me-3 mb-sm-0 mb-2">
 							A propos
