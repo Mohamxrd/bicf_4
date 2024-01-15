@@ -23,8 +23,8 @@ if(!isset($_SESSION['nom_user'])){
     <link rel="stylesheet" type="text/css" href="../../../css/main2.css">
    
 
-    <link href="../../css/nucleo-icons.css" rel="stylesheet" />
-    <link href="../../css/nucleo-svg.css" rel="stylesheet" />
+    <link href="../../../css/nucleo-icons.css" rel="stylesheet" />
+    <link href="../../../css/nucleo-svg.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 </head>

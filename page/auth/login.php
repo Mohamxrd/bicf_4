@@ -24,12 +24,6 @@ if (isset($_POST['submit'])) {
 					$_SESSION['username'] = $user['username'];
 					$_SESSION['nom_user'] = $user['nom_user'];
 					header('location: ../screen/user/user_page.php');
-				
-
-
-
-
-
 
 				exit();
 			} else {
@@ -133,7 +127,6 @@ if (isset($_POST['submit'])) {
 				</div>
 			</section>
 		</main>
-		<!-- -------- START FOOTER 3 w/ COMPANY DESCRIPTION WITH LINKS & SOCIAL ICONS & COPYRIGHT ------- -->
 		<footer class="footer py-5">
 			<div class="container">
 				<div class="row">
