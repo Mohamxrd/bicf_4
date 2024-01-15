@@ -2,27 +2,23 @@
 
 var form_1 = document.querySelector(".form_1");
 var form_2 = document.querySelector(".form_2");
-var form_3 = document.querySelector(".form_3");
 var form_4 = document.querySelector(".form_4");
 var form_5 = document.querySelector(".form_5");
 
 var form_1_btns = document.querySelector(".form_1_btns");
 var form_2_btns = document.querySelector(".form_2_btns");
-var form_3_btns = document.querySelector(".form_3_btns");
+
 var form_4_btns = document.querySelector(".form_4_btns");
 var form_5_btns = document.querySelector(".form_5_btns");
 
 var form_1_next_btn = document.querySelector(".form_1_btns .btn_next");
 var form_2_back_btn = document.querySelector(".form_2_btns .btn_back");
 var form_2_next_btn = document.querySelector(".form_2_btns .btn_next");
-var form_3_back_btn = document.querySelector(".form_3_btns .btn_back");
-var form_3_next_btn = document.querySelector(".form_3_btns .btn_next");
 var form_4_back_btn = document.querySelector(".form_4_btns .btn_back");
 var form_4_next_btn = document.querySelector(".form_4_btns .btn_next");
 var form_5_back_btn = document.querySelector(".form_5_btns .btn_back");
 
 var form_2_progessbar = document.querySelector(".form_2_progessbar");
-var form_3_progessbar = document.querySelector(".form_3_progessbar");
 var form_4_progessbar = document.querySelector(".form_4_progessbar");
 var form_5_progessbar = document.querySelector(".form_5_progessbar");
 
@@ -48,11 +44,9 @@ form_1_next_btn.addEventListener("click", function () {
     password === "" ||
     cpassword === ""
   ) {
-    // Afficher le message d'erreur si au moins un champ est vide
     errormsg.style.display = "block";
     pass_error.style.display = "none"; // Assurez-vous de cacher le message d'erreur de mot de passe
   } else {
-    // Cacher le message d'erreur si tous les champs sont remplis
     errormsg.style.display = "none";
 
     // Vérifier si les mots de passe correspondent
@@ -87,40 +81,24 @@ form_2_back_btn.addEventListener("click", function () {
 
 form_2_next_btn.addEventListener("click", function () {
   form_2.style.display = "none";
-  form_3.style.display = "block";
-
-  form_3_btns.style.display = "flex";
-  form_2_btns.style.display = "none";
-
-  form_3_progessbar.classList.add("active");
-});
-
-form_3_back_btn.addEventListener("click", function () {
-  form_2.style.display = "block";
-  form_3.style.display = "none";
-
-  form_3_btns.style.display = "none";
-  form_2_btns.style.display = "flex";
-
-  form_3_progessbar.classList.remove("active");
-});
-
-form_3_next_btn.addEventListener("click", function () {
-  form_3.style.display = "none";
   form_4.style.display = "block";
 
   form_4_btns.style.display = "flex";
-  form_3_btns.style.display = "none";
+  form_2_btns.style.display = "none";
 
   form_4_progessbar.classList.add("active");
 });
 
+
+
+
+
 form_4_back_btn.addEventListener("click", function () {
-  form_3.style.display = "block";
+  form_2.style.display = "block";
   form_4.style.display = "none";
 
   form_4_btns.style.display = "none";
-  form_3_btns.style.display = "flex";
+  form_2_btns.style.display = "flex";
 
   form_4_progessbar.classList.remove("active");
 });
@@ -190,16 +168,6 @@ function showInputFields1(
   userMena1.style.display = mena1;
   userMena2.style.display = mena2;
 
-   // userSexeInput.value = null;
-      // userAgeInput.value = null;
-      // userStatus.value = null;
-      // userCompSizeInput.value = null;
-      // userServInput.value = null;
-      // userOrgtyp1.value = null;
-      // userOrgtyp2.value = null;
-      // userCom.value = null;
-      // userMena1.value = null;
-      // userMena2.value = null;
 }
 
 showInputFields1(
@@ -355,101 +323,6 @@ accountType.addEventListener("change", (event) => {
 
 // Écoute de l'événement de changement de actor_type
 
-const sectorActivitySelector = document.getElementById(
-  "sector_activity_selector"
-);
-const industrySelector = document.getElementById("industry_selector");
-const buildingTypeInput = document.getElementById("building_type_input");
-const commerceSectorSelector = document.getElementById(
-  "commerce_sector_selector"
-);
-const transportSectorSelector = document.getElementById(
-  "transport_sector_selector"
-);
 
-function showInputFields(selector, displayValue) {
-  selector.style.display = displayValue;
-}
 
-showInputFields(industrySelector, "block");
-showInputFields(buildingTypeInput, "none");
-showInputFields(commerceSectorSelector, "none");
-showInputFields(transportSectorSelector, "none");
 
-sectorActivitySelector.addEventListener("change", (event) => {
-  const selectedOption = event.target.value;
-
-  // Hide all selectors initially
-  showInputFields(industrySelector, "none");
-  showInputFields(buildingTypeInput, "none");
-  showInputFields(commerceSectorSelector, "none");
-  showInputFields(transportSectorSelector, "none");
-
-  // Show the relevant selector based on the selected option
-  switch (selectedOption) {
-    case "Industrie":
-      showInputFields(industrySelector, "block");
-      break;
-    case "Construction":
-      showInputFields(buildingTypeInput, "block");
-      break;
-    case "Commerce":
-      showInputFields(commerceSectorSelector, "block");
-      break;
-    case "Service":
-      showInputFields(transportSectorSelector, "block");
-      break;
-    default:
-
-    // Do nothing for other options
-  }
-});
-
-fetch("https://restcountries.com/v3.1/all")
-  .then((response) => response.json())
-  .then((data) => {
-    const countryDropdown = document.getElementById("country");
-
-    // Ajouter la Côte d'Ivoire en tant que première option
-    const optionIvoryCoast = document.createElement("option");
-    optionIvoryCoast.value = "Cote d'ivoire";
-    optionIvoryCoast.textContent = "Côte d'Ivoire";
-    countryDropdown.appendChild(optionIvoryCoast);
-
-    // Ajouter les autres pays
-    data.forEach((country, index) => {
-      const option = document.createElement("option");
-      option.value = "option" + (index + 2);
-      option.textContent = country.name.common;
-      countryDropdown.appendChild(option);
-    });
-  })
-  .catch((error) =>
-    console.error("Erreur lors de la récupération des pays", error)
-  );
-
-function populateCountryDropdown() {
-  const countryDropdown = document.getElementById("country_code");
-  fetch("https://restcountries.com/v2/all")
-    .then((response) => response.json())
-    .then((data) => {
-      data.forEach((country) => {
-        if (
-          country.hasOwnProperty("callingCodes") &&
-          country.callingCodes.length > 0
-        ) {
-          const countryCode = country.callingCodes[0];
-          const countryName = country.name;
-          const option = document.createElement("option");
-          option.value = countryCode;
-          option.textContent = `${countryName} (+${countryCode})`;
-          countryDropdown.appendChild(option);
-        }
-      });
-    })
-    .catch((error) =>
-      console.error("Erreur lors de la récupération des pays", error)
-    );
-}
-
-populateCountryDropdown();

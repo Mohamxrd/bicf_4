@@ -20,15 +20,11 @@ if (isset($_POST['submit'])) {
 			// Vérifiez si le mot de passe soumis correspond au mot de passe dans la base de données
 			if (password_verify($mdpSoumis, $mdpDansLaBase)) {
 
-				if ($user['user_type'] == 'Demandeur' || $user['user_type'] == 'Fournisseur' || $user['user_type'] == 'Livreur' || $user['user_type'] == 'investisseur') {
+		
 					$_SESSION['username'] = $user['username'];
 					$_SESSION['nom_user'] = $user['nom_user'];
 					header('location: ../screen/user/user_page.php');
-				} elseif ($user['user_type'] == 'Agent') {
-					$_SESSION['username'] = $user['username'];
-					$_SESSION['nom_user'] = $user['nom_user'];
-					header('location: ../screen/dashbord/admin.php');
-				}
+				
 
 
 

@@ -25,7 +25,7 @@ if (isset($_POST['submit'])) {
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $cpassword = password_hash($_POST['cpassword'], PASSWORD_DEFAULT);
 
-            
+
             $actorType = $_POST['user_type'];
             $sexe_user = $_POST['user_sexe'];
             $age_user = $_POST['user_age'];
@@ -37,11 +37,6 @@ if (isset($_POST['submit'])) {
             $comType = $_POST['user_com'];
             $menaType = $_POST['user_mena1'];
             $menaStat = $_POST['user_mena2'];
-            $user_type = $_POST['account_type'];
-            $actorStatu_user = $_POST['actor_type'];
-            $actorStatu_user2 = $_POST['actor_type2'];
-            $budget_user = $_POST['actor_budg'];
-            $agentType_user = $_POST['agent_account'];
             $activSector_user = $_POST['sector_activity'];
             $indus_user = $_POST['industry'];
             $bat_user = $_POST['building_type'];
@@ -54,37 +49,41 @@ if (isset($_POST['submit'])) {
             $email_user = $_POST['email'];
             $ActivZone_user = $_POST['proximity'];
 
-           // $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
+            // $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
 
-            if($actorType == "Personne physique"){
+            if ($actorType == "Personne physique") {
                 $entreSize = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
-            } elseif($actorType == "Personne morale"){
+            } elseif ($actorType == "Personne morale") {
                 $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
-            } elseif($actorType == "Service public"){
+            } elseif ($actorType == "Service public") {
                 $entreSize = $socialStatus_user = $age_user = $sexe_user  = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
-            }elseif($actorType == "Organisme"){
+            } elseif ($actorType == "Organisme") {
                 $entreSize = $socialStatus_user = $age_user = $sexe_user  = $comType = $menaType = $menaStat = null;
-            }elseif($actorType == "Comunauté"){
+            } elseif ($actorType == "Comunauté") {
                 $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2  = $menaType = $menaStat = null;
-            }elseif($actorType == "Menage"){
+            } elseif ($actorType == "Menage") {
                 $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2    = null;
-            } 
-
-            // $actorStatu_user = $budget_user = $agentType_user = $activSector_user = $agentType_user = null;
-
-            if($user_type == "Demandeur"){
-                 $budget_user = $agentType_user = $activSector_user = null;
-            }elseif($user_type == "Fournisseur"){
-                $budget_user =  $actorStatu_user  = $agentType_user = null;
-            }elseif($user_type == "Livreur"){
-                $actorStatu_user = $budget_user   = $agentType_user = null;
-            }elseif($user_type == "investisseur"){
-                $activSector_user = $actorStatu_user  = $agentType_user = null;
             }
 
 
-            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, user_type, actorStatu_user, actorStatu_user2, budget_user, agentType_user, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $user_type, $actorStatu_user,$actorStatu_user2, $budget_user, $agentType_user, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
+
+            if ($activSector_user == "Industrie") {
+                $bat_user = $comm_user = $serv_user = null;
+            } elseif ($activSector_user == "Construction") {
+                $indus_user = $comm_user = $serv_user = null;
+            } elseif ($activSector_user == "Commerce") {
+                $indus_user = $bat_user = $serv_user = null;
+            } elseif ($activSector_user == "Service") {
+                $indus_user = $bat_user = $comm_user  = null;
+            } elseif ($activSector_user == "Autre") {
+                $indus_user = $bat_user = $comm_user = $serv_user  = null;
+            }
+
+
+
+
+            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )');
+            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat,  $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
 
             header('location: login.php');
             exit();
@@ -129,14 +128,10 @@ if (isset($_POST['submit'])) {
                         <p>2</p>
                     </div>
                 </li>
-                <li class="form_3_progessbar">
-                    <div>
-                        <p>3</p>
-                    </div>
-                </li>
+
                 <li class="form_4_progessbar">
                     <div>
-                        <p>4</p>
+                        <p>3</p>
                     </div>
                 </li>
                 <li class="form_5_progessbar">
@@ -294,65 +289,7 @@ if (isset($_POST['submit'])) {
                     </div>
 
                 </div>
-                <div class="form_3 data_info" style="display: none">
-                    <h2>Type de compte</h2>
 
-                    <div class="form_container">
-                        <div class="input_wrap">
-                            <label for="account_type">Type d'acteur</label>
-                            <select name="account_type" id="account_type" class="input">
-                                <option selected value="Demandeur">Demandeur</option>
-                                <option value="Fournisseur">Fournisseur</option>
-                                <option value="Livreur">Livreur</option>
-                                <option value="investisseur">investisseur</option>
-                                <option value="Agent">Agent</option>
-                            </select>
-                        </div>
-                        <div class="input_wrap" id="actor_type_input">
-                            <label for="actor_type">Status acteur</label>
-                            <select name="actor_type" id="actor_type" class="input">
-                                <option selected value="Facbricant">Facbricant</option>
-                                <option value="Producteur">Producteur</option>
-                                <option value="Importateur">Importateur</option>
-                                <option value="Grossiste">Grossiste</option>
-                                <option value="Semi-grossiste">Semi-grossiste</option>
-                                <option value="Detaillant">Detaillant</option>
-                            </select>
-                        </div>
-
-                        <div class="input_wrap" id="actor_type_input2">
-                            <label for="actor_type2">Status acteur</label>
-                            <select name="actor_type2" id="actor_type2" class="input">
-                                <option selected value="Importateur">Importateur</option>
-                                <option value="Grossiste">Grossiste</option>
-                                <option value="Semi-grossiste">Semi-grossiste</option>
-                                <option value="Detaillant">Detaillant</option>
-                            </select>
-                        </div>
-                        <div class="input_wrap" id="actor_budg_input">
-                            <label for="actor_budg">Budget (Fcfa)</label>
-                            <select name="actor_budg" id="actor_bidg" class="input">
-                                <option selected value="10 000 - 100 000">10 000 - 100 000</option>
-                                <option value="101 000 - 1 000 000">101 000 - 1 000 000</option>
-                                <option value="1 001 000 - 10 000 000">1 001 000 - 10 000 000</option>
-                                <option value="10 001 000 - 100 000 000">10 001 000 - 100 000 000</option>
-                                <option value="100 001 000 - 1 Milliard">100 001 000 - 1 Milliard</option>
-                                <option value="1 Milliard et plus">1 Milliard et plus</option>
-                            </select>
-                        </div>
-                        <div class="input_wrap" id="agent_account_input">
-                            <label for="agent_account">Type d'Agent</label>
-                            <select name="agent_account" id="agent_account" class="input">
-                                <option selected value="Commercial">Commercial</option>
-                                <option value="uperviseur principale">Superviseur principale</option>
-                                <option value="Superviseur generale">Superviseur generale</option>
-                                <option value="Fondé de pouvoir">Fondé de pouvoir</option>
-                                <option value="Super adminitrateur">Super adminitrateur</option>
-                            </select>
-                        </div>
-                    </div>
-
-                </div>
 
                 <div class="form_4 data_info" style="display: none">
                     <h2>Secteur d'activité</h2>
@@ -459,6 +396,7 @@ if (isset($_POST['submit'])) {
                             <label for="country">Choisissez un pays</label>
                             <select name="country" id="country" class="input"></select>
                         </div>
+
                         <div class="input_wrap" style="width: 500px; max-width: 100%; margin: 0 auto 20px">
                             <label for="phone">Téléphone</label>
                             <div>
@@ -553,7 +491,110 @@ if (isset($_POST['submit'])) {
     </div>
 
 
-    <script type="text/javascript" src="../../js/step2.js"></script>
+    <script>
+
+const sectorActivitySelector = document.getElementById(
+  "sector_activity_selector"
+);
+const industrySelector = document.getElementById("industry_selector");
+const buildingTypeInput = document.getElementById("building_type_input");
+const commerceSectorSelector = document.getElementById(
+  "commerce_sector_selector"
+);
+const transportSectorSelector = document.getElementById(
+  "transport_sector_selector"
+);
+
+function showInputFields(selector, displayValue) {
+  selector.style.display = displayValue;
+}
+
+showInputFields(industrySelector, "block");
+showInputFields(buildingTypeInput, "none");
+showInputFields(commerceSectorSelector, "none");
+showInputFields(transportSectorSelector, "none");
+
+sectorActivitySelector.addEventListener("change", (event) => {
+  const selectedOption = event.target.value;
+
+  // Hide all selectors initially
+  showInputFields(industrySelector, "none");
+  showInputFields(buildingTypeInput, "none");
+  showInputFields(commerceSectorSelector, "none");
+  showInputFields(transportSectorSelector, "none");
+
+  // Show the relevant selector based on the selected option
+  switch (selectedOption) {
+    case "Industrie":
+      showInputFields(industrySelector, "block");
+      break;
+    case "Construction":
+      showInputFields(buildingTypeInput, "block");
+      break;
+    case "Commerce":
+      showInputFields(commerceSectorSelector, "block");
+      break;
+    case "Service":
+      showInputFields(transportSectorSelector, "block");
+      break;
+    default:
+
+    // Do nothing for other options
+  }
+});
+
+fetch("https://restcountries.com/v3.1/all")
+  .then((response) => response.json())
+  .then((data) => {
+    const countryDropdown = document.getElementById("country");
+
+    // Ajouter la Côte d'Ivoire en tant que première option
+    const optionIvoryCoast = document.createElement("option");
+    optionIvoryCoast.value = "Cote d'ivoire";
+    optionIvoryCoast.textContent = "Côte d'Ivoire";
+    countryDropdown.appendChild(optionIvoryCoast);
+
+    // Ajouter les autres pays
+    data.forEach((country, index) => {
+      const option = document.createElement("option");
+      option.value = "option" + (index + 2);
+      option.textContent = country.name.common;
+      countryDropdown.appendChild(option);
+    });
+  })
+  .catch((error) =>
+    console.error("Erreur lors de la récupération des pays", error)
+  );
+
+function populateCountryDropdown() {
+  const countryDropdown = document.getElementById("country_code");
+  fetch("https://restcountries.com/v2/all")
+    .then((response) => response.json())
+    .then((data) => {
+      data.forEach((country) => {
+        if (
+          country.hasOwnProperty("callingCodes") &&
+          country.callingCodes.length > 0
+        ) {
+          const countryCode = country.callingCodes[0];
+          const countryName = country.name;
+          const option = document.createElement("option");
+          option.value = countryCode;
+          option.textContent = `${countryName} (+${countryCode})`;
+          countryDropdown.appendChild(option);
+        }
+      });
+    })
+    .catch((error) =>
+      console.error("Erreur lors de la récupération des pays", error)
+    );
+}
+
+populateCountryDropdown();
+    </script>
+
+
+    <script type="text/javascript" src="../../js/step3.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
