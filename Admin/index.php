@@ -12,6 +12,7 @@ if(!isset($_SESSION['username'])){
 
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,35 +82,65 @@ if(!isset($_SESSION['username'])){
             
             <li
                 class="sidebar-item active ">
-                <a href="index.php" class='sidebar-link'>
+                <a href="index.html" class='sidebar-link'>
                     <i class="bi bi-grid-fill"></i>
                     <span>Dashboard</span>
                 </a>
                 
 
             </li>
-
+            
             <li
-                class="sidebar-item  ">
-                <a href="index.html" class='sidebar-link'>
-                    <i class="bi bi-collection-fill"></i>
-                    <span>Ajouter client</span>
+                class="sidebar-item  has-sub">
+                <a href="#" class='sidebar-link'>
+                    <i class="bi bi-stack"></i>
+                    <span>Agent</span>
                 </a>
+                
+                <ul class="submenu ">
+                    
+                    <li class="submenu-item  ">
+                        <a href="component-accordion.html" class="submenu-link">Ajouter Agents</a>
+                        
+                    </li>
+                    
+                    <li class="submenu-item  ">
+                        <a href="component-alert.html" class="submenu-link">Liste des agents</a>
+                        
+                    </li>
+                    
+                   
+                </ul>
                 
 
             </li>
-
+            
             <li
-            class="sidebar-item  ">
-            <a href="index.html" class='sidebar-link'>
-                <i class="bi bi-collection-fill"></i>
-                <span>Liste des clients</span>
-            </a>
-            
+                class="sidebar-item  has-sub">
+                <a href="#" class='sidebar-link'>
+                    <i class="bi bi-collection-fill"></i>
+                    <span>Client</span>
+                </a>
+                
+                <ul class="submenu ">
+                    
+                    <li class="submenu-item  ">
+                        <a href="extra-component-avatar.html" class="submenu-link">Ajouter Client</a>
+                        
+                    </li>
+                    
+                    <li class="submenu-item  ">
+                        <a href="extra-component-divider.html" class="submenu-link">Liste des clients</a>
+                        
+                    </li>
+                   
+                    
+                </ul>
+                
 
-        </li>
+            </li>
             
-         
+           
             
         </ul>
     </div>
@@ -122,9 +153,8 @@ if(!isset($_SESSION['username'])){
                 </a>
             </header>
             
-<div class="page-heading d-flex justify-content-between">
+<div class="page-heading">
     <h3>Statistique</h3>
-    <a href="#" class="btn icon icon-left btn-primary"><i data-feather="edit"></i> Primary</a>
 </div> 
 <div class="page-content"> 
     <section class="row">
@@ -325,66 +355,7 @@ if(!isset($_SESSION['username'])){
                 </div>
             </div>
         </div>
-        <!-- <div class="col-12 col-lg-3">
-            <div class="card">
-                <div class="card-body py-4 px-4">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-xl">
-                            <img src="./assets/compiled/jpg/1.jpg" alt="Face 1">
-                        </div>
-                        <div class="ms-3 name">
-                            <h5 class="font-bold">John Duck</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header">
-                    <h4>Recent Messages</h4>
-                </div>
-                <div class="card-content pb-4">
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="./assets/compiled/jpg/4.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">Hank Schrader</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="./assets/compiled/jpg/5.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">Dean Winchester</h5>
-                            <h6 class="text-muted mb-0">@imdean</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="./assets/compiled/jpg/1.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">John Dodol</h5>
-                            <h6 class="text-muted mb-0">@dodoljohn</h6>
-                        </div>
-                    </div>
-                    <div class="px-4">
-                        <button class='btn btn-block btn-xl btn-outline-primary font-bold mt-3'>Start Conversation</button>
-                    </div>
-                </div>
-            </div> 
-            <div class="card">
-                <div class="card-header">
-                    <h4>Visitors Profile</h4>
-                </div>
-                <div class="card-body">
-                    <div id="chart-visitors-profile"></div>
-                </div>
-            </div>
-        </div> -->
+       
     </section>
 </div>
 

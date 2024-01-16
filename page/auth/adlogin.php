@@ -1,8 +1,6 @@
 <?php
 
-session_start();
-
-$conn = new PDO('mysql:host=localhost;dbname=bicf;charset=utf8;', 'root', 'root');
+@include('../config.php');
 
 
 
@@ -10,11 +8,10 @@ $errorMsg = '';
 
 if (isset($_POST['submit'])) {
 	if (!empty($_POST['username']) && !empty($_POST['password'])) {
-		$username = trim(htmlspecialchars($_POST['username']));
+		$username = htmlspecialchars($_POST['username']);
+		$mdpSoumis = $_POST['password'];
 
-		$mdpSoumis = htmlspecialchars($_POST['password']);
-
-		$recupUser = $conn->prepare('SELECT * FROM admin WHERE username_admin = ?');
+		$recupUser = $conn->prepare('SELECT * FROM adminTable WHERE username_admin = ?');
 		$recupUser->execute(array($username));
 
 		if ($recupUser->rowCount() > 0) {
@@ -22,20 +19,27 @@ if (isset($_POST['submit'])) {
 
 			$mdpDansLaBase = $admin['password_admin'];
 
-			// Vérifiez si le mot de passe soumis correspond au mot de passe dans la base de données
 			if (password_verify($mdpSoumis, $mdpDansLaBase)) {
 
+                if($admin['admin_type'] === 'admin'){
+					$_SESSION['username'] = $admin['username_admin'];
+					$_SESSION['nom_user'] = $admin['nom_admin'];
+					header('location: ../../Admin/index.php');
+				}elseif($admin['admin_type'] === 'agent'){
+				    $_SESSION['username'] = $admin['username_admin'];
+					$_SESSION['nom_user'] = $admin['nom_admin'];
+					header('location: ../../Agent/index.php');
+				}
 
-				$_SESSION['username'] = $admin['username_admin'];
-				$_SESSION['nom_user'] = $admin['nom_admin'];
-				header('location: ../../Agent/index.php');
+				
 
 				exit();
 			} else {
 				$errorMsg = "Mauvais identifiant ou mot de passe";
 			}
+
 		} else {
-			$errorMsg = "Mauvais identifiant ou mot de passe";
+			 $errorMsg = "Mauvais identifiant ou mot de passe";
 		}
 	} else {
 		$errorMsg = 'Veuillez remplir tous les champs';
@@ -72,6 +76,11 @@ if (isset($_POST['submit'])) {
 
 				<form class="login100-form validate-form p-b-33 p-t-5" method="post">
 
+				    
+				<!-- <div class="wrap-input100 validate-input">
+						<input class="input100" type="text" name="name_admin" placeholder="Nom admin">
+						<span class="focus-input100" data-placeholder="&#xe82a;"></span>
+					</div> -->
 					<div class="wrap-input100 validate-input">
 						<input class="input100" type="text" name="username" placeholder="Nom d'utlisateur">
 						<span class="focus-input100" data-placeholder="&#xe82a;"></span>
@@ -81,6 +90,7 @@ if (isset($_POST['submit'])) {
 						<input class="input100" type="password" name="password" placeholder="Mot de passe">
 						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
 					</div>
+
 
 					<?php
 
