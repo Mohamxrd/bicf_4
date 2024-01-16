@@ -76,11 +76,6 @@ if (isset($_POST['submit'])) {
 
 				<form class="login100-form validate-form p-b-33 p-t-5" method="post">
 
-				    
-				<!-- <div class="wrap-input100 validate-input">
-						<input class="input100" type="text" name="name_admin" placeholder="Nom admin">
-						<span class="focus-input100" data-placeholder="&#xe82a;"></span>
-					</div> -->
 					<div class="wrap-input100 validate-input">
 						<input class="input100" type="text" name="username" placeholder="Nom d'utlisateur">
 						<span class="focus-input100" data-placeholder="&#xe82a;"></span>
@@ -90,17 +85,11 @@ if (isset($_POST['submit'])) {
 						<input class="input100" type="password" name="password" placeholder="Mot de passe">
 						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
 					</div>
-
-
 					<?php
-
 					if (!empty($errorMsg)) {
 						echo '<div class="error-msg">' . $errorMsg . '</div>';
 					}
 					?>
-
-                    
-
 					<div class="container-login100-form-btn m-t-32">
 						<button class="login100-form-btn" type="submit" name="submit">
 							Se connecter

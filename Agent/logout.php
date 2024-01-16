@@ -1,7 +1,7 @@
-
 <?php
  
- @include 'config.php';
+ @include('../page/config.php');
+
 
  session_start();
  session_unset();
@@ -9,6 +9,6 @@
 
  $_SESSION = array();
 
- header('location: auth/login.php');
+ header('location: ../page/auth/adlogin.php');
 
 ?>
