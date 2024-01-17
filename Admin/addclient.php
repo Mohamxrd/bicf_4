@@ -244,10 +244,34 @@ if (isset($_POST['submit'])) {
 
 
                 <div class="wrapper">
-                    <!-- <div class="alert alert-light-success alert-dismissible show fade">
-                        Compte créer avec success 
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div> -->
+
+
+                    <?php
+
+                    if (!empty($sucessMdg)) {
+                        
+                        echo '
+        <div class="alert alert-light-success alert-dismissible show fade">
+           ' . $sucessMdg . '
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    ';
+                    }
+
+                    ?>
+                    <?php
+
+                    if (!empty($errorMsg)) {
+                        
+                        echo '
+<div class="alert alert-light-danger alert-dismissible show fade">
+' . $errorMsg . '
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+';
+                    }
+
+                    ?>
 
                     <form action="" method="post">
                         <div class="form_wrap">
@@ -279,19 +303,9 @@ if (isset($_POST['submit'])) {
                                     <div class="pass_lengh">Votre mot de passe doit contenir au moins 8 carractères et une majuscule</div>
                                     <div class="error-msg">Veillez remplire tout les champs obligatoires</div>
 
-                                    <?php
+                                    
 
-                                    if (!empty($errorMsg)) {
-                                        echo '<div class="error-message">' . $errorMsg . '</div>';
-                                    }
-                                    ?>
 
-                                    <?php
-
-                                    if (!empty($sucessMdg)) {
-                                        echo '<div class="successMsg">' . $sucessMdg . '</div>';
-                                    }
-                                    ?>
 
                                 </div>
 
@@ -601,22 +615,20 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
+    <script type="text/javascript" src="assets/static/js/addclient.js"></script>
+ 
 
 
-    <script src="../js/step3.js"></script>
-    <script src="../js/step4.js"></script>
+    <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="assets/static/js/components/dark.js"></script>
 
-   
-  <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-     <script src="assets/static/js/components/dark.js"></script>
-  
 
 
     <script src="assets/compiled/js/app.js"></script>
 
 
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script> 
+    <script src="assets/static/js/pages/dashboard.js"></script>
 
 </body>
 

@@ -1,5 +1,3 @@
-
-
 var form_1 = document.querySelector(".form_1");
 var form_2 = document.querySelector(".form_2");
 var form_4 = document.querySelector(".form_4");
@@ -45,7 +43,7 @@ form_1_next_btn.addEventListener("click", function () {
     cpassword === ""
   ) {
     errormsg.style.display = "block";
-    pass_error.style.display = "none"; 
+    pass_error.style.display = "none";
   } else {
     errormsg.style.display = "none";
 
@@ -89,10 +87,6 @@ form_2_next_btn.addEventListener("click", function () {
   form_4_progessbar.classList.add("active");
 });
 
-
-
-
-
 form_4_back_btn.addEventListener("click", function () {
   form_2.style.display = "block";
   form_4.style.display = "none";
@@ -131,7 +125,6 @@ shadow.addEventListener("click", function () {
   modal_wrapper.classList.remove("active");
 });
 
-
 const userTypeSelect = document.getElementById("user_type");
 const userSexeInput = document.getElementById("user_sexe_input");
 const userAgeInput = document.getElementById("user_age_input");
@@ -166,7 +159,6 @@ function showInputFields1(
   userCom.style.display = com;
   userMena1.style.display = mena1;
   userMena2.style.display = mena2;
-
 }
 
 showInputFields1(
@@ -198,8 +190,6 @@ userTypeSelect.addEventListener("change", (event) => {
         "none",
         "none"
       );
-     
-      
 
       break;
     case "Personne morale":
@@ -316,19 +306,8 @@ accountType.addEventListener("change", (event) => {
       break;
     default:
   }
-
-
 });
-
-
 
 /// Pourquoi cette partie ne fontionne pas ?? Lorsqu'elle est sur cette page mais fonctionne quand elle inserer directement dans la page html alors que les autres script finctionne
 
-
 // Fonction pour afficher ou masquer un élément en fonction de la valeur de display
-
-
-
-
-
-

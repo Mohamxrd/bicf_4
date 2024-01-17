@@ -16,9 +16,6 @@ var form_4_back_btn = document.querySelector(".form_4_btns .btn_back");
 var form_4_next_btn = document.querySelector(".form_4_btns .btn_next");
 var form_5_back_btn = document.querySelector(".form_5_btns .btn_back");
 
-var form_2_progessbar = document.querySelector(".form_2_progessbar");
-var form_4_progessbar = document.querySelector(".form_4_progessbar");
-var form_5_progessbar = document.querySelector(".form_5_progessbar");
 
 var btn_done = document.querySelector(".btn_done");
 var modal_wrapper = document.querySelector(".modal_wrapper");
@@ -74,7 +71,7 @@ form_2_back_btn.addEventListener("click", function () {
   form_1_btns.style.display = "flex";
   form_2_btns.style.display = "none";
 
-  form_2_progessbar.classList.remove("active");
+
 });
 
 form_2_next_btn.addEventListener("click", function () {
@@ -84,7 +81,7 @@ form_2_next_btn.addEventListener("click", function () {
   form_4_btns.style.display = "flex";
   form_2_btns.style.display = "none";
 
-  form_4_progessbar.classList.add("active");
+
 });
 
 form_4_back_btn.addEventListener("click", function () {
@@ -104,7 +101,7 @@ form_4_next_btn.addEventListener("click", function () {
   form_4_btns.style.display = "none";
   form_5_btns.style.display = "flex";
 
-  form_5_progessbar.classList.add("active");
+
 });
 
 form_5_back_btn.addEventListener("click", function () {
@@ -114,16 +111,11 @@ form_5_back_btn.addEventListener("click", function () {
   form_5_btns.style.display = "none";
   form_4_btns.style.display = "flex";
 
-  form_5_progessbar.classList.remove("active");
+
 });
 
-btn_done.addEventListener("click", function () {
-  modal_wrapper.classList.add("active");
-});
 
-shadow.addEventListener("click", function () {
-  modal_wrapper.classList.remove("active");
-});
+
 
 /// partie selectionner de input
 
