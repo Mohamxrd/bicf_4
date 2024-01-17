@@ -79,7 +79,7 @@ if (isset($_POST['submit'])) {
                 $indus_user = $bat_user = $comm_user = $serv_user  = null;
             }
 
-            
+
 
 
             $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user,) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )');
@@ -489,14 +489,13 @@ if (isset($_POST['submit'])) {
             <p>Votre compte a été créer avec succès !</p>
         </div>
     </div>
-    <!-- #region 
--->
-<script type="text/javascript" src="../../js/step3.js"></script>
 
-    <script src="../../js/step4.js"></script>
+    <script type="text/javascript" src="../../js/step3.js"></script>
 
 
-    
+
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 

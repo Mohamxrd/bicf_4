@@ -114,11 +114,6 @@ form_5_back_btn.addEventListener("click", function () {
 
 });
 
-
-
-
-/// partie selectionner de input
-
 const userTypeSelect = document.getElementById("user_type");
 const userSexeInput = document.getElementById("user_sexe_input");
 const userAgeInput = document.getElementById("user_age_input");
@@ -261,98 +256,48 @@ userTypeSelect.addEventListener("change", (event) => {
   }
 });
 
-const accountType = document.getElementById("account_type");
-const actorType = document.getElementById("actor_type");
-const actorTypeInput = document.getElementById("actor_type_input"); // Notez la modification ici
-const actorType2 = document.getElementById("actor_type_input2");
-const actorBudginput = document.getElementById("actor_budg_input");
-const agentAccount = document.getElementById("agent_account_input");
-const detailantOptions = document.getElementById("detailant_options");
 
-function showInputFields2(actor, actor2, actorBudg, agent) {
-  actorTypeInput.style.display = actor;
-  actorType2.style.display = actor2;
-  actorBudginput.style.display = actorBudg;
-  agentAccount.style.display = agent;
-}
 
-showInputFields2("none", "none", "none", "none", "none");
-
-accountType.addEventListener("change", (event) => {
-  const selectedOption = event.target.value;
-
-  // Afficher ou masquer les éléments en fonction de la valeur sélectionnée
-  switch (selectedOption) {
-    case "Demandeur":
-      showInputFields2("none", "none", "none", "none");
-      break;
-    case "Fournisseur":
-      showInputFields2("block", "none", "none", "none");
-      break;
-    case "Livreur":
-      showInputFields2("none", "block", "none", "none");
-      break;
-    case "investisseur":
-      showInputFields2("none", "none", "block", "none");
-      break;
-    case "Agent":
-      showInputFields2("none", "none", "none", "block");
-      break;
-    default:
-  }
-
-  // Gérer l'affichage de detailantOptions en fonction de actor_type
-});
-
-const sectorActivitySelector = document.getElementById(
-  "sector_activity_selector"
-);
+const sectorActivitySelector = document.getElementById("sector_activity_selector");
 const industrySelector = document.getElementById("industry_selector");
 const buildingTypeInput = document.getElementById("building_type_input");
-const commerceSectorSelector = document.getElementById(
-  "commerce_sector_selector"
-);
-const transportSectorSelector = document.getElementById(
-  "transport_sector_selector"
-);
+const commerceSectorSelector = document.getElementById("commerce_sector_selector");
+const transportSectorSelector = document.getElementById("transport_sector_selector");
 
-function showInputFields(selector, displayValue) {
-  selector.style.display = displayValue;
-}
+const setDisplay = (element, displayValue) => element.style.display = displayValue;
 
-showInputFields(industrySelector, "block");
-showInputFields(buildingTypeInput, "none");
-showInputFields(commerceSectorSelector, "none");
-showInputFields(transportSectorSelector, "none");
+setDisplay(industrySelector, "block");
+setDisplay(buildingTypeInput, "none");
+setDisplay(commerceSectorSelector, "none");
+setDisplay(transportSectorSelector, "none");
 
 sectorActivitySelector.addEventListener("change", (event) => {
   const selectedOption = event.target.value;
 
   // Hide all selectors initially
-  showInputFields(industrySelector, "none");
-  showInputFields(buildingTypeInput, "none");
-  showInputFields(commerceSectorSelector, "none");
-  showInputFields(transportSectorSelector, "none");
+  [industrySelector, buildingTypeInput, commerceSectorSelector, transportSectorSelector]
+    .forEach(element => setDisplay(element, "none"));
 
   // Show the relevant selector based on the selected option
   switch (selectedOption) {
     case "Industrie":
-      showInputFields(industrySelector, "block");
+      setDisplay(industrySelector, "block");
       break;
     case "Construction":
-      showInputFields(buildingTypeInput, "block");
+      setDisplay(buildingTypeInput, "block");
       break;
     case "Commerce":
-      showInputFields(commerceSectorSelector, "block");
+      setDisplay(commerceSectorSelector, "block");
       break;
     case "Service":
-      showInputFields(transportSectorSelector, "block");
+      setDisplay(transportSectorSelector, "block");
       break;
     default:
-
-    // Do nothing for other options
+      // Do nothing for other options
   }
 });
+
+
 
 fetch("https://restcountries.com/v3.1/all")
   .then((response) => response.json())
