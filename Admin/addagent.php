@@ -167,6 +167,12 @@ if (!isset($_SESSION['username'])) {
                                                     <input type="text" id="username" class="form-control" name="username" placeholder="Nom d'utlisateur">
                                                 </div>
                                             </div>
+                                            <div class="col-12 mb-2">
+                                                <div class="form-group">
+                                                    <label for="phonenumber">Numero de téléphone</label>
+                                                    <input type="number" id="phonenumber" class="form-control" name="phonenumber" placeholder="Nom d'utlisateur">
+                                                </div>
+                                            </div>
                                             <div class="col-12  mb-2">
                                                 <div class="form-group">
                                                     <label for="password">Mot de passe</label>
