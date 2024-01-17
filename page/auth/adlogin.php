@@ -22,6 +22,7 @@ if (isset($_POST['submit'])) {
 			if (password_verify($mdpSoumis, $mdpDansLaBase)) {
 
                 if($admin['admin_type'] === 'admin'){
+					$_SESSION['id_admin'] = $admin['id_admin'];
 					$_SESSION['username'] = $admin['username_admin'];
 					$_SESSION['nom_user'] = $admin['nom_admin'];
 					header('location: ../../Admin/index.php');

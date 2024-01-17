@@ -79,11 +79,11 @@ if (isset($_POST['submit'])) {
                 $indus_user = $bat_user = $comm_user = $serv_user  = null;
             }
 
+            
 
 
-
-            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )');
-            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat,  $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user));
+            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user,) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )');
+            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat,  $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user,));
 
             header('location: login.php');
             exit();
@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
                 </li>
                 <li class="form_5_progessbar">
                     <div>
-                        <p>5</p>
+                        <p>4</p>
                     </div>
                 </li>
             </ul>
@@ -491,106 +491,9 @@ if (isset($_POST['submit'])) {
     </div>
 
 
-    <script>
+    <script src="../../js/step4.js">
 
-const sectorActivitySelector = document.getElementById(
-  "sector_activity_selector"
-);
-const industrySelector = document.getElementById("industry_selector");
-const buildingTypeInput = document.getElementById("building_type_input");
-const commerceSectorSelector = document.getElementById(
-  "commerce_sector_selector"
-);
-const transportSectorSelector = document.getElementById(
-  "transport_sector_selector"
-);
 
-function showInputFields(selector, displayValue) {
-  selector.style.display = displayValue;
-}
-
-showInputFields(industrySelector, "block");
-showInputFields(buildingTypeInput, "none");
-showInputFields(commerceSectorSelector, "none");
-showInputFields(transportSectorSelector, "none");
-
-sectorActivitySelector.addEventListener("change", (event) => {
-  const selectedOption = event.target.value;
-
-  // Hide all selectors initially
-  showInputFields(industrySelector, "none");
-  showInputFields(buildingTypeInput, "none");
-  showInputFields(commerceSectorSelector, "none");
-  showInputFields(transportSectorSelector, "none");
-
-  // Show the relevant selector based on the selected option
-  switch (selectedOption) {
-    case "Industrie":
-      showInputFields(industrySelector, "block");
-      break;
-    case "Construction":
-      showInputFields(buildingTypeInput, "block");
-      break;
-    case "Commerce":
-      showInputFields(commerceSectorSelector, "block");
-      break;
-    case "Service":
-      showInputFields(transportSectorSelector, "block");
-      break;
-    default:
-
-    // Do nothing for other options
-  }
-});
-
-fetch("https://restcountries.com/v3.1/all")
-  .then((response) => response.json())
-  .then((data) => {
-    const countryDropdown = document.getElementById("country");
-
-    // Ajouter la Côte d'Ivoire en tant que première option
-    const optionIvoryCoast = document.createElement("option");
-    optionIvoryCoast.value = "Cote d'ivoire";
-    optionIvoryCoast.textContent = "Côte d'Ivoire";
-    countryDropdown.appendChild(optionIvoryCoast);
-
-    // Ajouter les autres pays
-    data.forEach((country, index) => {
-      const option = document.createElement("option");
-      option.value = "option" + (index + 2);
-      option.textContent = country.name.common;
-      countryDropdown.appendChild(option);
-    });
-  })
-  .catch((error) =>
-    console.error("Erreur lors de la récupération des pays", error)
-  );
-
-function populateCountryDropdown() {
-  const countryDropdown = document.getElementById("country_code");
-  fetch("https://restcountries.com/v2/all")
-    .then((response) => response.json())
-    .then((data) => {
-      data.forEach((country) => {
-        if (
-          country.hasOwnProperty("callingCodes") &&
-          country.callingCodes.length > 0
-        ) {
-          const countryCode = country.callingCodes[0];
-          const countryName = country.name;
-          const option = document.createElement("option");
-          option.value = countryCode;
-          option.textContent = `${countryName} (+${countryCode})`;
-          countryDropdown.appendChild(option);
-        }
-      });
-    })
-    .catch((error) =>
-      console.error("Erreur lors de la récupération des pays", error)
-    );
-}
-
-populateCountryDropdown();
     </script>
 
 

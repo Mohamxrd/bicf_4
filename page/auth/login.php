@@ -157,8 +157,7 @@ if (isset($_POST['submit'])) {
 		</footer>
 
 
-
-
+       
 
 
 		<script src="../../js/core/popper.min.js"></script>

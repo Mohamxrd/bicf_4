@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
 :root{
-	--primary: #22ABFD;
+	--primary: #3347B0;
 	--secondary: #bfc0c0;
 	--white: #fff;
 	--text-clr: #5b6475;
 	--header-clr: #25273d;
-	--next-btn-hover: #288ac3;
+	--next-btn-hover: #4e60b7;
 	--back-btn-hover: #8b8c8c;
 }
 
@@ -129,10 +129,11 @@ a:hover {
 }
 
 .wrapper .form_wrap h2{
+	font-size: 18px;
 	color: var(--header-clr);
 	text-align: center;
 	text-transform: uppercase;
-	margin-bottom: 20px;
+	margin-bottom: 24px;
 }
 
 .wrapper .form_wrap .input_wrap{
@@ -318,6 +319,12 @@ a:hover {
 }
 .error-message{
 	color: crimson ;
+    font-size: 15px ;
+    text-align: center ;
+	margin: 10px 0;
+}
+.successMsg{
+    color: rgb(100, 198, 100) ;
     font-size: 15px ;
     text-align: center ;
 	margin: 10px 0;
