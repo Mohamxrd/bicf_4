@@ -166,7 +166,7 @@ if (!isset($_SESSION['username'])) {
                                         <th>Nom</th>
                                         <th>Username</th>
                                         <th>Telephone</th>
-                                        
+                                        <th>Agent</th>
                                         <th>Ville</th>
                                         
                                     </tr>
@@ -174,7 +174,7 @@ if (!isset($_SESSION['username'])) {
                                 <tbody>
                                 <?php
                                     // Utilizez l'agent_id dans la clause WHERE de votre requête SQL
-                                    $recupUsers = $conn->prepare('SELECT * FROM user ');
+                                    $recupUsers = $conn->prepare('SELECT user.*, admintable.nom_admin FROM user LEFT JOIN admintable ON user.id_admin = admintable.id_admin WHERE admintable.admin_type = "agent"');
                                     
                                     $recupUsers->execute();
 
@@ -184,11 +184,12 @@ if (!isset($_SESSION['username'])) {
                                             <td><?= $user['nom_user']; ?></td>
                                             <td><?= $user['username']; ?></td>
                                             <td><?= $user['tel_user']; ?></td>
+                                            <td><?= $user['nom_admin']; ?></td>
                                             <td><a href="#">Details</a></td>
                                         </tr>
                                     <?php
                                     }
-                                    ?>
+                                ?>
                                     
                                 </tbody>
                             </table>
