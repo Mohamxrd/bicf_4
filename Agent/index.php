@@ -1,8 +1,10 @@
 <?php
+
+session_start();
 @include('../page/config.php');
 
 
-session_start();
+
 
 if (!isset($_SESSION['username'])) {
     header('location: ../page/auth/adlogin.php');
@@ -80,7 +82,7 @@ if (!isset($_SESSION['username'])) {
                         </li>
 
                         <li class="sidebar-item  ">
-                            <a href="index.html" class='sidebar-link'>
+                            <a href="addclient.php" class='sidebar-link'>
                                 <i class="bi bi-collection-fill"></i>
                                 <span>Ajouter client</span>
                             </a>
@@ -89,7 +91,7 @@ if (!isset($_SESSION['username'])) {
                         </li>
 
                         <li class="sidebar-item  ">
-                            <a href="index.html" class='sidebar-link'>
+                            <a href="listclient.php" class='sidebar-link'>
                                 <i class="bi bi-collection-fill"></i>
                                 <span>Liste des clients</span>
                             </a>

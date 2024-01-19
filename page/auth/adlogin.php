@@ -27,6 +27,7 @@ if (isset($_POST['submit'])) {
 					$_SESSION['nom_user'] = $admin['nom_admin'];
 					header('location: ../../Admin/index.php');
 				}elseif($admin['admin_type'] === 'agent'){
+					$_SESSION['id_agent'] = $admin['id_admin'];
 				    $_SESSION['username'] = $admin['username_admin'];
 					$_SESSION['nom_user'] = $admin['nom_admin'];
 					header('location: ../../Agent/index.php');

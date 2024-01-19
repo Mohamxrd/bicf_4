@@ -1,12 +1,16 @@
 <?php
+session_start();
 @include('../page/config.php');
 
 
-session_start();
 
-if (!isset($_SESSION['username'])) {
+
+if (!isset($_SESSION['id_admin'])) {
     header('location: ../page/auth/adlogin.php');
 }
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 
 ?>
@@ -24,13 +28,13 @@ if (!isset($_SESSION['username'])) {
 
     <link rel="shortcut icon" href="./assets/compiled/svg/favicon.svg" type="image/x-icon">
     <link rel="shortcut icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAiCAYAAADRcLDBAAAEs2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS41LjAiPgogPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIKICAgIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIKICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgZXhpZjpQaXhlbFhEaW1lbnNpb249IjMzIgogICBleGlmOlBpeGVsWURpbWVuc2lvbj0iMzQiCiAgIGV4aWY6Q29sb3JTcGFjZT0iMSIKICAgdGlmZjpJbWFnZVdpZHRoPSIzMyIKICAgdGlmZjpJbWFnZUxlbmd0aD0iMzQiCiAgIHRpZmY6UmVzb2x1dGlvblVuaXQ9IjIiCiAgIHRpZmY6WFJlc29sdXRpb249Ijk2LjAiCiAgIHRpZmY6WVJlc29sdXRpb249Ijk2LjAiCiAgIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiCiAgIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIKICAgeG1wOk1vZGlmeURhdGU9IjIwMjItMDMtMzFUMTA6NTA6MjMrMDI6MDAiCiAgIHhtcDpNZXRhZGF0YURhdGU9IjIwMjItMDMtMzFUMTA6NTA6MjMrMDI6MDAiPgogICA8eG1wTU06SGlzdG9yeT4KICAgIDxyZGY6U2VxPgogICAgIDxyZGY6bGkKICAgICAgc3RFdnQ6YWN0aW9uPSJwcm9kdWNlZCIKICAgICAgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWZmaW5pdHkgRGVzaWduZXIgMS4xMC4xIgogICAgICBzdEV2dDp3aGVuPSIyMDIyLTAzLTMxVDEwOjUwOjIzKzAyOjAwIi8+CiAgICA8L3JkZjpTZXE+CiAgIDwveG1wTU06SGlzdG9yeT4KICA8L3JkZjpEZXNjcmlwdGlvbj4KIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+Cjw/eHBhY2tldCBlbmQ9InIiPz5V57uAAAABgmlDQ1BzUkdCIElFQzYxOTY2LTIuMQAAKJF1kc8rRFEUxz9maORHo1hYKC9hISNGTWwsRn4VFmOUX5uZZ36oeTOv954kW2WrKLHxa8FfwFZZK0WkZClrYoOe87ypmWTO7dzzud97z+nec8ETzaiaWd4NWtYyIiNhZWZ2TvE946WZSjqoj6mmPjE1HKWkfdxR5sSbgFOr9Ll/rXoxYapQVik8oOqGJTwqPL5i6Q5vCzeo6dii8KlwpyEXFL519LjLLw6nXP5y2IhGBsFTJ6ykijhexGra0ITl5bRqmWU1fx/nJTWJ7PSUxBbxJkwijBBGYYwhBgnRQ7/MIQIE6ZIVJfK7f/MnyUmuKrPOKgZLpEhj0SnqslRPSEyKnpCRYdXp/9++msneoFu9JgwVT7b91ga+LfjetO3PQ9v+PgLvI1xkC/m5A+h7F32zoLXug38dzi4LWnwHzjeg8UGPGbFfySvuSSbh9QRqZ6H+Gqrm3Z7l9zm+h+iafNUV7O5Bu5z3L/wAdthn7QIme0YAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJTSURBVFiF7Zi9axRBGIefEw2IdxFBRQsLWUTBaywSK4ubdSGVIY1Y6HZql8ZKCGIqwX/AYLmCgVQKfiDn7jZeEQMWfsSAHAiKqPiB5mIgELWYOW5vzc3O7niHhT/YZvY37/swM/vOzJbIqVq9uQ04CYwCI8AhYAlYAB4Dc7HnrOSJWcoJcBS4ARzQ2F4BZ2LPmTeNuykHwEWgkQGAet9QfiMZjUSt3hwD7psGTWgs9pwH1hC1enMYeA7sKwDxBqjGnvNdZzKZjqmCAKh+U1kmEwi3IEBbIsugnY5avTkEtIAtFhBrQCX2nLVehqyRqFoCAAwBh3WGLAhbgCRIYYinwLolwLqKUwwi9pxV4KUlxKKKUwxC6ZElRCPLYAJxGfhSEOCz6m8HEXvOB2CyIMSk6m8HoXQTmMkJcA2YNTHm3congOvATo3tE3A29pxbpnFzQSiQPcB55IFmFNgFfEQeahaAGZMpsIJIAZWAHcDX2HN+2cT6r39GxmvC9aPNwH5gO1BOPFuBVWAZue0vA9+A12EgjPadnhCuH1WAE8ivYAQ4ohKaagV4gvxi5oG7YSA2vApsCOH60WngKrA3R9IsvQUuhIGY00K4flQG7gHH/mLytB4C42EgfrQb0mV7us8AAMeBS8mGNMR4nwHamtBB7B4QRNdaS0M8GxDEog7iyoAguvJ0QYSBuAOcAt71Kfl7wA8DcTvZ2KtOlJEr+ByyQtqqhTyHTIeB+ONeqi3brh+VgIN0fohUgWGggizZFTplu12yW8iy/YLOGWMpDMTPXnl+Az9vj2HERYqPAAAAAElFTkSuQmCC" type="image/png">
-    
-<link rel="stylesheet" href="assets/extensions/simple-datatables/style.css">
+
+    <link rel="stylesheet" href="assets/extensions/simple-datatables/style.css">
 
 
-  <link rel="stylesheet" href="./assets/compiled/css/table-datatable.css">
-  <link rel="stylesheet" href="./assets/compiled/css/app.css">
-  <link rel="stylesheet" href="./assets/compiled/css/app-dark.css">
+    <link rel="stylesheet" href="./assets/compiled/css/table-datatable.css">
+    <link rel="stylesheet" href="./assets/compiled/css/app.css">
+    <link rel="stylesheet" href="./assets/compiled/css/app-dark.css">
 </head>
 
 <body>
@@ -165,193 +169,34 @@ if (!isset($_SESSION['username'])) {
                                         <th>Nom</th>
                                         <th>Username</th>
                                         <th>Telephone</th>
-                                        <th>Ville</th>
-                                        
+                                        <th>Details</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Graiden</td>
-                                        <td>vehicula.aliquet@semconsequat.co.uk</td>
-                                        <td>076 4820 8838</td>
-                                        <td>Offenburg</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Dale</td>
-                                        <td>fringilla.euismod.enim@quam.ca</td>
-                                        <td>0500 527693</td>
-                                        <td>New Quay</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Nathaniel</td>
-                                        <td>mi.Duis@diam.edu</td>
-                                        <td>(012165) 76278</td>
-                                        <td>Grumo Appula</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Darius</td>
-                                        <td>velit@nec.com</td>
-                                        <td>0309 690 7871</td>
-                                        <td>Ways</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Oleg</td>
-                                        <td>rhoncus.id@Aliquamauctorvelit.net</td>
-                                        <td>0500 441046</td>
-                                        <td>Rossignol</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Kermit</td>
-                                        <td>diam.Sed.diam@anteVivamusnon.org</td>
-                                        <td>(01653) 27844</td>
-                                        <td>Patna</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Jermaine</td>
-                                        <td>sodales@nuncsit.org</td>
-                                        <td>0800 528324</td>
-                                        <td>Mold</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Ferdinand</td>
-                                        <td>gravida.molestie@tinciduntadipiscing.org</td>
-                                        <td>(016977) 4107</td>
-                                        <td>Marlborough</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Kuame</td>
-                                        <td>Quisque.purus@mauris.org</td>
-                                        <td>(0151) 561 8896</td>
-                                        <td>Tresigallo</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Deacon</td>
-                                        <td>Duis.a.mi@sociisnatoquepenatibus.com</td>
-                                        <td>07740 599321</td>
-                                        <td>Karapınar</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Channing</td>
-                                        <td>tempor.bibendum.Donec@ornarelectusante.ca</td>
-                                        <td>0845 46 49</td>
-                                        <td>Warrnambool</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Aladdin</td>
-                                        <td>sem.ut@pellentesqueafacilisis.ca</td>
-                                        <td>0800 1111</td>
-                                        <td>Bothey</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Cruz</td>
-                                        <td>non@quisturpisvitae.ca</td>
-                                        <td>07624 944915</td>
-                                        <td>Shikarpur</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Keegan</td>
-                                        <td>molestie.dapibus@condimentumDonecat.edu</td>
-                                        <td>0800 200103</td>
-                                        <td>Assen</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Ray</td>
-                                        <td>placerat.eget@sagittislobortis.edu</td>
-                                        <td>(0112) 896 6829</td>
-                                        <td>Hofors</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Maxwell</td>
-                                        <td>diam@dapibus.org</td>
-                                        <td>0334 836 4028</td>
-                                        <td>Thane</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Carter</td>
-                                        <td>urna.justo.faucibus@orci.com</td>
-                                        <td>07079 826350</td>
-                                        <td>Biez</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Stone</td>
-                                        <td>velit.Aliquam.nisl@sitametrisus.com</td>
-                                        <td>0800 1111</td>
-                                        <td>Olivar</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Berk</td>
-                                        <td>fringilla.porttitor.vulputate@taciti.edu</td>
-                                        <td>(0101) 043 2822</td>
-                                        <td>Sanquhar</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Philip</td>
-                                        <td>turpis@euenimEtiam.org</td>
-                                        <td>0500 571108</td>
-                                        <td>Okara</td>
-                                        
-                                    </tr>
-                                    <tr>
-                                        <td>Kibo</td>
-                                        <td>feugiat@urnajustofaucibus.co.uk</td>
-                                        <td>07624 682306</td>
-                                        <td>La Cisterna</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Bruno</td>
-                                        <td>elit.Etiam.laoreet@luctuslobortisClass.edu</td>
-                                        <td>07624 869434</td>
-                                        <td>Rocca d"Arce</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Leonard</td>
-                                        <td>blandit.enim.consequat@mollislectuspede.net</td>
-                                        <td>0800 1111</td>
-                                        <td>Lobbes</td>
-                                      
-                                    </tr>
-                                    <tr>
-                                        <td>Hamilton</td>
-                                        <td>mauris@diam.org</td>
-                                        <td>0800 256 8788</td>
-                                        <td>Sanzeno</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Harding</td>
-                                        <td>Lorem.ipsum.dolor@etnetuset.com</td>
-                                        <td>0800 1111</td>
-                                        <td>Obaix</td>
-                                       
-                                    </tr>
-                                    <tr>
-                                        <td>Emmanuel</td>
-                                        <td>eget.lacus.Mauris@feugiatSednec.org</td>
-                                        <td>(016977) 8208</td>
-                                        <td>Saint-Remy-Geest</td>
-                                      
-                                    </tr>
+                                    <?php
+                                    // Utilisez le champ admin_type pour filtrer les administrateurs ayant le rôle 'agent'
+                                    $recupAdmins = $conn->prepare('SELECT * FROM adminTable WHERE admin_type = :admin_type');
+                                    $recupAdmins->bindValue(':admin_type', 'agent', PDO::PARAM_STR);
+
+                                    $recupAdmins->execute();
+
+                                    while ($admin = $recupAdmins->fetch()) {
+                                    ?>
+                                        <tr>
+                                            <td><?= $admin['nom_admin']; ?></td>
+                                            <td><?= $admin['username_admin']; ?></td>
+                                            <td><?= $admin['phonenumber']; ?></td>
+                                            <td><a href="#">Details</a></td>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+
+
+
+
+
                                 </tbody>
                             </table>
                         </div>
@@ -365,14 +210,14 @@ if (!isset($_SESSION['username'])) {
     </div>
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    
-    
-    <script src="assets/compiled/js/app.js"></script>
-    
 
-    
-<script src="assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
-<script src="assets/static/js/pages/simple-datatables.js"></script>
+
+    <script src="assets/compiled/js/app.js"></script>
+
+
+
+    <script src="assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+    <script src="assets/static/js/pages/simple-datatables.js"></script>
 
 </body>
 

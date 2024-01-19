@@ -5,7 +5,7 @@ session_start();
 
 
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['id_agent'])) {
     header('location: ../page/auth/adlogin.php');
 }
 
@@ -82,50 +82,20 @@ if (!isset($_SESSION['username'])) {
 
                         </li>
 
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-stack"></i>
-                                <span>Agent</span>
+                        <li class="sidebar-item  ">
+                            <a href="addclient.php" class='sidebar-link'>
+                                <i class="bi bi-collection-fill"></i>
+                                <span>Ajouter client</span>
                             </a>
-
-                            <ul class="submenu ">
-
-                                <li class="submenu-item  ">
-                                    <a href="addagent.php" class="submenu-link">Ajouter Agents</a>
-
-                                </li>
-
-                                <li class="submenu-item  ">
-                                    <a href="listagent.php" class="submenu-link">Liste des agents</a>
-
-                                </li>
-
-
-                            </ul>
 
 
                         </li>
 
-                        <li class="sidebar-item active has-sub">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item active ">
+                            <a href="listclient.php" class='sidebar-link'>
                                 <i class="bi bi-collection-fill"></i>
-                                <span>Client</span>
+                                <span>Liste des clients</span>
                             </a>
-
-                            <ul class="submenu active">
-
-                                <li class="submenu-item  ">
-                                    <a href="addclient.php" class="submenu-link">Ajouter Client</a>
-
-                                </li>
-
-                                <li class="submenu-item  active">
-                                    <a href="listclient.php" class="submenu-link">Liste des clients</a>
-
-                                </li>
-
-
-                            </ul>
 
 
                         </li>
@@ -166,16 +136,15 @@ if (!isset($_SESSION['username'])) {
                                         <th>Nom</th>
                                         <th>Username</th>
                                         <th>Telephone</th>
-                                        
-                                        <th>Ville</th>
+                                        <th>Details</th>
                                         
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
                                     // Utilizez l'agent_id dans la clause WHERE de votre requête SQL
-                                    $recupUsers = $conn->prepare('SELECT * FROM user ');
-                                    
+                                    $recupUsers = $conn->prepare('SELECT * FROM user WHERE id_admin = :id_admin');
+                                    $recupUsers->bindParam(':id_admin', $_SESSION['id_agent'], PDO::PARAM_INT);
                                     $recupUsers->execute();
 
                                     while ($user = $recupUsers->fetch()) {
