@@ -171,7 +171,13 @@ if (!isset($_SESSION['username'])) {
                                 <tbody>
                                 <?php
                                     // Utilizez l'agent_id dans la clause WHERE de votre requête SQL
+<<<<<<< HEAD
                                     $recupUsers = $conn->prepare('SELECT user.*, admintable.nom_admin FROM user LEFT JOIN admintable ON user.id_admin = admintable.id_admin AND admintable.admin_type = "agent" ORDER BY date_creation DESC');
+=======
+                                    $recupUsers = $conn->prepare('SELECT user.*, admintable.nom_admin FROM user
+                                     LEFT JOIN admintable ON user.id_admin = admintable.id_admin 
+                                     AND admintable.admin_type = "agent"');
+>>>>>>> 5bda58b92e9ad28e36e52724c90c821ac26def85
                                     
                                     $recupUsers->execute();
 
