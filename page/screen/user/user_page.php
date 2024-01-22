@@ -1,7 +1,6 @@
 <?php
-@include('../../config.php');
-
 session_start();
+@include('../../config.php');
 
 if(!isset($_SESSION['nom_user'])){
     header('location: ../../auth/login.php');

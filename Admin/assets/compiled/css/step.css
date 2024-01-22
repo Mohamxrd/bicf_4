@@ -17,36 +17,12 @@
 	list-style: none;
 	outline: none;
 	font-family: 'Open Sans', sans-serif;
+
 }
 
-body{
-	background: F6F7F9;
-	color: var(--text-clr);
-	font-size: 16px;
-	position: relative;
-}
-a {
+/*  */
 
-	font-size: 14px;
-	line-height: 1.7;
-	color: var(--primary);
-	margin: 0px;
-	transition: all 0.4s;
-	-webkit-transition: all 0.4s;
-  -o-transition: all 0.4s;
-  -moz-transition: all 0.4s;
-  font-weight: 800;
-  text-decoration: none;
-}
 
-a:focus {
-	outline: none !important;
-}
-
-a:hover {
-	text-decoration: none;
-  color:  var(--next-btn-hover);
-}
 .text-center{
     margin-top: 30px;
     text-align: center;

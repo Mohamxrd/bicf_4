@@ -1,0 +1,19 @@
+.custom-border{
+    border: 2px dashed #3347B0; /* Couleur et style de la bordure */
+    padding: 15px; /* Espace intérieur */
+    text-align: center; 
+    border-radius: 10px;
+    color: #3347B0;
+    cursor: pointer;
+}
+.custom-border h6{
+    color: #3347B0;
+}
+.custom-border:hover h6{
+    color: #fff;
+}
+.custom-border:hover{
+    border: 2px solid #3347B0;
+    background-color: #3347B0;
+   
+}
