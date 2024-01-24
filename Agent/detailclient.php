@@ -81,50 +81,20 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
 
                         </li>
 
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-stack"></i>
-                                <span>Agent</span>
+                        <li class="sidebar-item  ">
+                            <a href="addclient.php" class='sidebar-link'>
+                                <i class="bi bi-collection-fill"></i>
+                                <span>Ajouter client</span>
                             </a>
-
-                            <ul class="submenu ">
-
-                                <li class="submenu-item  ">
-                                    <a href="addagent.php" class="submenu-link">Ajouter Agents</a>
-
-                                </li>
-
-                                <li class="submenu-item  ">
-                                    <a href="listagent.php" class="submenu-link">Liste des agents</a>
-
-                                </li>
-
-
-                            </ul>
 
 
                         </li>
 
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item  ">
+                            <a href="listclient.php" class='sidebar-link'>
                                 <i class="bi bi-collection-fill"></i>
-                                <span>Client</span>
+                                <span>Liste des clients</span>
                             </a>
-
-                            <ul class="submenu ">
-
-                                <li class="submenu-item  ">
-                                    <a href="addclient.php" class="submenu-link">Ajouter Client</a>
-
-                                </li>
-
-                                <li class="submenu-item  ">
-                                    <a href="listclient.php" class="submenu-link">Liste des clients</a>
-
-                                </li>
-
-
-                            </ul>
 
 
                         </li>
@@ -137,7 +107,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
 
 
                         </li>
-                        
 
                         <li class="sidebar-item ">
                             <a href="logout.php" class='sidebar-link'>
