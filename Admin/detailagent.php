@@ -1,31 +1,50 @@
 <?php
+
 session_start();
 @include('../page/config.php');
 
-if (!isset($_SESSION['username'])) {
-    header('location: ../page/auth/adlogin.php');
-}
 
-if (isset($_GET['id']) && is_numeric($_GET['id'])){
-    $id_user = $_GET['id'];
 
-    $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
-    $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-    $recupUser->execute();
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id_agent = $_GET['id'];
 
-    if ($client = $recupUser->fetch()){
-        $nom_client = $client['nom_user'];
-        $username_client = $client['username'];
-        $phonenumber = $client['tel_user'];
-        $id_agent = $client['id_admin'];
+    // Récupérer les informations de l'agent spécifié
+    $recupAgent = $conn->prepare('SELECT * FROM adminTable WHERE id_admin = :id_admin');
+    $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
+    $recupAgent->execute();
+
+    $recupUsers = $conn->prepare('SELECT * FROM user WHERE id_admin = :id_admin');
+    $recupUsers->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
+    $recupUsers->execute();
+
+
+    $nombreClient = $recupUsers->rowCount();
+
+    $nombreClient = $recupUsers->rowCount();
+
+    if ($agent = $recupAgent->fetch()) {
+        // Les informations de l'agent sont maintenant dans $agent
+        $id_agent = $agent['id_admin'];
+        $nom_agent = $agent['nom_admin'];
+        $username_agent = $agent['username_admin'];
+        $phonenumber = $agent['phonenumber'];
+        $admin_type = $agent['admin_type'];
+        $date_creation = $agent['date_creation'];
+
     } else {
-        // L'utilisateur avec l'ID spécifié n'existe pas
+       
         exit();
     }
-} else {
-    // Aucun ID d'utilisateur spécifié dans la requête GET
-    exit();
+
+
 }
+
+
+
+
+
+
+
 ?>
 
 
@@ -154,6 +173,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                 </div>
             </div>
         </div>
+
+   
         <div id="main">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
@@ -183,9 +204,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                                         </div>
 
                                         <h5 class="mt-3">
-                                            <?= $nom_client ?>
+                                            <?= $nom_agent ?>
                                         </h5>
-                                        <p class="text-small">Client</p>
+                                        <p class="text-small">Agent</p>
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +226,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                                         <div class="form-group">
                                             <h5>Username</h5>
                                             <p>
-                                                <?= $username_client ?>
+                                                <?= $username_agent ?>
                                             </p>
 
                                         </div>
@@ -216,11 +237,17 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                                             </p>
 
                                         </div>
-                                        
+                                        <div class="form-group">
+                                            <h5>Nombre de client enregistré</h5>
+                                            <p>
+                                                <?= $nombreClient ?>
+                                            </p>
+
+                                        </div>
 
                                         <div class="form-group">
                                             <button name="submit-info" type="submit" class="btn btn-danger"
-                                                >Supprimé client</button>
+                                                >Supprimé l'agent</button>
                                         </div>
                                     </form>
 
@@ -231,13 +258,70 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
 
                     </div>
                 </section>
-                
+                <section class="section">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <h5 class="card-title">
+                                Tout les clients enregistrés
+                            </h5>
+
+
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped" id="table1">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Username</th>
+                                        <th>Telephone</th>
+                                        <th>Details</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    // Utilizez l'agent_id dans la clause WHERE de votre requête SQL
+                                    $recupUsers = $conn->prepare('SELECT * FROM user WHERE id_admin = :id_admin');
+                                    $recupUsers->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
+                                    $recupUsers->execute();
+
+                                    while ($user = $recupUsers->fetch()) {
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?= $user['nom_user']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['username']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['tel_user']; ?>
+                                            </td>
+                                            <td><a href="#">Details</a></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </section>
             </div>
 
 
 
         </div>
     </div>
+    <!-- <div class="modal_wrapper ">
+        <div class="shadow"></div>
+        <div class="success_wrap">
+            <span class="modal_icon"><ion-icon name="checkmark-sharp"></ion-icon></span>
+            <p>Votre compte a été créer avec succès !</p>
+        </div>
+    </div> -->
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
@@ -248,6 +332,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="assets/static/js/pages/dashboard.js"></script>
 
+  
 
 
 </body>

@@ -242,8 +242,8 @@ if (isset($_POST['submit-info'])) {
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <div class="avatar avatar-xl me-3">
-                                            <img src="assets/static/images/faces/3.jpg" alt="" srcset="">
+                                        <div class="avatar avatar-xxl me-3">
+                                            <img src="assets/static/images/faces/4.jpg" alt="" srcset="" style="width: 196px; height: 196px;">
                                         </div>
 
                                         <h3 class="mt-3"><?php echo $admin_info['nom_admin']; ?></h3>
@@ -289,7 +289,7 @@ if (isset($_POST['submit-info'])) {
 
                                     <form action="#" method="post">
                                         <div class="form-group">
-                                            <label for="name" class="form-label">Name</label>
+                                            <label for="name" class="form-label">Nom</label>
                                             <input type="text" name="name" id="name" class="form-control" placeholder="Your Name" value="<?php echo $admin_info['nom_admin']; ?>">
                                         </div>
                                         <div class="form-group">
@@ -297,7 +297,7 @@ if (isset($_POST['submit-info'])) {
                                             <input type="text" name="username" id="username" class="form-control" placeholder="username" value="<?php echo $admin_info['username_admin']; ?>">
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone" class="form-label">Phone</label>
+                                            <label for="phone" class="form-label">Numero de téléphone</label>
                                             <input type="text" name="phone" id="phone" class="form-control" placeholder="Your Phone" value="<?php echo $admin_info['phonenumber']; ?>">
                                         </div>
 
@@ -313,7 +313,7 @@ if (isset($_POST['submit-info'])) {
                             <div class="col-12">
 
                                 <div class="card-header">
-                                    <h5 class="card-title">Change Password</h5>
+                                    <h5 class="card-title">Changer votre mot de passe</h5>
                                 </div>
                                 <?php
 

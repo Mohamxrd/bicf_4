@@ -182,7 +182,7 @@ ini_set('display_errors', 1);
                                             <td><?= $admin['nom_admin']; ?></td>
                                             <td><?= $admin['username_admin']; ?></td>
                                             <td><?= $admin['phonenumber']; ?></td>
-                                            <td><a href="#">Details</a></td>
+                                            <td><a href="detailagent.php?id=<?= $admin['id_admin']; ?>">Details</a></td>
                                         </tr>
                                     <?php
                                     }

@@ -319,7 +319,7 @@ $numberOfAgents = $countAgents->fetchColumn();
                                                                 <td><?= $user['username']; ?></td>
                                                                 <td><?= $user['tel_user']; ?></td>
                                                                 <td><?= $user['nom_admin']; ?></td>
-                                                                <td><a href="detailclient.php">Details</a></td>
+                                                                <td><a href="detailclient.php?id=<?= $user['id_user']; ?>">Details</a></td>
                                                             </tr>
                                                         <?php
                                                         }
