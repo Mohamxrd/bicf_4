@@ -150,7 +150,7 @@ if (!isset($_SESSION['id_agent'])) {
                                             <td><?= $user['nom_user']; ?></td>
                                             <td><?= $user['username']; ?></td>
                                             <td><?= $user['tel_user']; ?></td>
-                                            <td><a href="#">Details</a></td>
+                                            <td><a href="detailclient.php?id=<?= $user['id_user']; ?>">Details</a></td>
                                         </tr>
                                     <?php
                                     }

@@ -32,7 +32,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $date_creation = $agent['date_creation'];
 
     } else {
-       
+
         exit();
     }
 
@@ -113,7 +113,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                                 </li>
 
-                                <li class="submenu-item  active">
+                                <li class="submenu-item  ">
                                     <a href="listagent.php" class="submenu-link">Liste des agents</a>
 
                                 </li>
@@ -174,7 +174,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             </div>
         </div>
 
-   
+
         <div id="main">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
@@ -246,12 +246,12 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                         </div>
 
                                         <div class="form-group">
-                                            <button name="submit-info" type="submit" class="btn btn-danger"
-                                                >Supprimé l'agent</button>
+                                            <button name="submit-info" type="submit" class="btn btn-danger">Supprimé
+                                                l'agent</button>
                                         </div>
                                     </form>
 
-                                   
+
                                 </div>
                             </div>
                         </div>
@@ -332,7 +332,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="assets/static/js/pages/dashboard.js"></script>
 
-  
+
 
 
 </body>
