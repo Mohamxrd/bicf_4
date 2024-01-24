@@ -17,6 +17,15 @@ $countAgents->bindValue(':admin_type', 'agent', PDO::PARAM_STR);
 $countAgents->execute();
 $numberOfAgents = $countAgents->fetchColumn();
 
+$id_admin = $_SESSION['id_admin'];
+
+$get_admin_info = $conn->prepare('SELECT nom_admin, username_admin, phonenumber FROM adminTable WHERE id_admin = :id_admin');
+$get_admin_info->bindParam(':id_admin', $id_admin, PDO::PARAM_INT);
+$get_admin_info->execute();
+$admin_info = $get_admin_info->fetch(PDO::FETCH_ASSOC);
+
+$nom_agent = $admin_info['nom_admin'];
+
 
 
 
@@ -36,9 +45,10 @@ $numberOfAgents = $countAgents->fetchColumn();
 
     <link rel="shortcut icon" href="./assets/compiled/svg/favicon.svg" type="image/x-icon">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.1.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
-    
-    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-straight/css/uicons-solid-straight.css'>
-    
+
+    <link rel='stylesheet'
+        href='https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+
 
     <link rel="stylesheet" href="./assets/compiled/css/app.css">
     <link rel="stylesheet" href="./assets/compiled/css/app-dark.css">
@@ -125,17 +135,17 @@ $numberOfAgents = $countAgents->fetchColumn();
 
                         <li class="sidebar-item  ">
                             <a href="profil.php" class='sidebar-link'>
-                            <i class="bi bi-person-circle"></i>
+                                <i class="bi bi-person-circle"></i>
                                 <span>Profils</span>
                             </a>
 
 
                         </li>
-                        
+
 
                         <li class="sidebar-item ">
                             <a href="logout.php" class='sidebar-link'>
-                            <i class="bi bi-box-arrow-right "></i>
+                                <i class="bi bi-box-arrow-right "></i>
                                 <span>Se deconnecter</span>
                             </a>
 
@@ -149,16 +159,66 @@ $numberOfAgents = $countAgents->fetchColumn();
             </div>
         </div>
         <div id="main">
-            <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
+            <header>
+                <nav class="navbar navbar-expand navbar-light navbar-top p-0">
+                    <div class="container-fluid">
+                        <a href="#" class="burger-btn d-block d-xl-none">
+                            <i class="bi bi-justify fs-3"></i>
+                        </a>
+
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav ms-auto mb-lg-0">
+
+
+                            </ul>
+                            <div class="dropdown">
+                                <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="user-menu d-flex">
+                                        <div class="user-name text-end me-3">
+                                            <h6 class="mb-0 text-gray-600">
+                                                <?= $nom_agent ?>
+                                            </h6>
+                                            <p class="mb-0 text-sm text-gray-600">Administrateur</p>
+                                        </div>
+                                        <div class="user-img d-flex align-items-center">
+                                            <div class="avatar avatar-md">
+                                                <img src="./assets/compiled/jpg/1.jpg">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
+                                    style="min-width: 11rem;">
+                                    <li>
+                                        <h6 class="dropdown-header">Salut,
+                                            <?= $nom_agent ?>
+                                        </h6>
+                                    </li>
+                                    <li><a class="dropdown-item" href="profil.php"><i
+                                                class="icon-mid bi bi-person me-2"></i> Mon
+                                            Profile</a></li>
+
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="logout.php"><i
+                                                class="icon-mid bi bi-box-arrow-left me-2"></i> Se deconecter</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
             </header>
 
             <div class="page-heading d-flex justify-content-between">
                 <h3>Statistique</h3>
 
-                
+
             </div>
             <div class="page-content">
                 <section class="row">
@@ -168,7 +228,8 @@ $numberOfAgents = $countAgents->fetchColumn();
                                 <div class="card">
                                     <div class="card-body px-4 py-4-5">
                                         <div class="row">
-                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                            <div
+                                                class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
                                                 <div class="stats-icon purple mb-2">
                                                     <i class="iconly-boldAdd-User"></i>
 
@@ -177,7 +238,9 @@ $numberOfAgents = $countAgents->fetchColumn();
                                             </div>
                                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                                 <h6 class="text-muted font-semibold">Clients</h6>
-                                                <h6 class="font-extrabold mb-0"><?= $countUsers ?></h6>
+                                                <h6 class="font-extrabold mb-0">
+                                                    <?= $countUsers ?>
+                                                </h6>
                                             </div>
                                         </div>
                                     </div>
@@ -187,7 +250,8 @@ $numberOfAgents = $countAgents->fetchColumn();
                                 <div class="card">
                                     <div class="card-body px-4 py-4-5">
                                         <div class="row">
-                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                            <div
+                                                class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
                                                 <div class="stats-icon blue mb-2">
                                                     <i class="iconly-boldUser1"></i>
 
@@ -195,7 +259,9 @@ $numberOfAgents = $countAgents->fetchColumn();
                                             </div>
                                             <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
                                                 <h6 class="text-muted font-semibold">Agents</h6>
-                                                <h6 class="font-extrabold mb-0"><?= $numberOfAgents ?></h6>
+                                                <h6 class="font-extrabold mb-0">
+                                                    <?= $numberOfAgents ?>
+                                                </h6>
                                             </div>
                                         </div>
                                     </div>
@@ -205,7 +271,8 @@ $numberOfAgents = $countAgents->fetchColumn();
                                 <div class="card">
                                     <div class="card-body px-4 py-4-5">
                                         <div class="row">
-                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                            <div
+                                                class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
                                                 <div class="stats-icon green mb-2">
                                                     <i class="iconly-boldArrow---Down"></i>
                                                 </div>
@@ -222,7 +289,8 @@ $numberOfAgents = $countAgents->fetchColumn();
                                 <div class="card">
                                     <div class="card-body px-4 py-4-5">
                                         <div class="row">
-                                            <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                            <div
+                                                class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
                                                 <div class="stats-icon red mb-2">
                                                     <i class="iconly-boldArrow---Up"></i>
                                                 </div>
@@ -254,22 +322,29 @@ $numberOfAgents = $countAgents->fetchColumn();
                                             $numAgent = 1;
 
                                             while ($admin = $recupAdmins->fetch()) {
-                                            ?>
+                                                ?>
 
                                                 <div class="col-6 col-md-3 d-flex flex-column align-items-center ">
                                                     <div class="avatar me-7 align-items-center mb-3">
-                                                        <img src="./assets/compiled/jpg/<?= $numAgent ?>.jpg" alt="" srcset="" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                                                        <img src="./assets/compiled/jpg/<?= $numAgent ?>.jpg" alt=""
+                                                            srcset="" class="img-fluid rounded-circle"
+                                                            style="width: 100px; height: 100px;">
                                                     </div>
-                                                    <h6 class="text-center"><?= $admin['nom_admin']; ?></h6>
-                                                    <p>Agent <?= $numAgent; ?></p>
+                                                    <h6 class="text-center">
+                                                        <?= $admin['nom_admin']; ?>
+                                                    </h6>
+                                                    <p>Agent
+                                                        <?= $numAgent; ?>
+                                                    </p>
                                                 </div>
 
-                                            <?php
+                                                <?php
                                                 $numAgent++;
                                             }
                                             ?>
                                             <div class="col-6 col-md-3 d-flex flex-column align-items-center mb-3">
-                                                <a href="addagent.php"><i class="fi fi-ss-plus" style="font-size: 100px; color: #999;"></i></a>
+                                                <a href="addagent.php"><i class="fi fi-ss-plus"
+                                                        style="font-size: 100px; color: #999;"></i></a>
                                                 <h6 class="text-center">Ajouter</h6>
                                             </div>
                                         </div>
@@ -313,15 +388,25 @@ $numberOfAgents = $countAgents->fetchColumn();
                                                         $recupUsers->execute();
 
                                                         while ($user = $recupUsers->fetch()) {
-                                                        ?>
+                                                            ?>
                                                             <tr>
-                                                                <td><?= $user['nom_user']; ?></td>
-                                                                <td><?= $user['username']; ?></td>
-                                                                <td><?= $user['tel_user']; ?></td>
-                                                                <td><?= $user['nom_admin']; ?></td>
-                                                                <td><a href="detailclient.php?id=<?= $user['id_user']; ?>">Details</a></td>
+                                                                <td>
+                                                                    <?= $user['nom_user']; ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= $user['username']; ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= $user['tel_user']; ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?= $user['nom_admin']; ?>
+                                                                </td>
+                                                                <td><a
+                                                                        href="detailclient.php?id=<?= $user['id_user']; ?>">Details</a>
+                                                                </td>
                                                             </tr>
-                                                        <?php
+                                                            <?php
                                                         }
                                                         ?>
 
@@ -345,8 +430,10 @@ $numberOfAgents = $countAgents->fetchColumn();
                                         <div class="row">
                                             <div class="col-7">
                                                 <div class="d-flex align-items-center">
-                                                    <svg class="bi text-success" width="32" height="32" fill="blue" style="width:10px">
-                                                        <use xlink:href="assets/static/images/bootstrap-icons.svg#circle-fill" />
+                                                    <svg class="bi text-success" width="32" height="32" fill="blue"
+                                                        style="width:10px">
+                                                        <use
+                                                            xlink:href="assets/static/images/bootstrap-icons.svg#circle-fill" />
                                                     </svg>
                                                     <h5 class="mb-0 ms-3">Avocat</h5>
                                                 </div>
@@ -361,8 +448,10 @@ $numberOfAgents = $countAgents->fetchColumn();
                                         <div class="row">
                                             <div class="col-7">
                                                 <div class="d-flex align-items-center">
-                                                    <svg class="bi text-danger" width="32" height="32" fill="blue" style="width:10px">
-                                                        <use xlink:href="assets/static/images/bootstrap-icons.svg#circle-fill" />
+                                                    <svg class="bi text-danger" width="32" height="32" fill="blue"
+                                                        style="width:10px">
+                                                        <use
+                                                            xlink:href="assets/static/images/bootstrap-icons.svg#circle-fill" />
                                                     </svg>
                                                     <h5 class="mb-0 ms-3">Lait</h5>
                                                 </div>
@@ -376,7 +465,7 @@ $numberOfAgents = $countAgents->fetchColumn();
                                         </div>
                                         <div class="col-12">
                                             <div class="custom-border" onclick="redirectToPage()">
-                                               
+
                                                 <h6 class="ms-3 mb-0">+ Ajouter un client</h6>
                                             </div>
                                         </div>
@@ -404,11 +493,11 @@ $numberOfAgents = $countAgents->fetchColumn();
     <script src="assets/static/js/pages/dashboard.js"></script>
 
     <script>
-    function redirectToPage() {
-        // Rediriger vers la page souhaitée
-        window.location.href = 'addclient.php';
-    }
-  </script>
+        function redirectToPage() {
+            // Rediriger vers la page souhaitée
+            window.location.href = 'addclient.php';
+        }
+    </script>
 
 </body>
 

@@ -6,18 +6,35 @@ if (!isset($_SESSION['username'])) {
     header('location: ../page/auth/adlogin.php');
 }
 
-if (isset($_GET['id']) && is_numeric($_GET['id'])){
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_user = $_GET['id'];
 
+    // Récupérer les informations de l'utilisateur
     $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
     $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
     $recupUser->execute();
 
-    if ($client = $recupUser->fetch()){
+    if ($client = $recupUser->fetch()) {
         $nom_client = $client['nom_user'];
         $username_client = $client['username'];
         $phonenumber = $client['tel_user'];
         $id_agent = $client['id_admin'];
+        $actorType = $client['actorType'];
+        $activSector_user = $client['activSector_user'];
+        $adress_user = $client['adress_user'];
+        $email_user = $client['email_user'];
+
+        // Maintenant, récupérez les informations de l'agent
+        $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
+        $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
+        $recupAgent->execute();
+
+        if ($agent = $recupAgent->fetch()) {
+            $nom_agent = $agent['nom_admin'];
+        } else {
+            // L'agent avec l'ID spécifié n'existe pas
+            exit();
+        }
     } else {
         // L'utilisateur avec l'ID spécifié n'existe pas
         exit();
@@ -165,7 +182,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                 <div class="page-title">
                     <div class="row">
                         <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3>Profile</h3>
+                            <h3>Detail client</h3>
 
                         </div>
 
@@ -173,65 +190,149 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                 </div>
                 <section class="section">
                     <div class="row">
-                        <div class="col-12 col-lg-4">
+                        <div class="col-12">
                             <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <div class="avatar avatar-xxl me-3">
-                                            <img src="assets/static/images/faces/2.jpg" alt="" srcset=""
-                                                style="width: 180px; height: 180px;">
+                                <div class="card-body ">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar avatar-xxl me-3">
+                                                <img src="assets/static/images/faces/2.jpg" alt=""
+                                                    style="width: 100px; height: 100px;">
+                                            </div>
+
+                                            <div class="d-flex flex-column">
+                                                <h5 class="mb-0">
+                                                    <?= $nom_client ?>
+                                                </h5>
+                                                <p class="text-small mb-0">
+                                                    <?= '@'.$username_client ?>
+                                                </p>
+                                            </div>
                                         </div>
 
-                                        <h5 class="mt-3">
-                                            <?= $nom_client ?>
-                                        </h5>
-                                        <p class="text-small">Client</p>
+                                        <div class="ms-auto">
+                                            <a href="#" class="btn btn-outline-primary">Modifier agent</a>
+                                            <a href="#" class="btn btn-outline-danger">Supprimé client</a>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-8">
 
-                            <div class="card">
+                                    <div class="row">
+                                        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                                    href="#home" role="tab" aria-controls="home"
+                                                    aria-selected="true">Information personel</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                                    href="#profile" role="tab" aria-controls="profile"
+                                                    aria-selected="false">Produit de service</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="contact-tab" data-bs-toggle="tab"
+                                                    href="#contact" role="tab" aria-controls="contact"
+                                                    aria-selected="false">Consomation</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="histoire-tab" data-bs-toggle="tab"
+                                                    href="#histoire" role="tab" aria-controls="contact"
+                                                    aria-selected="false">Historique de demande</a>
+                                            </li>
+                                        </ul>
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab">
+
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-12">
+                                                        <div class="form-group">
+                                                            <h6>Nom du client</h6>
+                                                            <p>
+                                                                <?= $nom_client ?>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h6>Username</h6>
+                                                            <p>
+                                                                <?= $username_client ?>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h6>Téléphone</h6>
+                                                            <p>
+                                                                <?= $phonenumber ?>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h6>Type d'acteur</h6>
+                                                            <p>
+                                                                <?= $actorType ?>
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-12">
+                                                        <div class="form-group">
+                                                            <h6>Secteur d'activité</h6>
+                                                            <p>
+                                                                <?= $activSector_user ?>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h6>Adress</h6>
+                                                            <p>
+                                                                <?= $adress_user ?>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h6>Email</h6>
+                                                            <p>
+                                                                <?= $email_user ?>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h6>Agent rataché</h6>
+                                                            <p>
+                                                                <?= $nom_agent ?>
+                                                            </p>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
 
 
 
-                                <div class="card-body">
 
 
 
-                                    <form action="#" method="post">
-
-                                        <div class="form-group">
-                                            <h5>Username</h5>
-                                            <p>
-                                                <?= $username_client ?>
-                                            </p>
-
+                                            </div>
+                                            <div class="tab-pane fade" id="profile" role="tabpanel"
+                                                aria-labelledby="profile-tab">
+                                               Aucun produit enregistré
+                                            </div>
+                                            <div class="tab-pane fade" id="contact" role="tabpanel"
+                                                aria-labelledby="contact-tab">
+                                               Aucune donnée enregistré
+                                            </div>
+                                            <div class="tab-pane fade" id="histoire" role="tabpanel"
+                                                aria-labelledby="histoire-tab">
+                                                Historique vide
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <h5>Téléphone</h5>
-                                            <p>
-                                                <?= $phonenumber ?>
-                                            </p>
-
-                                        </div>
-                                        
-
-                                        <div class="form-group">
-                                            <button name="submit-info" type="submit" class="btn btn-danger"
-                                                >Supprimé client</button>
-                                        </div>
-                                    </form>
-
-                                   
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                     </div>
                 </section>
-                
+
             </div>
 
 
