@@ -116,13 +116,11 @@ $nom_agent = $admin_info['nom_admin'];
 
                         </li>
 
-                        <li class="sidebar-item ">
-                            <a href="logout.php" class='sidebar-link'>
-                                <i class="bi bi-box-arrow-right "></i>
+                        <li class="sidebar-item">
+                            <a href="#" class='sidebar-link' id="logoutBtn">
+                                <i class="bi bi-box-arrow-right"></i>
                                 <span>Se deconnecter</span>
                             </a>
-
-
                         </li>
 
 
@@ -146,14 +144,16 @@ $nom_agent = $admin_info['nom_admin'];
                         </button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav ms-auto mb-lg-0">
-                                
-                               
+
+
                             </ul>
                             <div class="dropdown">
                                 <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                                     <div class="user-menu d-flex">
                                         <div class="user-name text-end me-3">
-                                            <h6 class="mb-0 text-gray-600"><?= $nom_agent ?></h6>
+                                            <h6 class="mb-0 text-gray-600">
+                                                <?= $nom_agent ?>
+                                            </h6>
                                             <p class="mb-0 text-sm text-gray-600">Agent</p>
                                         </div>
                                         <div class="user-img d-flex align-items-center">
@@ -166,16 +166,21 @@ $nom_agent = $admin_info['nom_admin'];
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"
                                     style="min-width: 11rem;">
                                     <li>
-                                        <h6 class="dropdown-header">Salut, <?= $nom_agent ?></h6>
+                                        <h6 class="dropdown-header">Salut,
+                                            <?= $nom_agent ?>
+                                        </h6>
                                     </li>
-                                    <li><a class="dropdown-item" href="profil.php"><i class="icon-mid bi bi-person me-2"></i> Mon
-                                            Profile</a></li>
-                                   
+                                    <li><a class="dropdown-item" href="profil.php"><i
+                                                class="icon-mid bi bi-person me-2"></i> Mon Profile</a></li>
+
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="logout.php"><i
-                                                class="icon-mid bi bi-box-arrow-left me-2"></i> Se deconecter</a></li>
+                                    <li><a href="#" class='dropdown-item' id="logoutBtn2">
+                                            <i class="bi bi-box-arrow-right"></i>
+                                            <span>Se deconnecter</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -372,6 +377,54 @@ $nom_agent = $admin_info['nom_admin'];
 
         </div>
     </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', function (event) {
+            // Empêcher le comportement par défaut du lien
+            event.preventDefault();
+
+            // Afficher l'alerte SweetAlert2
+            Swal.fire({
+                title: "Êtes-vous sûr de vous déconnecter?",
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui",
+                cancelButtonText: 'Non',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de déconnexion après confirmation
+                    window.location.href = "logout.php";
+                }
+            });
+        });
+
+        document.getElementById('logoutBtn2').addEventListener('click', function (event) {
+            // Empêcher le comportement par défaut du lien
+            event.preventDefault();
+
+            // Afficher l'alerte SweetAlert2
+            Swal.fire({
+                title: "Êtes-vous sûr de vous déconnecter?",
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui",
+                cancelButtonText: 'Non',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de déconnexion après confirmation
+                    window.location.href = "logout.php";
+                }
+            });
+        });
+    </script>
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
@@ -388,6 +441,8 @@ $nom_agent = $admin_info['nom_admin'];
             window.location.href = 'addclient.php';
         }
     </script>
+
+    
 
 </body>
 

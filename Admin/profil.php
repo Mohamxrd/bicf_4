@@ -204,13 +204,11 @@ if (isset($_POST['submit-info'])) {
                         </li>
 
 
-                        <li class="sidebar-item ">
-                            <a href="logout.php" class='sidebar-link'>
-                                <i class="bi bi-box-arrow-right "></i>
+                        <li class="sidebar-item">
+                            <a href="#" class='sidebar-link' id="logoutBtn">
+                                <i class="bi bi-box-arrow-right"></i>
                                 <span>Se deconnecter</span>
                             </a>
-
-
                         </li>
 
 
@@ -227,8 +225,9 @@ if (isset($_POST['submit-info'])) {
                 </a>
             </header>
 
+
             <div class="page-heading">
-                <div class="page-title">
+                <div class="page-title mb-4">
                     <div class="row">
                         <div class="col-12 col-md-6 order-md-1 order-last">
                             <h3>Profile</h3>
@@ -239,149 +238,233 @@ if (isset($_POST['submit-info'])) {
                 </div>
                 <section class="section">
                     <div class="row">
-                        <div class="col-12 col-lg-4">
+                        <div class="col-12">
                             <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <div class="avatar avatar-xxl me-3">
-                                            <img src="assets/static/images/faces/4.jpg" alt="" srcset=""
-                                                style="width: 196px; height: 196px;">
+                                <div class="card-body ">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar avatar-xxl me-3">
+                                                <img src="assets/static/images/faces/4.jpg" alt=""
+                                                    style="width: 100px; height: 100px;">
+                                            </div>
+
+                                            <div class="d-flex flex-column">
+                                                <h5 class="mb-0">
+                                                    <?php echo $admin_info['nom_admin']; ?>
+                                                </h5>
+                                                <p class="text-small mb-0">
+                                                    <?php echo '@' . $admin_info['username_admin'] ?>
+                                                </p>
+                                            </div>
                                         </div>
 
-                                        <h3 class="mt-3">
-                                            <?php echo $admin_info['nom_admin']; ?>
-                                        </h3>
-                                        <p class="text-small">Administrateur principale</p>
+
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-8">
 
-                            <div class="card">
+                                    <div class="row">
+                                        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                                    href="#home" role="tab" aria-controls="home"
+                                                    aria-selected="true">Information personel</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                                    href="#profile" role="tab" aria-controls="profile"
+                                                    aria-selected="false">Modifier le profile</a>
+                                            </li>
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link" id="contact-tab" data-bs-toggle="tab"
+                                                    href="#contact" role="tab" aria-controls="contact"
+                                                    aria-selected="false">Modifier Mot de passe</a>
+                                            </li>
+                                            
+                                        </ul>
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                                aria-labelledby="home-tab">
+
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <h6>Nom de l'administrateur</h6>
+                                                            <p>
+                                                            <?php echo $admin_info['nom_admin']; ?>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h6>Username</h6>
+                                                            <p>
+                                                            <?php echo $admin_info['username_admin'] ?>
+                                                            </p>
+
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h6>Téléphone</h6>
+                                                            <p>
+                                                            <?php echo $admin_info['phonenumber'] ?>
+                                                            </p>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
 
 
 
-                                <div class="card-body">
 
-                                    <?php
 
-                                    if (!empty($successMsg2)) {
 
-                                        echo '
-                                         <div class="alert alert-light-success alert-dismissible show fade">
-                                         ' . $successMsg2 . '
-                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                         </div>
-                                         ';
-                                    }
+                                            </div>
+                                            <div class="tab-pane fade" id="profile" role="tabpanel"
+                                                aria-labelledby="profile-tab">
+                                                <div class="col-12 col-lg-8">
 
-                                    ?>
-                                    <?php
+                                                    <div class="card">
 
-                                    if (!empty($errorMsg2)) {
 
-                                        echo '
-                                         <div class="alert alert-light-danger alert-dismissible show fade">
-                                         ' . $errorMsg2 . '
-                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                         </div>
-                                         ';
-                                    }
 
-                                    ?>
+                                                        <div class="card-body">
 
-                                    <form action="#" method="post">
-                                        <div class="form-group">
-                                            <label for="name" class="form-label">Name</label>
-                                            <input type="text" name="name" id="name" class="form-control"
-                                                placeholder="Your Name" value="<?php echo $admin_info['nom_admin']; ?>">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="username" class="form-label">Username</label>
-                                            <input type="text" name="username" id="username" class="form-control"
-                                                placeholder="username"
-                                                value="<?php echo $admin_info['username_admin']; ?>">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="phone" class="form-label">Phone</label>
-                                            <input type="text" name="phone" id="phone" class="form-control"
-                                                placeholder="Your Phone"
-                                                value="<?php echo $admin_info['phonenumber']; ?>">
-                                        </div>
+                                                            <?php
 
-                                        <div class="form-group">
-                                            <button name="submit-info" type="submit"
-                                                class="btn btn-primary">Modifier</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card">
+                                                            if (!empty($successMsg2)) {
 
-                            <div class="col-12">
+                                                                echo '
+<div class="alert alert-light-success alert-dismissible show fade">
+' . $successMsg2 . '
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+';
+                                                            }
 
-                                <div class="card-header">
-                                    <h5 class="card-title">Changer le mot de passe</h5>
-                                </div>
-                                <?php
+                                                            ?>
+                                                            <?php
 
-                                if (!empty($successMsg)) {
+                                                            if (!empty($errorMsg2)) {
 
-                                    echo '
+                                                                echo '
+<div class="alert alert-light-danger alert-dismissible show fade">
+' . $errorMsg2 . '
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+';
+                                                            }
+
+                                                            ?>
+
+                                                            <form action="#" method="post">
+                                                                <div class="form-group">
+                                                                    <label for="name" class="form-label">Nom</label>
+                                                                    <input type="text" name="name" id="name"
+                                                                        class="form-control" placeholder="Your Name"
+                                                                        value="<?php echo $admin_info['nom_admin']; ?>">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="username"
+                                                                        class="form-label">Username</label>
+                                                                    <input type="text" name="username" id="username"
+                                                                        class="form-control" placeholder="username"
+                                                                        value="<?php echo $admin_info['username_admin']; ?>">
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="phone" class="form-label">Numero de
+                                                                        téléphone</label>
+                                                                    <input type="text" name="phone" id="phone"
+                                                                        class="form-control" placeholder="Your Phone"
+                                                                        value="<?php echo $admin_info['phonenumber']; ?>">
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <button name="submit-info" type="submit"
+                                                                        class="btn btn-primary">Modifier</button>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane fade" id="contact" role="tabpanel"
+                                                aria-labelledby="contact-tab">
+                                                <div class="col-12">
+
+                                                    <div class="card-header">
+                                                        <h5 class="card-title">Changer votre mot de passe</h5>
+                                                    </div>
+                                                    <?php
+
+                                                    if (!empty($successMsg)) {
+
+                                                        echo '
 <div class="alert alert-light-success alert-dismissible show fade">
 ' . $successMsg . '
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 ';
-                                }
+                                                    }
 
-                                ?>
-                                <?php
+                                                    ?>
+                                                    <?php
 
-                                if (!empty($errorMsg)) {
+                                                    if (!empty($errorMsg)) {
 
-                                    echo '
+                                                        echo '
 <div class="alert alert-light-danger alert-dismissible show fade">
 ' . $errorMsg . '
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 ';
-                                }
+                                                    }
 
-                                ?>
-                                <div class="card-body">
-                                    <form action="#" method="post">
-                                        <div class="form-group my-2">
-                                            <label for="current_password" class="form-label">Mot de passe actuel</label>
-                                            <input type="password" name="current_password" id="current_password"
-                                                class="form-control" placeholder="Mot de passe actuel" value="">
-                                        </div>
-                                        <div class="form-group my-2">
-                                            <label for="new_password" class="form-label">Nouveau Mot de passe</label>
-                                            <input type="password" name="new_password" id="new_password"
-                                                class="form-control" placeholder="Entrer nouveau mot de passe" value="">
-                                        </div>
-                                        <div class="form-group my-2">
-                                            <label for="confirm_password" class="form-label">Confirmer mot de
-                                                passe</label>
-                                            <input type="password" name="confirm_password" id="confirm_password"
-                                                class="form-control" placeholder="Confirmer mot de passe" value="">
-                                        </div>
+                                                    ?>
+                                                    <div class="card-body">
+                                                        <form action="#" method="post">
+                                                            <div class="form-group my-2">
+                                                                <label for="current_password" class="form-label">Mot de
+                                                                    passe actuel</label>
+                                                                <input type="password" name="current_password"
+                                                                    id="current_password" class="form-control"
+                                                                    placeholder="Mot de passe actuel" value="">
+                                                            </div>
+                                                            <div class="form-group my-2">
+                                                                <label for="new_password" class="form-label">Nouveau Mot
+                                                                    de passe</label>
+                                                                <input type="password" name="new_password"
+                                                                    id="new_password" class="form-control"
+                                                                    placeholder="Entrer nouveau mot de passe" value="">
+                                                            </div>
+                                                            <div class="form-group my-2">
+                                                                <label for="confirm_password"
+                                                                    class="form-label">Confirmer mot de
+                                                                    passe</label>
+                                                                <input type="password" name="confirm_password"
+                                                                    id="confirm_password" class="form-control"
+                                                                    placeholder="Confirmer mot de passe" value="">
+                                                            </div>
 
-                                        <div class="form-group my-2 d-flex justify-content-end">
-                                            <button name="submit" type="submit"
-                                                class="btn btn-primary">Sauvegarder</button>
+                                                            <div class="form-group my-2 d-flex justify-content-end">
+                                                                <button name="submit" type="submit"
+                                                                    class="btn btn-primary">Sauvegarder</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </section>
+                
             </div>
 
+            
         </div>
     </div>
     <script src="assets/static/js/components/dark.js"></script>
@@ -393,6 +476,30 @@ if (isset($_POST['submit-info'])) {
 
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="assets/static/js/pages/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+    document.getElementById('logoutBtn').addEventListener('click', function (event) {
+        // Empêcher le comportement par défaut du lien
+        event.preventDefault();
+
+        // Afficher l'alerte SweetAlert2
+        Swal.fire({
+            title: "Êtes-vous sûr de vous déconnecter?",
+            
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oui",
+            cancelButtonText: 'Non',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Rediriger vers la page de déconnexion après confirmation
+                window.location.href = "logout.php";
+            }
+        });
+    });
+</script>
 
     
 

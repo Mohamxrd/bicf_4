@@ -3,10 +3,7 @@
 session_start();
 @include('../page/config.php');
 
-
-
-
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['id_admin'])) {
     header('location: ../page/auth/adlogin.php');
 }
 
@@ -26,11 +23,11 @@ $admin_info = $get_admin_info->fetch(PDO::FETCH_ASSOC);
 
 $nom_agent = $admin_info['nom_admin'];
 
-
-
-
-
 ?>
+
+<!-- Le reste de votre code HTML ici -->
+
+
 
 
 <!DOCTYPE html>
@@ -143,13 +140,11 @@ $nom_agent = $admin_info['nom_admin'];
                         </li>
 
 
-                        <li class="sidebar-item ">
-                            <a href="logout.php" class='sidebar-link'>
-                                <i class="bi bi-box-arrow-right "></i>
+                        <li class="sidebar-item">
+                            <a href="#" class='sidebar-link' id="logoutBtn">
+                                <i class="bi bi-box-arrow-right"></i>
                                 <span>Se deconnecter</span>
                             </a>
-
-
                         </li>
 
 
@@ -206,8 +201,11 @@ $nom_agent = $admin_info['nom_admin'];
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="logout.php"><i
-                                                class="icon-mid bi bi-box-arrow-left me-2"></i> Se deconecter</a></li>
+                                    <li><a href="#" class='dropdown-item' id="logoutBtn2">
+                                            <i class="bi bi-box-arrow-right"></i>
+                                            <span>Se deconnecter</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -482,6 +480,53 @@ $nom_agent = $admin_info['nom_admin'];
 
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+    document.getElementById('logoutBtn').addEventListener('click', function (event) {
+        // Empêcher le comportement par défaut du lien
+        event.preventDefault();
+
+        // Afficher l'alerte SweetAlert2
+        Swal.fire({
+            title: "Êtes-vous sûr de vous déconnecter?",
+            
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oui",
+            cancelButtonText: 'Non',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Rediriger vers la page de déconnexion après confirmation
+                window.location.href = "logout.php";
+            }
+        });
+    });
+
+    document.getElementById('logoutBtn2').addEventListener('click', function (event) {
+            // Empêcher le comportement par défaut du lien
+            event.preventDefault();
+
+            // Afficher l'alerte SweetAlert2
+            Swal.fire({
+                title: "Êtes-vous sûr de vous déconnecter?",
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui",
+                cancelButtonText: 'Non',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de déconnexion après confirmation
+                    window.location.href = "logout.php";
+                }
+            });
+        });
+</script>
+
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 

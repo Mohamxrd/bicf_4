@@ -158,13 +158,11 @@ if (isset($_POST['submit'])) {
 
 
                         </li>
-                        <li class="sidebar-item ">
-                            <a href="logout.php" class='sidebar-link'>
-                                <i class="bi bi-box-arrow-right "></i>
+                        <li class="sidebar-item">
+                            <a href="#" class='sidebar-link' id="logoutBtn">
+                                <i class="bi bi-box-arrow-right"></i>
                                 <span>Se deconnecter</span>
                             </a>
-
-
                         </li>
 
 
@@ -277,6 +275,31 @@ if (isset($_POST['submit'])) {
 
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="assets/static/js/pages/dashboard.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+    document.getElementById('logoutBtn').addEventListener('click', function (event) {
+        // Empêcher le comportement par défaut du lien
+        event.preventDefault();
+
+        // Afficher l'alerte SweetAlert2
+        Swal.fire({
+            title: "Êtes-vous sûr de vous déconnecter?",
+            
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oui",
+            cancelButtonText: 'Non',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Rediriger vers la page de déconnexion après confirmation
+                window.location.href = "logout.php";
+            }
+        });
+    });
+</script>
 
 </body>
 

@@ -32,7 +32,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $date_creation = $agent['date_creation'];
 
     } else {
-       
+
         exit();
     }
 
@@ -158,13 +158,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                         </li>
 
 
-                        <li class="sidebar-item ">
-                            <a href="logout.php" class='sidebar-link'>
-                                <i class="bi bi-box-arrow-right "></i>
+                        <li class="sidebar-item">
+                            <a href="#" class='sidebar-link' id="logoutBtn">
+                                <i class="bi bi-box-arrow-right"></i>
                                 <span>Se deconnecter</span>
                             </a>
-
-
                         </li>
 
 
@@ -174,7 +172,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             </div>
         </div>
 
-   
+
         <div id="main">
             <header class="mb-3">
                 <a href="#" class="burger-btn d-block d-xl-none">
@@ -221,37 +219,39 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 
 
-                                    <form action="#" method="post">
 
-                                        <div class="form-group">
-                                            <h5>Username</h5>
-                                            <p>
-                                                <?= $username_agent ?>
-                                            </p>
 
-                                        </div>
-                                        <div class="form-group">
-                                            <h5>Téléphone</h5>
-                                            <p>
-                                                <?= $phonenumber ?>
-                                            </p>
+                                    <div class="form-group">
+                                        <h5>Username</h5>
+                                        <p>
+                                            <?= $username_agent ?>
+                                        </p>
 
-                                        </div>
-                                        <div class="form-group">
-                                            <h5>Nombre de client enregistré</h5>
-                                            <p>
-                                                <?= $nombreClient ?>
-                                            </p>
+                                    </div>
+                                    <div class="form-group">
+                                        <h5>Téléphone</h5>
+                                        <p>
+                                            <?= $phonenumber ?>
+                                        </p>
 
-                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <h5>Nombre de client enregistré</h5>
+                                        <p>
+                                            <?= $nombreClient ?>
+                                        </p>
 
-                                        <div class="form-group">
-                                            <button name="submit-info" type="submit" class="btn btn-danger"
-                                                >Supprimé l'agent</button>
-                                        </div>
+                                    </div>
+
+                                    <form method="post" action="delete_agent.php">
+
+                                        <input type="hidden" name="id_admin" value="<?= $id_agent ?>">
+                                        <button type="submit" class="btn btn-outline-danger"
+                                            id="deleteClientBtn">Supprimé agent</button>
                                     </form>
 
-                                   
+
+
                                 </div>
                             </div>
                         </div>
@@ -315,13 +315,38 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
         </div>
     </div>
-    <!-- <div class="modal_wrapper ">
-        <div class="shadow"></div>
-        <div class="success_wrap">
-            <span class="modal_icon"><ion-icon name="checkmark-sharp"></ion-icon></span>
-            <p>Votre compte a été créer avec succès !</p>
-        </div>
-    </div> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        // Ajouter un écouteur d'événement de clic au bouton "Supprimé client"
+        document.getElementById('deleteClientBtn').addEventListener('click', function (event) {
+            // Prevent the form from submitting normally
+            event.preventDefault();
+
+            // Afficher l'alerte SweetAlert
+            Swal.fire({
+                title: "Êtes-vous sûr?",
+                text: "Vous ne pourrez pas revenir en arrière!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui, supprimer!",
+                cancelButtonText: "Annuler",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Afficher une autre alerte si l'utilisateur confirme
+                    Swal.fire({
+                        title: "Supprimé!",
+                        text: "Votre fichier a été supprimé.",
+                        icon: "success"
+                    }).then(() => {
+                        // Submit the form after the success alert is closed
+                        this.closest('form').submit();
+                    });
+                }
+            });
+        });
+    </script>
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
@@ -332,7 +357,32 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="assets/static/js/pages/dashboard.js"></script>
 
-  
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+    document.getElementById('logoutBtn').addEventListener('click', function (event) {
+        // Empêcher le comportement par défaut du lien
+        event.preventDefault();
+
+        // Afficher l'alerte SweetAlert2
+        Swal.fire({
+            title: "Êtes-vous sûr de vous déconnecter?",
+            
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oui",
+            cancelButtonText: 'Non',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Rediriger vers la page de déconnexion après confirmation
+                window.location.href = "logout.php";
+            }
+        });
+    });
+</script>
+
+
 
 
 </body>
