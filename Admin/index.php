@@ -108,7 +108,7 @@ $nom_agent = $admin_info['nom_admin'];
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                            <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
@@ -126,6 +126,15 @@ $nom_agent = $admin_info['nom_admin'];
 
 
                             </ul>
+
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="conso.php" class='sidebar-link'>
+                                <i class="bi bi-card-heading"></i>
+                                <span>Consommation</span>
+                            </a>
 
 
                         </li>
@@ -482,29 +491,7 @@ $nom_agent = $admin_info['nom_admin'];
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-    document.getElementById('logoutBtn').addEventListener('click', function (event) {
-        // Empêcher le comportement par défaut du lien
-        event.preventDefault();
-
-        // Afficher l'alerte SweetAlert2
-        Swal.fire({
-            title: "Êtes-vous sûr de vous déconnecter?",
-            
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Oui",
-            cancelButtonText: 'Non',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Rediriger vers la page de déconnexion après confirmation
-                window.location.href = "logout.php";
-            }
-        });
-    });
-
-    document.getElementById('logoutBtn2').addEventListener('click', function (event) {
+        document.getElementById('logoutBtn').addEventListener('click', function (event) {
             // Empêcher le comportement par défaut du lien
             event.preventDefault();
 
@@ -525,7 +512,29 @@ $nom_agent = $admin_info['nom_admin'];
                 }
             });
         });
-</script>
+
+        document.getElementById('logoutBtn2').addEventListener('click', function (event) {
+            // Empêcher le comportement par défaut du lien
+            event.preventDefault();
+
+            // Afficher l'alerte SweetAlert2
+            Swal.fire({
+                title: "Êtes-vous sûr de vous déconnecter?",
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui",
+                cancelButtonText: 'Non',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de déconnexion après confirmation
+                    window.location.href = "logout.php";
+                }
+            });
+        });
+    </script>
 
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>

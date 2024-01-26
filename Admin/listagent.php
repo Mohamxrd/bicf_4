@@ -92,7 +92,7 @@ ini_set('display_errors', 1);
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                            <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
@@ -110,6 +110,15 @@ ini_set('display_errors', 1);
 
 
                             </ul>
+
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="conso.php" class='sidebar-link'>
+                                <i class="bi bi-card-heading"></i>
+                                <span>Consommation</span>
+                            </a>
 
 
                         </li>

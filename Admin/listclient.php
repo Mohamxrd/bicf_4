@@ -89,7 +89,7 @@ if (!isset($_SESSION['username'])) {
 
                         <li class="sidebar-item active has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                            <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
@@ -107,6 +107,15 @@ if (!isset($_SESSION['username'])) {
 
 
                             </ul>
+
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="conso.php" class='sidebar-link'>
+                                <i class="bi bi-card-heading"></i>
+                                <span>Consommation</span>
+                            </a>
 
 
                         </li>

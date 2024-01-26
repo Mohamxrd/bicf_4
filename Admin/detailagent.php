@@ -126,7 +126,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                            <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
@@ -144,6 +144,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 
                             </ul>
+
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="conso.php" class='sidebar-link'>
+                                <i class="bi bi-card-heading"></i>
+                                <span>Consommation</span>
+                            </a>
 
 
                         </li>

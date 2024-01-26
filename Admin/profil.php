@@ -172,7 +172,7 @@ if (isset($_POST['submit-info'])) {
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                                <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
@@ -190,6 +190,15 @@ if (isset($_POST['submit-info'])) {
 
 
                             </ul>
+
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="conso.php" class='sidebar-link'>
+                                <i class="bi bi-card-heading"></i>
+                                <span>Consommation</span>
+                            </a>
 
 
                         </li>
@@ -278,7 +287,7 @@ if (isset($_POST['submit-info'])) {
                                                     href="#contact" role="tab" aria-controls="contact"
                                                     aria-selected="false">Modifier Mot de passe</a>
                                             </li>
-                                            
+
                                         </ul>
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade show active" id="home" role="tabpanel"
@@ -289,21 +298,21 @@ if (isset($_POST['submit-info'])) {
                                                         <div class="form-group">
                                                             <h6>Nom de l'administrateur</h6>
                                                             <p>
-                                                            <?php echo $admin_info['nom_admin']; ?>
+                                                                <?php echo $admin_info['nom_admin']; ?>
                                                             </p>
 
                                                         </div>
                                                         <div class="form-group">
                                                             <h6>Username</h6>
                                                             <p>
-                                                            <?php echo $admin_info['username_admin'] ?>
+                                                                <?php echo $admin_info['username_admin'] ?>
                                                             </p>
 
                                                         </div>
                                                         <div class="form-group">
                                                             <h6>Téléphone</h6>
                                                             <p>
-                                                            <?php echo $admin_info['phonenumber'] ?>
+                                                                <?php echo $admin_info['phonenumber'] ?>
                                                             </p>
 
                                                         </div>
@@ -452,7 +461,7 @@ if (isset($_POST['submit-info'])) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -461,10 +470,10 @@ if (isset($_POST['submit-info'])) {
 
                     </div>
                 </section>
-                
+
             </div>
 
-            
+
         </div>
     </div>
     <script src="assets/static/js/components/dark.js"></script>
@@ -478,30 +487,30 @@ if (isset($_POST['submit-info'])) {
     <script src="assets/static/js/pages/dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-    document.getElementById('logoutBtn').addEventListener('click', function (event) {
-        // Empêcher le comportement par défaut du lien
-        event.preventDefault();
+        document.getElementById('logoutBtn').addEventListener('click', function (event) {
+            // Empêcher le comportement par défaut du lien
+            event.preventDefault();
 
-        // Afficher l'alerte SweetAlert2
-        Swal.fire({
-            title: "Êtes-vous sûr de vous déconnecter?",
-            
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Oui",
-            cancelButtonText: 'Non',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Rediriger vers la page de déconnexion après confirmation
-                window.location.href = "logout.php";
-            }
+            // Afficher l'alerte SweetAlert2
+            Swal.fire({
+                title: "Êtes-vous sûr de vous déconnecter?",
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui",
+                cancelButtonText: 'Non',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de déconnexion après confirmation
+                    window.location.href = "logout.php";
+                }
+            });
         });
-    });
-</script>
+    </script>
 
-    
+
 
 </body>
 

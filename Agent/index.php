@@ -100,10 +100,18 @@ $nom_agent = $admin_info['nom_admin'];
 
                         <li class="sidebar-item  ">
                             <a href="listclient.php" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                            <i class="bi bi-people-fill"></i>
                                 <span>Liste des clients</span>
                             </a>
 
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="conso.php" class='sidebar-link'>
+                                <i class="bi bi-card-heading"></i>
+                                <span>Consommation</span>
+                            </a>
 
                         </li>
 

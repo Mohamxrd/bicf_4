@@ -182,14 +182,14 @@ if (isset($_POST['submit'])) {
                         </li>
 
                         <li class="sidebar-item active has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                            <a href="#" class='sidebar-link' >
+                            <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
-                            <ul class="submenu ">
+                            <ul class="submenu active">
 
-                                <li class="submenu-item  active">
+                                <li class="submenu-item active ">
                                     <a href="addclient.php" class="submenu-link">Ajouter Client</a>
 
                                 </li>
@@ -201,6 +201,15 @@ if (isset($_POST['submit'])) {
 
 
                             </ul>
+
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="conso.php" class='sidebar-link'>
+                                <i class="bi bi-card-heading"></i>
+                                <span>Consommation</span>
+                            </a>
 
 
                         </li>

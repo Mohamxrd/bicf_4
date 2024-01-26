@@ -81,6 +81,13 @@ if (!isset($_SESSION['id_agent'])) {
 
                         </li>
                         <li class="sidebar-item  ">
+                            <a href="conso.php" class='sidebar-link'>
+                                <i class="bi bi-card-heading"></i>
+                                <span>Consommation</span>
+                            </a>
+
+                        </li>
+                        <li class="sidebar-item  ">
                             <a href="profil.php" class='sidebar-link'>
                             <i class="bi bi-person-circle"></i>
                                 <span>Profils</span>
