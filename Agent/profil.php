@@ -159,7 +159,7 @@ if (isset($_POST['submit-info'])) {
 
                         <li class="sidebar-item  ">
                             <a href="listclient.php" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                                <i class="bi bi-people-fill"></i>
                                 <span>Liste des clients</span>
                             </a>
 
@@ -167,7 +167,7 @@ if (isset($_POST['submit-info'])) {
                         </li>
 
                         <li class="sidebar-item  ">
-                            <a href="conso.php" class='sidebar-link'>
+                            <a href="listconso.php" class='sidebar-link'>
                                 <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>

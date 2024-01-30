@@ -1,7 +1,12 @@
 <?php
 
 
-@include('../config.php');
+session_start();
+
+$conn = new PDO('mysql:host=localhost;dbname=bicf;charset=utf8;', 'root', 'root');
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 $errorMsg = '';
 
@@ -78,12 +83,13 @@ if (isset($_POST['submit'])) {
             } elseif ($activSector_user == "Autre") {
                 $indus_user = $bat_user = $comm_user = $serv_user  = null;
             }
+            
 
 
 
 
-            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user,) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )');
-            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat,  $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user,));
+            $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user, id_admin) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )');
+            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat,  $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user, null));
 
             header('location: login.php');
             exit();
@@ -199,7 +205,7 @@ if (isset($_POST['submit'])) {
 
                         <div class="input_wrap" id="user_sexe_input">
                             <label for="user_sexe">Sexe</label>
-                            <select name="user_sexe" id="user_type" class="input">
+                            <select name="user_sexe" id="user_sexe" class="input">
                                 <option selected value="Masculin">Masculin</option>
                                 <option value="Feminin">Feminin</option>
                             </select>
@@ -490,7 +496,7 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 
-    <script type="text/javascript" src="../../js/step3.js"></script>
+    <script type="text/javascript" src="../../js/step.js"></script>
 
 
 

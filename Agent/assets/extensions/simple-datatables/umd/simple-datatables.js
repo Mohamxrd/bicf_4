@@ -1442,6 +1442,7 @@
                 (t += this.options.layout.bottom),
                 (t += "</div>"),
                 (t = t.replace(
+                  "{info}",
                   this.options.paging
                     ? "<div class='dataTable-info'></div>"
                     : ""

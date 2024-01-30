@@ -109,14 +109,14 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <li class="sidebar-item  ">
                             <a href="listclient.php" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
+                            <i class="bi bi-people-fill"></i>
                                 <span>Liste des clients</span>
                             </a>
 
 
                         </li>
                         <li class="sidebar-item  ">
-                            <a href="conso.php" class='sidebar-link'>
+                            <a href="listconso.php" class='sidebar-link'>
                                 <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
@@ -289,7 +289,151 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             </div>
                                             <div class="tab-pane fade" id="contact" role="tabpanel"
                                                 aria-labelledby="contact-tab">
-                                               Aucune donnée enregistré
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <h5 class="card-title">
+                                                            Consommation en produit du client
+                                                        </h5>
+
+                                                        <a href="addconsprod.php?id=<?= $id_user ?>"
+                                                            class="btn btn-success">Ajouter</a>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <table class="table table-striped" id="table1">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nom</th>
+                                                                    <th>Type (local/importé)</th>
+                                                                    <th>Conditionnement</th>
+                                                                    <th>Format</th>
+                                                                    <th>Quantité</th>
+                                                                    <th>Prix</th>
+                                                                    <th>Frequence</th>
+                                                                    <th>Jour (achat)</th>
+                                                                    <th>Zone d'activité</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
+                                                                $recupUsers = $conn->prepare('SELECT consprodUser.*, user.nom_user FROM consprodUser 
+                    LEFT JOIN user ON consprodUser.id_user = user.id_user
+                    WHERE consprodUser.id_user = :id_user
+                    ORDER BY date_ajout DESC');
+
+                                                                $recupUsers->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                                                $recupUsers->execute();
+
+                                                                while ($user = $recupUsers->fetch()) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <?= $user['nom_art']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['type_prov']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['cond_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['format_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['qte_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['prix_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['frqce_conse']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['jourAch_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['zoneAct']; ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <h5 class="card-title">
+                                                            Consommation en service du client
+                                                        </h5>
+
+                                                        <a href="addconserv.php?id=<?= $id_user ?>"
+                                                            class="btn btn-success">Ajouter</a>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <table class="table table-striped" id="table1">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nom metier</th>
+                                                                    <th>Qualification</th>
+                                                                    <th>Specialité</th>
+                                                                    <th>Prix</th>
+                                                                    <th>Frequence</th>
+                                                                    <th>Quantité</th>
+                                                                    <th>Zone d'activité</th>
+                                                                    <th>Nom client</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
+                                                                $recupServ = $conn->prepare('SELECT consservUser.*, user.nom_user FROM consservUser 
+    LEFT JOIN user ON consservUser.id_user = user.id_user
+    WHERE consservUser.id_user = :id_user
+    ORDER BY date_ajout DESC');
+
+                                                                $recupServ->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                                                $recupServ->execute();
+
+                                                                while ($conserv = $recupServ->fetch()) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <?= $conserv['nom_met']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['qalif_user']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['spetia_user']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['prix_cons']; ?>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <?= $conserv['frqce_conse']; ?>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <?= $conserv['qte_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['zoneAct']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['nom_user']; ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="tab-pane fade" id="histoire" role="tabpanel"
                                                 aria-labelledby="histoire-tab">

@@ -6,11 +6,10 @@ if (!isset($_SESSION['username'])) {
     header('location: ../page/auth/adlogin.php');
 }
 
+$nom_agent = "Aucun agent";  // Définir une valeur par défaut
+
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_user = $_GET['id'];
-
-
-
 
     // Récupérer les informations de l'utilisateur
     $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
@@ -18,6 +17,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $recupUser->execute();
 
     if ($client = $recupUser->fetch()) {
+
         $nom_client = $client['nom_user'];
         $username_client = $client['username'];
         $phonenumber = $client['tel_user'];
@@ -34,19 +34,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
         if ($agent = $recupAgent->fetch()) {
             $nom_agent = $agent['nom_admin'];
-        } else {
-            // L'agent avec l'ID spécifié n'existe pas
-            exit();
         }
-    } else {
-        // L'utilisateur avec l'ID spécifié n'existe pas
-        exit();
     }
-} else {
-    // Aucun ID d'utilisateur spécifié dans la requête GET
-    exit();
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -64,6 +56,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     <link rel='stylesheet'
         href='https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+
+    <link rel="stylesheet" href="assets/extensions/simple-datatables/style.css">
+
+
+    <link rel="stylesheet" href="./assets/compiled/css/table-datatable.css">
 
 
     <link rel="stylesheet" href="./assets/compiled/css/app.css">
@@ -114,7 +111,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                                 </li>
 
-                                <li class="submenu-item  active">
+                                <li class="submenu-item  ">
                                     <a href="listagent.php" class="submenu-link">Liste des agents</a>
 
                                 </li>
@@ -127,7 +124,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-people-fill"></i>
+                                <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
@@ -150,13 +147,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                         </li>
 
                         <li class="sidebar-item  ">
-                            <a href="conso.php" class='sidebar-link'>
+                            <a href="listconso.php" class='sidebar-link'>
                                 <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
 
 
+
                         </li>
+
 
                         <li class="sidebar-item  ">
                             <a href="profil.php" class='sidebar-link'>
@@ -221,7 +220,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                         </div>
 
                                         <div class="ms-auto">
-                                           
+
                                             <form method="post" action="delete_client.php">
                                                 <a href="#" class="btn btn-outline-primary">Modifier agent</a>
                                                 <input type="hidden" name="id_user" value="<?= $id_user ?>">
@@ -265,6 +264,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                             <p>
                                                                 <?= $nom_client ?>
                                                             </p>
+
 
                                                         </div>
                                                         <div class="form-group">
@@ -316,16 +316,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                             <p>
                                                                 <?= $nom_agent ?>
                                                             </p>
+                                                            </p>
 
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
-
-
-
                                             </div>
                                             <div class="tab-pane fade" id="profile" role="tabpanel"
                                                 aria-labelledby="profile-tab">
@@ -333,7 +328,153 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             </div>
                                             <div class="tab-pane fade" id="contact" role="tabpanel"
                                                 aria-labelledby="contact-tab">
-                                                Aucune donnée enregistré
+
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <h5 class="card-title">
+                                                            Consommation en produit du client
+                                                        </h5>
+
+                                                        <a href="addconsprod.php?id=<?= $id_user ?>"
+                                                            class="btn btn-success">Ajouter</a>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <table class="table table-striped" id="table1">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nom</th>
+                                                                    <th>Type (local/importé)</th>
+                                                                    <th>Conditionnement</th>
+                                                                    <th>Format</th>
+                                                                    <th>Quantité</th>
+                                                                    <th>Prix</th>
+                                                                    <th>Frequence</th>
+                                                                    <th>Jour (achat)</th>
+                                                                    <th>Zone d'activité</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
+                                                                $recupUsers = $conn->prepare('SELECT consprodUser.*, user.nom_user FROM consprodUser 
+                    LEFT JOIN user ON consprodUser.id_user = user.id_user
+                    WHERE consprodUser.id_user = :id_user
+                    ORDER BY date_ajout DESC');
+
+                                                                $recupUsers->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                                                $recupUsers->execute();
+
+                                                                while ($user = $recupUsers->fetch()) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <?= $user['nom_art']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['type_prov']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['cond_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['format_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['qte_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['prix_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['frqce_conse']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['jourAch_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['zoneAct']; ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <h5 class="card-title">
+                                                            Consommation en service du client
+                                                        </h5>
+
+                                                        <a href="addconserv.php?id=<?= $id_user ?>"
+                                                            class="btn btn-success">Ajouter</a>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <table class="table table-striped" id="table1">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nom metier</th>
+                                                                    <th>Qualification</th>
+                                                                    <th>Specialité</th>
+                                                                    <th>Prix</th>
+                                                                    <th>Frequence</th>
+                                                                    <th>Quantité</th>
+                                                                    <th>Zone d'activité</th>
+                                                                    <th>Nom client</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
+                                                                $recupServ = $conn->prepare('SELECT consservUser.*, user.nom_user FROM consservUser 
+    LEFT JOIN user ON consservUser.id_user = user.id_user
+    WHERE consservUser.id_user = :id_user
+    ORDER BY date_ajout DESC');
+
+                                                                $recupServ->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                                                $recupServ->execute();
+
+                                                                while ($conserv = $recupServ->fetch()) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <?= $conserv['nom_met']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['qalif_user']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['spetia_user']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['prix_cons']; ?>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <?= $conserv['frqce_conse']; ?>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <?= $conserv['qte_cons']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['zoneAct']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $conserv['nom_user']; ?>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="tab-pane fade" id="histoire" role="tabpanel"
                                                 aria-labelledby="histoire-tab">
@@ -357,70 +498,66 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script>
-// Ajouter un écouteur d'événement de clic au bouton "Supprimé client"
-document.getElementById('deleteClientBtn').addEventListener('click', function (event) {
-    // Prevent the form from submitting normally
-    event.preventDefault();
+        // Ajouter un écouteur d'événement de clic au bouton "Supprimé client"
+        document.getElementById('deleteClientBtn').addEventListener('click', function (event) {
+            // Prevent the form from submitting normally
+            event.preventDefault();
 
-    // Afficher l'alerte SweetAlert
-    Swal.fire({
-        title: "Êtes-vous sûr?",
-        text: "Vous ne pourrez pas revenir en arrière!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Oui, supprimer!",
-        cancelButtonText: "Annuler",
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Afficher une autre alerte si l'utilisateur confirme
+            // Afficher l'alerte SweetAlert
             Swal.fire({
-                title: "Supprimé!",
-                text: "Votre fichier a été supprimé.",
-                icon: "success"
-            }).then(() => {
-                // Submit the form after the success alert is closed
-                this.closest('form').submit();
+                title: "Êtes-vous sûr?",
+                text: "Vous ne pourrez pas revenir en arrière!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui, supprimer!",
+                cancelButtonText: "Annuler",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Afficher une autre alerte si l'utilisateur confirme
+                    Swal.fire({
+                        title: "Supprimé!",
+                        text: "Votre fichier a été supprimé.",
+                        icon: "success"
+                    }).then(() => {
+                        // Submit the form after the success alert is closed
+                        this.closest('form').submit();
+                    });
+                }
             });
-        }
-    });
-});
-</script>
+        });
+    </script>
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-
     <script src="assets/compiled/js/app.js"></script>
-
-
-    <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script>
+    <script src="assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+    <script src="assets/static/js/pages/simple-datatables.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-    document.getElementById('logoutBtn').addEventListener('click', function (event) {
-        // Empêcher le comportement par défaut du lien
-        event.preventDefault();
+        document.getElementById('logoutBtn').addEventListener('click', function (event) {
+            // Empêcher le comportement par défaut du lien
+            event.preventDefault();
 
-        // Afficher l'alerte SweetAlert2
-        Swal.fire({
-            title: "Êtes-vous sûr de vous déconnecter?",
-            
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Oui",
-            cancelButtonText: 'Non',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Rediriger vers la page de déconnexion après confirmation
-                window.location.href = "logout.php";
-            }
+            // Afficher l'alerte SweetAlert2
+            Swal.fire({
+                title: "Êtes-vous sûr de vous déconnecter?",
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui",
+                cancelButtonText: 'Non',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de déconnexion après confirmation
+                    window.location.href = "logout.php";
+                }
+            });
         });
-    });
-</script>
+    </script>
 
 
 
