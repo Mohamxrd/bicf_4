@@ -91,11 +91,50 @@ $id_admin = $_SESSION['id_agent']
 
                         </li>
 
-                        <li class="sidebar-item active ">
-                            <a href="listconso.php" class='sidebar-link'>
-                                <i class="bi bi-card-heading"></i>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                            <i class="bi bi-box2-fill"></i>
+                                <span>Produit et service</span>
+                            </a>
+
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="listprod.php" class="submenu-link">Liste produit</a>
+
+                                </li>
+
+                                <li class="submenu-item  ">
+                                    <a href="listserv.php" class="submenu-link">Liste service</a>
+
+                                </li>
+
+
+                            </ul>
+
+
+                        </li>
+                        <li class="sidebar-item active has-sub">
+                            <a href="#" class='sidebar-link'>
+                            <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
+
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="listconprodA.php" class="submenu-link">Produit</a>
+
+                                </li>
+
+                                <li class="submenu-item  active">
+                                    <a href="listconservA.php" class="submenu-link">Service</a>
+
+                                </li>
+
+
+                            </ul>
+
 
                         </li>
 
@@ -143,88 +182,6 @@ $id_admin = $_SESSION['id_agent']
             </div>
 
             <div class="page-content">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <h5 class="card-title">
-                            Consommation en produit
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-striped" id="table1_consprod">
-                            <!-- ... Votre contenu pour la consommation en produit ... -->
-
-                            <table class="table table-striped" id="table1">
-                                <thead>
-                                    <tr>
-                                        <th>Nom</th>
-                                        <th>Type (local/importé)</th>
-                                        <th>Conditionnement</th>
-                                        <th>Format</th>
-                                        <th>Quantité</th>
-                                        <th>Prix</th>
-                                        <th>Frequence</th>
-                                        <th>Jour (achat)</th>
-                                        <th>Zone d'activité</th>
-                                        <th>Nom client</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    // Utilisez une jointure LEFT JOIN pour obtenir les informations de consprodUser et user
-                                    $recupUsers = $conn->prepare('
-                                    SELECT consprodUser.*, user.nom_user 
-                                    FROM consprodUser 
-                                    LEFT JOIN user ON consprodUser.id_user = user.id_user
-                                    LEFT JOIN adminTable ON user.id_admin = adminTable.id_admin
-                                    WHERE adminTable.id_admin = :id_admin
-                                    ORDER BY consprodUser.date_ajout DESC');
-
-                                    $recupUsers->bindParam(':id_admin', $id_admin, PDO::PARAM_INT);
-                                    $recupUsers->execute();
-
-                                    while ($user = $recupUsers->fetch()) {
-                                        ?>
-                                        <tr>
-                                            <td>
-                                                <?= $user['nom_art']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['type_prov']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['cond_cons']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['format_cons']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['qte_cons']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['prix_cons']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['frqce_conse']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['jourAch_cons']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['zoneAct']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['nom_user']; ?>
-                                            </td>
-                                        </tr>
-                                        <?php
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-                        </table>
-                    </div>
-                </div>
-
                 <div class="card">
                     <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title">

@@ -120,7 +120,7 @@ if (!isset($_SESSION['id_admin'])) {
 
 
                         </li>
-                        <li class="sidebar-item active has-sub">
+                        <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
                             <i class="bi bi-box2-fill"></i>
                                 <span>Produit et service</span>
@@ -128,7 +128,7 @@ if (!isset($_SESSION['id_admin'])) {
 
                             <ul class="submenu ">
 
-                                <li class="submenu-item active ">
+                                <li class="submenu-item ">
                                     <a href="listprod.php" class="submenu-link">Liste produit</a>
 
                                 </li>
@@ -144,7 +144,7 @@ if (!isset($_SESSION['id_admin'])) {
 
                         </li>
 
-                        <li class="sidebar-item  has-sub">
+                        <li class="sidebar-item active  has-sub">
                             <a href="#" class='sidebar-link'>
                             <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
@@ -152,7 +152,7 @@ if (!isset($_SESSION['id_admin'])) {
 
                             <ul class="submenu ">
 
-                                <li class="submenu-item  ">
+                                <li class="submenu-item  active">
                                     <a href="listConsoProd.php" class="submenu-link">Produits</a>
 
                                 </li>
@@ -209,14 +209,14 @@ if (!isset($_SESSION['id_admin'])) {
             </header>
 
             <div class="page-heading d-flex justify-content-between">
-                <h3>Produits</h3>
+                <h3>Consommation</h3>
             </div>
 
             <div class="page-content">
                 <div class="card">
                 <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title">
-                           Liste des Produits
+                            Consommation en produit
                         </h5>
                     </div>
                     <div class="card-body">
@@ -232,8 +232,8 @@ if (!isset($_SESSION['id_admin'])) {
                                         <th>Format</th>
                                         <th>Quantité</th>
                                         <th>Prix</th>
-                                        <th>Mode de paiement</th>
-                                        <th>Capacité de livré</th>
+                                        <th>Frequence</th>
+                                        <th>Jour (achat)</th>
                                         <th>Zone d'activité</th>
                                         <th>Nom client</th>
                                     </tr>
@@ -241,8 +241,8 @@ if (!isset($_SESSION['id_admin'])) {
                                 <tbody>
                                     <?php
                                     // Utilisez une jointure LEFT JOIN pour obtenir les informations de consprodUser et user
-                                    $recupUsers = $conn->prepare('SELECT prodUser.*, user.nom_user FROM prodUser 
-                                                LEFT JOIN user ON prodUser.id_user = user.id_user
+                                    $recupUsers = $conn->prepare('SELECT consprodUser.*, user.nom_user FROM consprodUser 
+                                                LEFT JOIN user ON consprodUser.id_user = user.id_user
                                                  ORDER BY date_ajout DESC');
 
                                     $recupUsers->execute();
@@ -251,31 +251,31 @@ if (!isset($_SESSION['id_admin'])) {
                                         ?>
                                         <tr>
                                             <td>
-                                                <?= $user['nomArt']; ?>
+                                                <?= $user['nom_art']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['typeProd']; ?>
+                                                <?= $user['type_prov']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['condProd']; ?>
+                                                <?= $user['cond_cons']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['formatProd']; ?>
+                                                <?= $user['format_cons']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['qteProd']; ?>
+                                                <?= $user['qte_cons']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['PrixProd']; ?>
+                                                <?= $user['prix_cons']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['paymodProd']; ?>
+                                                <?= $user['frqce_conse']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['LivreCapProd']; ?>
+                                                <?= $user['jourAch_cons']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['zonecoProd']; ?>
+                                                <?= $user['zoneAct']; ?>
                                             </td>
                                             <td>
                                                 <?= $user['nom_user']; ?>

@@ -197,11 +197,26 @@ if (isset($_POST['submit'])) {
 
 
                         </li>
-                        <li class="sidebar-item  ">
-                            <a href="listconso.php" class='sidebar-link'>
-                                <i class="bi bi-card-heading"></i>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                            <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
+
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="listconprodA.php" class="submenu-link">Produit</a>
+
+                                </li>
+
+                                <li class="submenu-item  ">
+                                    <a href="listconservA.php" class="submenu-link">Service</a>
+
+                                </li>
+
+
+                            </ul>
 
 
                         </li>
