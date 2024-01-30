@@ -3,13 +3,15 @@
 session_start();
 @include('../page/config.php');
 
-if (!isset($_SESSION['id_admin'])) {
+if (!isset($_SESSION['id_agent'])) {
     header('location: ../page/auth/adlogin.php');
+
 }
 
+$id_admin = $_SESSION['id_agent']
 
 
-?>
+    ?>
 
 
 
@@ -73,55 +75,25 @@ if (!isset($_SESSION['id_admin'])) {
 
                         </li>
 
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi bi-stack"></i>
-                                <span>Agent</span>
+                        <li class="sidebar-item  ">
+                            <a href="addclient.php" class='sidebar-link'>
+                                <i class="bi bi-collection-fill"></i>
+                                <span>Ajouter client</span>
                             </a>
-
-                            <ul class="submenu ">
-
-                                <li class="submenu-item  ">
-                                    <a href="addagent.php" class="submenu-link">Ajouter Agents</a>
-
-                                </li>
-
-                                <li class="submenu-item  ">
-                                    <a href="listagent.php" class="submenu-link">Liste des agents</a>
-
-                                </li>
-
-
-                            </ul>
 
 
                         </li>
 
-                        <li class="sidebar-item  has-sub">
-                            <a href="#" class='sidebar-link'>
+                        <li class="sidebar-item  ">
+                            <a href="listclient.php" class='sidebar-link'>
                                 <i class="bi bi-people-fill"></i>
-                                <span>Client</span>
+                                <span>Liste des clients</span>
                             </a>
-
-                            <ul class="submenu ">
-
-                                <li class="submenu-item  ">
-                                    <a href="addclient.php" class="submenu-link">Ajouter Client</a>
-
-                                </li>
-
-                                <li class="submenu-item  ">
-                                    <a href="listclient.php" class="submenu-link">Liste des clients</a>
-
-                                </li>
-
-
-                            </ul>
 
 
                         </li>
 
-                        <li class="sidebar-item  has-sub">
+                        <li class="sidebar-item active has-sub">
                             <a href="#" class='sidebar-link'>
                             <i class="bi bi-box2-fill"></i>
                                 <span>Produit et service</span>
@@ -129,12 +101,12 @@ if (!isset($_SESSION['id_admin'])) {
 
                             <ul class="submenu ">
 
-                                <li class="submenu-item ">
+                                <li class="submenu-item  ">
                                     <a href="listprod.php" class="submenu-link">Liste produit</a>
 
                                 </li>
 
-                                <li class="submenu-item ">
+                                <li class="submenu-item  active">
                                     <a href="listserv.php" class="submenu-link">Liste service</a>
 
                                 </li>
@@ -145,12 +117,11 @@ if (!isset($_SESSION['id_admin'])) {
 
                         </li>
 
-                        <li class="sidebar-item active ">
+                        <li class="sidebar-item  ">
                             <a href="listconso.php" class='sidebar-link'>
                                 <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
-
 
                         </li>
 
@@ -162,7 +133,6 @@ if (!isset($_SESSION['id_admin'])) {
 
 
                         </li>
-
 
                         <li class="sidebar-item">
                             <a href="#" class='sidebar-link' id="logoutBtn">
@@ -195,14 +165,14 @@ if (!isset($_SESSION['id_admin'])) {
             </header>
 
             <div class="page-heading d-flex justify-content-between">
-                <h3>Consommation</h3>
+                <h3>Produits</h3>
             </div>
 
             <div class="page-content">
                 <div class="card">
                 <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title">
-                            Consommation en produit
+                           Liste des Produits
                         </h5>
                     </div>
                     <div class="card-body">
@@ -212,60 +182,57 @@ if (!isset($_SESSION['id_admin'])) {
                             <table class="table table-striped" id="table1">
                                 <thead>
                                     <tr>
-                                        <th>Nom</th>
-                                        <th>Type (local/importé)</th>
-                                        <th>Conditionnement</th>
-                                        <th>Format</th>
+                                        <th>Nom du service</th>
+                                        <th>Qualification</th>
+                                        <th>Specialité</th>
                                         <th>Quantité</th>
                                         <th>Prix</th>
-                                        <th>Frequence</th>
-                                        <th>Jour (achat)</th>
+                                        <th>Mode de paiement</th>
                                         <th>Zone d'activité</th>
                                         <th>Nom client</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    // Utilisez une jointure LEFT JOIN pour obtenir les informations de consprodUser et user
-                                    $recupUsers = $conn->prepare('SELECT consprodUser.*, user.nom_user FROM consprodUser 
-                                                LEFT JOIN user ON consprodUser.id_user = user.id_user
-                                                 ORDER BY date_ajout DESC');
+                                   $recupUsers = $conn->prepare('
+                                   SELECT servUser.*, user.nom_user 
+                                   FROM servUser 
+                                   LEFT JOIN user ON servUser.id_user = user.id_user
+                                   LEFT JOIN adminTable ON user.id_admin = adminTable.id_admin
+                                   WHERE adminTable.id_admin = :id_admin
+                                   ORDER BY servUser.date_ajout DESC');
 
-                                    $recupUsers->execute();
+                                   $recupUsers->bindParam(':id_admin', $id_admin, PDO::PARAM_INT);
+                                   $recupUsers->execute();
 
                                     while ($user = $recupUsers->fetch()) {
                                         ?>
                                         <tr>
                                             <td>
-                                                <?= $user['nom_art']; ?>
+                                                <?= $user['nomMet']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['type_prov']; ?>
+                                                <?= $user['qalifServ']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['cond_cons']; ?>
+                                                <?= $user['sepServ']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['format_cons']; ?>
+                                                <?= $user['qteServ']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['qte_cons']; ?>
+                                                <?= $user['PrixServ']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['prix_cons']; ?>
+                                                <?= $user['paymodServ']; ?>
                                             </td>
                                             <td>
-                                                <?= $user['frqce_conse']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['jourAch_cons']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['zoneAct']; ?>
+                                                <?= $user['zonecoServ']; ?>
                                             </td>
                                             <td>
                                                 <?= $user['nom_user']; ?>
                                             </td>
+                                            
                                         </tr>
                                         <?php
                                     }
@@ -276,76 +243,7 @@ if (!isset($_SESSION['id_admin'])) {
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <h5 class="card-title">
-                            Consommation en service
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-striped" id="table1_consserv">
-                            <!-- ... Votre contenu pour la consommation en service ... -->
-
-                            <table class="table table-striped" id="table1">
-                                            <thead>
-                                                <tr>
-                                                    <th>Nom metier</th>
-                                                    <th>Qualification</th>
-                                                    <th>Specialité</th>
-                                                    <th>Prix</th>
-                                                    <th>Frequence</th>
-                                                    <th>Quantité</th>
-                                                    <th>Zone d'activité</th>
-                                                    <th>Nom client</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                                                // Utilisez une jointure LEFT JOIN pour obtenir les informations de consprodUser et user
-                                                $recupServ = $conn->prepare('SELECT consservUser.*, user.nom_user FROM consservUser 
-                LEFT JOIN user ON consservUser.id_user = user.id_user
-                ORDER BY date_ajout DESC');
-
-                                                $recupServ->execute();
-
-                                                while ($conserv = $recupServ->fetch()) {
-                                                    ?>
-                                                    <tr>
-                                                        <td>
-                                                            <?= $conserv['nom_met']; ?>
-                                                        </td>
-                                                        <td>
-                                                            <?= $conserv['qalif_user']; ?>
-                                                        </td>
-                                                        <td>
-                                                            <?= $conserv['spetia_user']; ?>
-                                                        </td>
-                                                        <td>
-                                                            <?= $conserv['prix_cons']; ?>
-                                                        </td>
-
-                                                        <td>
-                                                            <?= $conserv['frqce_conse']; ?>
-                                                        </td>
-
-                                                        <td>
-                                                            <?= $conserv['qte_cons']; ?>
-                                                        </td>
-                                                        <td>
-                                                            <?= $conserv['zoneAct']; ?>
-                                                        </td>
-                                                        <td>
-                                                            <?= $conserv['nom_user']; ?>
-                                                        </td>
-                                                    </tr>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </tbody>
-                                        </table>
-                        </table>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>

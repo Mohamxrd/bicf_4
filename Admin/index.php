@@ -129,6 +129,29 @@ $nom_agent = $admin_info['nom_admin'];
 
 
                         </li>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                            <i class="bi bi-box2-fill"></i>
+                                <span>Produit et service</span>
+                            </a>
+
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="listprod.php" class="submenu-link">Liste produit</a>
+
+                                </li>
+
+                                <li class="submenu-item  ">
+                                    <a href="listserv.php" class="submenu-link">Liste service</a>
+
+                                </li>
+
+
+                            </ul>
+
+
+                        </li>
 
                         <li class="sidebar-item  ">
                             <a href="listconso.php" class='sidebar-link'>
@@ -139,6 +162,7 @@ $nom_agent = $admin_info['nom_admin'];
 
 
                         </li>
+                        
 
                         <li class="sidebar-item  ">
                             <a href="profil.php" class='sidebar-link'>

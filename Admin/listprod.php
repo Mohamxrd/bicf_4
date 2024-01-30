@@ -3,49 +3,17 @@
 session_start();
 @include('../page/config.php');
 
-
-
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $id_agent = $_GET['id'];
-
-    // Récupérer les informations de l'agent spécifié
-    $recupAgent = $conn->prepare('SELECT * FROM adminTable WHERE id_admin = :id_admin');
-    $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
-    $recupAgent->execute();
-
-    $recupUsers = $conn->prepare('SELECT * FROM user WHERE id_admin = :id_admin');
-    $recupUsers->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
-    $recupUsers->execute();
-
-
-    $nombreClient = $recupUsers->rowCount();
-
-    $nombreClient = $recupUsers->rowCount();
-
-    if ($agent = $recupAgent->fetch()) {
-        // Les informations de l'agent sont maintenant dans $agent
-        $id_agent = $agent['id_admin'];
-        $nom_agent = $agent['nom_admin'];
-        $username_agent = $agent['username_admin'];
-        $phonenumber = $agent['phonenumber'];
-        $admin_type = $agent['admin_type'];
-        $date_creation = $agent['date_creation'];
-
-    } else {
-
-        exit();
-    }
-
-
+if (!isset($_SESSION['id_admin'])) {
+    header('location: ../page/auth/adlogin.php');
 }
 
 
 
-
-
-
-
 ?>
+
+
+
+
 
 
 <!DOCTYPE html>
@@ -63,6 +31,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     <link rel='stylesheet'
         href='https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+
+    <link rel="stylesheet" href="assets/extensions/simple-datatables/style.css">
+
+
+    <link rel="stylesheet" href="./assets/compiled/css/table-datatable.css">
 
 
     <link rel="stylesheet" href="./assets/compiled/css/app.css">
@@ -113,7 +86,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                                 </li>
 
-                                <li class="submenu-item  active">
+                                <li class="submenu-item  ">
                                     <a href="listagent.php" class="submenu-link">Liste des agents</a>
 
                                 </li>
@@ -126,7 +99,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-people-fill"></i>
+                                <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
@@ -147,7 +120,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 
                         </li>
-                        <li class="sidebar-item  has-sub">
+                        <li class="sidebar-item active has-sub">
                             <a href="#" class='sidebar-link'>
                             <i class="bi bi-box2-fill"></i>
                                 <span>Produit et service</span>
@@ -155,7 +128,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                             <ul class="submenu ">
 
-                                <li class="submenu-item  ">
+                                <li class="submenu-item active ">
                                     <a href="listprod.php" class="submenu-link">Liste produit</a>
 
                                 </li>
@@ -176,11 +149,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                 <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
-                            
 
 
                         </li>
-
 
                         <li class="sidebar-item  ">
                             <a href="profil.php" class='sidebar-link'>
@@ -205,151 +176,111 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </div>
             </div>
         </div>
-
-
         <div id="main">
-            <header class="mb-3">
-                <a href="#" class="burger-btn d-block d-xl-none">
-                    <i class="bi bi-justify fs-3"></i>
-                </a>
+            <header>
+                <nav class="navbar navbar-expand navbar-light navbar-top p-0">
+                    <div class="container-fluid">
+                        <a href="#" class="burger-btn d-block d-xl-none">
+                            <i class="bi bi-justify fs-3"></i>
+                        </a>
+
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+                </nav>
             </header>
 
-            <div class="page-heading">
-                <div class="page-title">
-                    <div class="row">
-                        <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3>Profile</h3>
+            <div class="page-heading d-flex justify-content-between">
+                <h3>Produits</h3>
+            </div>
 
-                        </div>
-
+            <div class="page-content">
+                <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                        <h5 class="card-title">
+                           Liste des Produits
+                        </h5>
                     </div>
-                </div>
-                <section class="section">
-                    <div class="row">
-                        <div class="col-12 col-lg-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-center align-items-center flex-column">
-                                        <div class="avatar avatar-xxl me-3">
-                                            <img src="assets/static/images/faces/2.jpg" alt="" srcset=""
-                                                style="width: 180px; height: 180px;">
-                                        </div>
+                    <div class="card-body">
+                        <table class="table table-striped" id="table1_consprod">
+                            <!-- ... Votre contenu pour la consommation en produit ... -->
 
-                                        <h5 class="mt-3">
-                                            <?= $nom_agent ?>
-                                        </h5>
-                                        <p class="text-small">Agent</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-lg-8">
-
-                            <div class="card">
-
-
-
-                                <div class="card-body">
-
-
-
-
-
-                                    <div class="form-group">
-                                        <h5>Username</h5>
-                                        <p>
-                                            <?= $username_agent ?>
-                                        </p>
-
-                                    </div>
-                                    <div class="form-group">
-                                        <h5>Téléphone</h5>
-                                        <p>
-                                            <?= $phonenumber ?>
-                                        </p>
-
-                                    </div>
-                                    <div class="form-group">
-                                        <h5>Nombre de client enregistré</h5>
-                                        <p>
-                                            <?= $nombreClient ?>
-                                        </p>
-
-                                    </div>
-
-                                    <form method="post" action="delete_agent.php">
-
-                                        <input type="hidden" name="id_admin" value="<?= $id_agent ?>">
-                                        <button type="submit" class="btn btn-outline-danger"
-                                            id="deleteClientBtn">Supprimé agent</button>
-                                    </form>
-
-
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </section>
-                <section class="section">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between">
-                            <h5 class="card-title">
-                                Tout les clients enregistrés
-                            </h5>
-
-
-                        </div>
-                        <div class="card-body">
                             <table class="table table-striped" id="table1">
                                 <thead>
                                     <tr>
                                         <th>Nom</th>
-                                        <th>Username</th>
-                                        <th>Telephone</th>
-                                        <th>Details</th>
-
+                                        <th>Type (local/importé)</th>
+                                        <th>Conditionnement</th>
+                                        <th>Format</th>
+                                        <th>Quantité</th>
+                                        <th>Prix</th>
+                                        <th>Mode de paiement</th>
+                                        <th>Capacité de livré</th>
+                                        <th>Zone d'activité</th>
+                                        <th>Nom client</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    // Utilizez l'agent_id dans la clause WHERE de votre requête SQL
-                                    $recupUsers = $conn->prepare('SELECT * FROM user WHERE id_admin = :id_admin');
-                                    $recupUsers->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
+                                    // Utilisez une jointure LEFT JOIN pour obtenir les informations de consprodUser et user
+                                    $recupUsers = $conn->prepare('SELECT prodUser.*, user.nom_user FROM prodUser 
+                                                LEFT JOIN user ON prodUser.id_user = user.id_user
+                                                 ORDER BY date_ajout DESC');
+
                                     $recupUsers->execute();
 
                                     while ($user = $recupUsers->fetch()) {
                                         ?>
                                         <tr>
                                             <td>
+                                                <?= $user['nomArt']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['typeProd']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['condProd']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['formatProd']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['qteProd']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['PrixProd']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['paymodProd']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['LivreCapProd']; ?>
+                                            </td>
+                                            <td>
+                                                <?= $user['zonecoProd']; ?>
+                                            </td>
+                                            <td>
                                                 <?= $user['nom_user']; ?>
                                             </td>
-                                            <td>
-                                                <?= $user['username']; ?>
-                                            </td>
-                                            <td>
-                                                <?= $user['tel_user']; ?>
-                                            </td>
-                                            <td><a href="detailclient.php?id=<?= $user['id_user']; ?>">Details</a></td>
                                         </tr>
                                         <?php
                                     }
                                     ?>
-
                                 </tbody>
                             </table>
-                        </div>
+                        </table>
                     </div>
+                </div>
 
-                </section>
+                
             </div>
-
-
-
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <script>
         // Ajouter un écouteur d'événement de clic au bouton "Supprimé client"
         document.getElementById('deleteClientBtn').addEventListener('click', function (event) {
@@ -383,41 +314,34 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     </script>
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-
-
     <script src="assets/compiled/js/app.js"></script>
-
-
-    <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
-    <script src="assets/static/js/pages/dashboard.js"></script>
+    <script src="assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
+    <script src="assets/static/js/pages/simple-datatables.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-    document.getElementById('logoutBtn').addEventListener('click', function (event) {
-        // Empêcher le comportement par défaut du lien
-        event.preventDefault();
+        document.getElementById('logoutBtn').addEventListener('click', function (event) {
+            // Empêcher le comportement par défaut du lien
+            event.preventDefault();
 
-        // Afficher l'alerte SweetAlert2
-        Swal.fire({
-            title: "Êtes-vous sûr de vous déconnecter?",
-            
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Oui",
-            cancelButtonText: 'Non',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Rediriger vers la page de déconnexion après confirmation
-                window.location.href = "logout.php";
-            }
+            // Afficher l'alerte SweetAlert2
+            Swal.fire({
+                title: "Êtes-vous sûr de vous déconnecter?",
+
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Oui",
+                cancelButtonText: 'Non',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers la page de déconnexion après confirmation
+                    window.location.href = "logout.php";
+                }
+            });
         });
-    });
-</script>
-
-
-
+    </script>
 
 </body>
 

@@ -146,6 +146,30 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         </li>
 
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-box2-fill"></i>
+                                <span>Produit et service</span>
+                            </a>
+
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="listprod.php" class="submenu-link">Liste produit</a>
+
+                                </li>
+
+                                <li class="submenu-item  ">
+                                    <a href="listserv.php" class="submenu-link">Liste service</a>
+
+                                </li>
+
+
+                            </ul>
+
+
+                        </li>
+
                         <li class="sidebar-item  ">
                             <a href="listconso.php" class='sidebar-link'>
                                 <i class="bi bi-card-heading"></i>
@@ -324,7 +348,155 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             </div>
                                             <div class="tab-pane fade" id="profile" role="tabpanel"
                                                 aria-labelledby="profile-tab">
-                                                Aucun produit enregistré
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <h5 class="card-title">
+                                                            Produit du client
+                                                        </h5>
+
+                                                        <a href="addprod.php?id=<?= $id_user ?>"
+                                                            class="btn btn-success">Ajouter</a>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <table class="table table-striped" id="table1">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nom</th>
+                                                                    <th>Type (local/importé)</th>
+                                                                    <th>Conditionnement</th>
+                                                                    <th>Format</th>
+                                                                    <th>Quantité</th>
+                                                                    <th>Prix</th>
+                                                                    <th>Mode de paiement</th>
+                                                                    <th>Capacité de livré</th>
+                                                                    <th>Zone d'activité</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
+                                                                $recupUsers = $conn->prepare('SELECT prodUser.*, user.nom_user FROM prodUser 
+                                                                
+                                                                 LEFT JOIN user ON prodUser.id_user = user.id_user
+                                                                 WHERE prodUser.id_user = :id_user
+                                                                 ORDER BY date_ajout DESC');
+
+                                                                $recupUsers->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                                                $recupUsers->execute();
+
+                                                                while ($user = $recupUsers->fetch()) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <?= $user['nomArt']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['typeProd']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['condProd']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['formatProd']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['qteProd']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['PrixProd']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['paymodProd']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['LivreCapProd']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $user['zonecoProd']; ?>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <h5 class="card-title">
+                                                            Service du client
+                                                        </h5>
+
+                                                        <a href="addserv.php?id=<?= $id_user ?>"
+                                                            class="btn btn-success">Ajouter</a>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <table class="table table-striped" id="table1">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Nom du service</th>
+                                                                    <th>Qualification</th>
+                                                                    <th>Specialité</th>
+                                                                    <th>Quantité</th>
+                                                                    <th>Prix</th>
+                                                                    <th>Mode de paiement</th>
+                                                                    <th>Zone d'activité</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+
+                                                                // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
+                                                                
+                                                                $recupServ = $conn->prepare('SELECT servUser.*, user.nom_user FROM servUser 
+                                                                
+                                                                LEFT JOIN user ON servUser.id_user = user.id_user
+                                                                WHERE servUser.id_user = :id_user
+                                                                ORDER BY date_ajout DESC');
+
+                                                                $recupServ->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                                                $recupServ->execute();
+
+                                                                while ($serv = $recupServ->fetch()) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <?= $serv['nomMet']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $serv['qalifServ']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $serv['sepServ']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $serv['qteServ']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $serv['PrixServ']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $serv['paymodServ']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $serv['zonecoServ']; ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?= $serv['nom_user']; ?>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="tab-pane fade" id="contact" role="tabpanel"
                                                 aria-labelledby="contact-tab">
@@ -357,9 +529,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                                 <?php
                                                                 // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
                                                                 $recupUsers = $conn->prepare('SELECT consprodUser.*, user.nom_user FROM consprodUser 
-                    LEFT JOIN user ON consprodUser.id_user = user.id_user
-                    WHERE consprodUser.id_user = :id_user
-                    ORDER BY date_ajout DESC');
+
+                                                                 LEFT JOIN user ON consprodUser.id_user = user.id_user
+                                                                 WHERE consprodUser.id_user = :id_user
+                                                                 ORDER BY date_ajout DESC');
 
                                                                 $recupUsers->bindParam(':id_user', $id_user, PDO::PARAM_INT);
                                                                 $recupUsers->execute();
@@ -429,11 +602,14 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                             </thead>
                                                             <tbody>
                                                                 <?php
+
                                                                 // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
+                                                                
                                                                 $recupServ = $conn->prepare('SELECT consservUser.*, user.nom_user FROM consservUser 
-    LEFT JOIN user ON consservUser.id_user = user.id_user
-    WHERE consservUser.id_user = :id_user
-    ORDER BY date_ajout DESC');
+                                                                
+                                                                LEFT JOIN user ON consservUser.id_user = user.id_user
+                                                                WHERE consservUser.id_user = :id_user
+                                                                ORDER BY date_ajout DESC');
 
                                                                 $recupServ->bindParam(':id_user', $id_user, PDO::PARAM_INT);
                                                                 $recupServ->execute();

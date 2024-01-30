@@ -4,11 +4,9 @@ session_start();
 
 if (!isset($_SESSION['username'])) {
     header('location: ../page/auth/adlogin.php');
-    exit(); // Add exit after header redirection
 }
-
 $errorMsg = '';
-$successMsg = '';
+$successMsg = ''; 
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_user = $_GET['id'];
@@ -22,35 +20,29 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $nom_client = $client['nom_user'];
     }
 
-    if (isset($_POST['submit'])) {
-        $nom_service = htmlspecialchars($_POST['pname']);
-        $qualification = htmlspecialchars($_POST['typep']);
-        $specialite = htmlspecialchars($_POST['cond']);
+    if(isset($_POST['submit'])){
+        $nom_produit = htmlspecialchars($_POST['pname']);
+        $type_produit = htmlspecialchars($_POST['typep']);
+        $conditionnalite = htmlspecialchars($_POST['cond']);
+        $format = htmlspecialchars($_POST['format']);
         $quantite = htmlspecialchars($_POST['qte_prod']);
         $prix = htmlspecialchars($_POST['prix']);
-        $frequence = htmlspecialchars($_POST['fqce']);
+        $modepay = htmlspecialchars($_POST['fqce']);
+        $caplivr = htmlspecialchars($_POST['jourAch']);
         $zone_economique = htmlspecialchars($_POST['zone_eco']);
-
-        // Vérification des champs obligatoires
-        if (empty($nom_service) || empty($prix)) {
+        
+        if(empty($nom_produit) || empty($conditionnalite) || empty($prix)){
             $errorMsg = "Veuillez remplir tous les champs obligatoires";
         } else {
-            $inserService = $conn->prepare("INSERT INTO consservUser (nom_met, qalif_user, spetia_user, prix_cons, frqce_conse, qte_cons, zoneAct, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $result = $inserService->execute(array($nom_service, $qualification, $specialite, $prix, $frequence, $quantite, $zone_economique, $id_user));
-
-            if ($result) {
-                $successMsg = "Service ajouté avec succès !";
-            } else {
-                $errorMsg = "Erreur lors de l'ajout du service : " . implode(" - ", $inserService->errorInfo());
-            }
+            $inserConsprod = $conn->prepare("INSERT INTO prodUser (	nomArt, typeProd, condProd, formatProd, qteProd, PrixProd, paymodProd, 	LivreCapProd, zonecoProd, id_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $inserConsprod->execute(array($nom_produit, $type_produit, $conditionnalite, $format, $quantite, $prix, $modepay, $caplivr, $zone_economique, $id_user));
+            
+            $successMsg = "Consommation ajoutée avec succès !";
         }
     }
 }
+
 ?>
-
-<!-- The rest of your HTML code remains unchanged -->
-
-
 
 
 
@@ -111,20 +103,50 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         </li>
 
-                        <li class="sidebar-item  ">
-                            <a href="addclient.php" class='sidebar-link'>
-                                <i class="bi bi-collection-fill"></i>
-                                <span>Ajouter client</span>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i class="bi bi-stack"></i>
+                                <span>Agent</span>
                             </a>
+
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="addagent.php" class="submenu-link">Ajouter Agents</a>
+
+                                </li>
+
+                                <li class="submenu-item  ">
+                                    <a href="listagent.php" class="submenu-link">Liste des agents</a>
+
+                                </li>
+
+
+                            </ul>
 
 
                         </li>
 
-                        <li class="sidebar-item  ">
-                            <a href="listclient.php" class='sidebar-link'>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
                                 <i class="bi bi-people-fill"></i>
-                                <span>Liste des clients</span>
+                                <span>Client</span>
                             </a>
+
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="addclient.php" class="submenu-link">Ajouter Client</a>
+
+                                </li>
+
+                                <li class="submenu-item  ">
+                                    <a href="listclient.php" class="submenu-link">Liste des clients</a>
+
+                                </li>
+
+
+                            </ul>
 
 
                         </li>
@@ -159,7 +181,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                 <span>Consommation</span>
                             </a>
 
+
+
                         </li>
+
 
                         <li class="sidebar-item  ">
                             <a href="profil.php" class='sidebar-link'>
@@ -169,6 +194,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 
                         </li>
+
 
                         <li class="sidebar-item">
                             <a href="#" class='sidebar-link' id="logoutBtn">
@@ -194,9 +220,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <div class="page-title mb-4">
                     <div class="row">
                         <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3>Ajouter une consommation en service pour
-                                <?= $nom_client ?>
-                            </h3>
+                            <h3>Ajouter un produit pour <?= $nom_client ?></h3>
 
                         </div>
 
@@ -207,62 +231,69 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                     <div class="col-12">
                         <div class="card">
 
-
+                       
 
                             <div class="card-content">
-                                <div class="card-body">
+                                <div class="card-body" >
                                     <form class="form form-vertical" method="post">
 
-                                        <?php
+                                    <?php
 
-                                        if (!empty($successMsg)) {
+if (!empty($successMsg)) {
 
-                                            echo '
+    echo '
 <div class="alert alert-light-success alert-dismissible show fade">
 ' . $successMsg . '
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 ';
-                                        }
+}
 
-                                        ?>
-                                        <?php
+?>
+<?php
 
-                                        if (!empty($errorMsg)) {
+if (!empty($errorMsg)) {
 
-                                            echo '
+    echo '
 <div class="alert alert-light-danger alert-dismissible show fade">
 ' . $errorMsg . '
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 ';
-                                        }
+}
 
-                                        ?>
+?>
                                         <div class="form-body">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="first-name-vertical">Nom du service *</label>
+                                                        <label for="first-name-vertical">Nom du produit *</label>
                                                         <input type="text" id="first-name-vertical" class="form-control"
-                                                            name="pname" placeholder="Nom du service ">
+                                                            name="pname" placeholder="Nom du produit">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="email-id-vertical">Qualification</label>
+                                                        <label for="email-id-vertical">Type (Locale/importer)</label>
                                                         <input type="text" id="email-id-vertical" class="form-control"
-                                                            name="typep" placeholder="Qualification">
+                                                            name="typep" placeholder="type">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="contact-info-vertical">Specialité </label>
+                                                        <label for="contact-info-vertical">Conditionnalité *</label>
                                                         <input type="text" id="contact-info-vertical"
-                                                            class="form-control" name="cond" placeholder="Specialité">
+                                                            class="form-control" name="cond"
+                                                            placeholder="Conditionnalité">
                                                     </div>
                                                 </div>
-
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="password-vertical">Format</label>
+                                                        <input type="text" id="password-vertical" class="form-control"
+                                                            name="format" placeholder="Format">
+                                                    </div>
+                                                </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="password-vertical">Quantité</label>
@@ -272,25 +303,31 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="password-vertical">Prix *</label>
+                                                        <label for="password-vertical">Prix minimal unitaire *</label>
                                                         <input type="number" id="password-vertical" class="form-control"
                                                             name="prix" placeholder="Prix">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="password-vertical">Frequence</label>
+                                                        <label for="password-vertical">Mode de paiement</label>
                                                         <input type="text" id="password-vertical" class="form-control"
-                                                            name="fqce" placeholder="Frequence">
+                                                            name="fqce" placeholder="Mode de paiement">
                                                     </div>
                                                 </div>
-
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label for="password-vertical">Capacité de livré</label>
+                                                        <input type="text" id="password-vertical" class="form-control"
+                                                            name="jourAch" placeholder="Capacité de livré">
+                                                    </div>
+                                                </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="zone-economique">Zone économique</label>
                                                         <select id="zone-economique" class="form-control"
                                                             name="zone_eco">
-
+                                                            
                                                             <option value="local" selected>Local</option>
                                                             <option value="proximite">Proximité</option>
                                                             <option value="international">International</option>
@@ -311,8 +348,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             </div>
                         </div>
                     </div>
-
-
 
                 </section>
 

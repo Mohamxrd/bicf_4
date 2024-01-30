@@ -8,7 +8,7 @@ if (!isset($_SESSION['username'])) {
 }
 
 $errorMsg = '';
-$successMsg = '';
+$successMsg = ''; 
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_user = $_GET['id'];
@@ -22,21 +22,21 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $nom_client = $client['nom_user'];
     }
 
-    if (isset($_POST['submit'])) {
+    if(isset($_POST['submit'])){
         $nom_service = htmlspecialchars($_POST['pname']);
         $qualification = htmlspecialchars($_POST['typep']);
         $specialite = htmlspecialchars($_POST['cond']);
         $quantite = htmlspecialchars($_POST['qte_prod']);
         $prix = htmlspecialchars($_POST['prix']);
-        $frequence = htmlspecialchars($_POST['fqce']);
+        $payMod = htmlspecialchars($_POST['fqce']);
         $zone_economique = htmlspecialchars($_POST['zone_eco']);
 
         // Vérification des champs obligatoires
-        if (empty($nom_service) || empty($prix)) {
+        if(empty($nom_service) || empty($prix)){
             $errorMsg = "Veuillez remplir tous les champs obligatoires";
         } else {
-            $inserService = $conn->prepare("INSERT INTO consservUser (nom_met, qalif_user, spetia_user, prix_cons, frqce_conse, qte_cons, zoneAct, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            $result = $inserService->execute(array($nom_service, $qualification, $specialite, $prix, $frequence, $quantite, $zone_economique, $id_user));
+            $inserService = $conn->prepare("INSERT INTO servUser (nomMet, qalifServ, sepServ, PrixServ, paymodServ, qteServ, zonecoServ, id_user) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $result = $inserService->execute(array($nom_service, $qualification, $specialite,  $prix,  $payMod , $quantite, $zone_economique, $id_user));
 
             if ($result) {
                 $successMsg = "Service ajouté avec succès !";
@@ -111,7 +111,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         </li>
 
-                        <li class="sidebar-item  ">
+                        <li class="sidebar-item active ">
                             <a href="addclient.php" class='sidebar-link'>
                                 <i class="bi bi-collection-fill"></i>
                                 <span>Ajouter client</span>
@@ -122,14 +122,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <li class="sidebar-item  ">
                             <a href="listclient.php" class='sidebar-link'>
-                                <i class="bi bi-people-fill"></i>
+                            <i class="bi bi-people-fill"></i>
                                 <span>Liste des clients</span>
                             </a>
 
 
+
                         </li>
 
-                        <li class="sidebar-item  has-sub">
+                        <li class="sidebar-item active has-sub">
                             <a href="#" class='sidebar-link'>
                             <i class="bi bi-box2-fill"></i>
                                 <span>Produit et service</span>
@@ -152,24 +153,22 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 
                         </li>
-
                         <li class="sidebar-item  ">
                             <a href="listconso.php" class='sidebar-link'>
                                 <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
 
-                        </li>
 
+                        </li>
                         <li class="sidebar-item  ">
                             <a href="profil.php" class='sidebar-link'>
-                                <i class="bi bi-person-circle"></i>
+                            <i class="bi bi-person-circle"></i>
                                 <span>Profils</span>
                             </a>
 
 
                         </li>
-
                         <li class="sidebar-item">
                             <a href="#" class='sidebar-link' id="logoutBtn">
                                 <i class="bi bi-box-arrow-right"></i>
@@ -193,10 +192,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <div class="page-heading">
                 <div class="page-title mb-4">
                     <div class="row">
-                        <div class="col-12 col-md-6 order-md-1 order-last">
-                            <h3>Ajouter une consommation en service pour
-                                <?= $nom_client ?>
-                            </h3>
+                    <div class="col-12 col-md-6 order-md-1 order-last">
+                            <h3>Ajouter un service pour <?= $nom_client ?></h3>
 
                         </div>
 
@@ -204,41 +201,41 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </div>
                 <section class="section">
 
-                    <div class="col-12">
+                <div class="col-12">
                         <div class="card">
 
-
+                       
 
                             <div class="card-content">
-                                <div class="card-body">
+                                <div class="card-body" >
                                     <form class="form form-vertical" method="post">
 
-                                        <?php
+                                    <?php
 
-                                        if (!empty($successMsg)) {
+if (!empty($successMsg)) {
 
-                                            echo '
+    echo '
 <div class="alert alert-light-success alert-dismissible show fade">
 ' . $successMsg . '
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 ';
-                                        }
+}
 
-                                        ?>
-                                        <?php
+?>
+<?php
 
-                                        if (!empty($errorMsg)) {
+if (!empty($errorMsg)) {
 
-                                            echo '
+    echo '
 <div class="alert alert-light-danger alert-dismissible show fade">
 ' . $errorMsg . '
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 ';
-                                        }
+}
 
-                                        ?>
+?>
                                         <div class="form-body">
                                             <div class="row">
                                                 <div class="col-12">
@@ -259,10 +256,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                     <div class="form-group">
                                                         <label for="contact-info-vertical">Specialité </label>
                                                         <input type="text" id="contact-info-vertical"
-                                                            class="form-control" name="cond" placeholder="Specialité">
+                                                            class="form-control" name="cond"
+                                                            placeholder="Specialité">
                                                     </div>
                                                 </div>
-
+                                            
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="password-vertical">Quantité</label>
@@ -279,18 +277,18 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label for="password-vertical">Frequence</label>
+                                                        <label for="password-vertical">Mode de paiement</label>
                                                         <input type="text" id="password-vertical" class="form-control"
-                                                            name="fqce" placeholder="Frequence">
+                                                            name="fqce" placeholder="Mode de paiement">
                                                     </div>
                                                 </div>
-
+                                              
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="zone-economique">Zone économique</label>
                                                         <select id="zone-economique" class="form-control"
                                                             name="zone_eco">
-
+                                                            
                                                             <option value="local" selected>Local</option>
                                                             <option value="proximite">Proximité</option>
                                                             <option value="international">International</option>
@@ -312,8 +310,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                         </div>
                     </div>
 
-
-
+                   
+                    
                 </section>
 
             </div>
