@@ -260,7 +260,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                         <div class="ms-auto">
 
                                             <form method="post" action="delete_client.php">
-                                                <a href="#" class="btn btn-outline-primary">Modifier agent</a>
+                                                <a href="editagent.php?id=<?= $id_user ?>" class="btn btn-outline-primary">Modifier agent</a>
                                                 <input type="hidden" name="id_user" value="<?= $id_user ?>">
                                                 <button type="submit" class="btn btn-outline-danger"
                                                     id="deleteClientBtn">Supprimé client</button>
