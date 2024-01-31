@@ -170,12 +170,26 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         </li>
 
-                        <li class="sidebar-item  ">
-                            <a href="listconso.php" class='sidebar-link'>
-                                <i class="bi bi-card-heading"></i>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                            <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
 
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="listConsoProd.php" class="submenu-link">Produits</a>
+
+                                </li>
+
+                                <li class="submenu-item  ">
+                                    <a href="listConsoServ.php" class="submenu-link">Services</a>
+
+                                </li>
+
+
+                            </ul>
 
 
                         </li>
@@ -375,44 +389,44 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                                             <tbody>
                                                                 <?php
                                                                 // Utilisez une jointure LEFT JOIN avec une clause WHERE pour filtrer par id_user
-                                                                $recupUsers = $conn->prepare('SELECT prodUser.*, user.nom_user FROM prodUser 
+                                                                $recupprods = $conn->prepare('SELECT prodUser.*, user.nom_user FROM prodUser 
                                                                 
                                                                  LEFT JOIN user ON prodUser.id_user = user.id_user
                                                                  WHERE prodUser.id_user = :id_user
                                                                  ORDER BY date_ajout DESC');
 
-                                                                $recupUsers->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-                                                                $recupUsers->execute();
+                                                                $recupprods->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                                                $recupprods->execute();
 
-                                                                while ($user = $recupUsers->fetch()) {
+                                                                while ($prod = $recupprods->fetch()) {
                                                                     ?>
                                                                     <tr>
                                                                         <td>
-                                                                            <?= $user['nomArt']; ?>
+                                                                            <?= $prod['nomArt']; ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $user['typeProd']; ?>
+                                                                            <?= $prod['typeProd']; ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $user['condProd']; ?>
+                                                                            <?= $prod['condProd']; ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $user['formatProd']; ?>
+                                                                            <?= $prod['formatProd']; ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $user['qteProd']; ?>
+                                                                            <?= $prod['qteProd']; ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $user['PrixProd']; ?>
+                                                                            <?= $prod['PrixProd']; ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $user['paymodProd']; ?>
+                                                                            <?= $prod['paymodProd']; ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $user['LivreCapProd']; ?>
+                                                                            <?= $prod['LivreCapProd']; ?>
                                                                         </td>
                                                                         <td>
-                                                                            <?= $user['zonecoProd']; ?>
+                                                                            <?= $prod['zonecoProd']; ?>
                                                                         </td>
 
                                                                     </tr>

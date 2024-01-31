@@ -171,12 +171,26 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         </li>
 
-                        <li class="sidebar-item  ">
-                            <a href="listconso.php" class='sidebar-link'>
-                                <i class="bi bi-card-heading"></i>
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                            <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
-                            
+
+                            <ul class="submenu ">
+
+                                <li class="submenu-item  ">
+                                    <a href="listConsoProd.php" class="submenu-link">Produits</a>
+
+                                </li>
+
+                                <li class="submenu-item  ">
+                                    <a href="listConsoServ.php" class="submenu-link">Services</a>
+
+                                </li>
+
+
+                            </ul>
 
 
                         </li>
