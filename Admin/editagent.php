@@ -20,13 +20,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     if ($client = $recupUser->fetch()) {
 
         $nom_client = $client['nom_user'];
-        $username_client = $client['username'];
-        $phonenumber = $client['tel_user'];
         $id_agent = $client['id_admin'];
-        $actorType = $client['actorType'];
-        $activSector_user = $client['activSector_user'];
-        $adress_user = $client['adress_user'];
-        $email_user = $client['email_user'];
 
         // Maintenant, récupérez les informations de l'agent
         $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
@@ -38,16 +32,22 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         }
     }
 }
+if (isset($_POST['selectionner'])) {
+    // Récupérer l'ID de l'agent à partir du formulaire
+    $id_agent_selectionne = $_POST['id_agent'];
+
+    // Mettre à jour la table user avec l'ID de l'agent sélectionné
+    $updateUser = $conn->prepare('UPDATE user SET id_admin = :id_admin WHERE id_user = :id_user');
+    $updateUser->bindParam(':id_admin', $id_agent_selectionne, PDO::PARAM_INT);
+    $updateUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);  // Assurez-vous d'avoir $id_user défini correctement
+    $updateUser->execute();
+    
+    // Rediriger ou afficher un message de succès si nécessaire
+    // header('Location: ...');
+    // exit();
+}
+
 ?>
-
-
-
-?>
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -299,7 +299,13 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                             <td>
                                                 <?= $clientCount; ?>
                                             </td>
-                                            <td><a href="#"><button class="btn btn-primary">Selectionner</button></a></td>
+                                            <td>
+                                                <form  method="POST" action="">
+                                                    <!-- Ajoutez un champ caché pour stocker l'ID de l'agent -->
+                                                    <input type="hidden" name="id_agent" value="<?= $admin['id_admin']; ?>">
+                                                    <input type="submit" class="btn btn-primary" name="selectionner" value="selectionner">
+                                                </form>
+                                            </td>
                                         </tr>
                                         <?php
                                     }
