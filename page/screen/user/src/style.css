@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ 
+@layer base {
+
+    :root { 
+
+        --m-top:                    4rem;       /*  64px */; 
+        --w-side:                   18rem;      /* 288px */;
+        --w-side-sm:                16rem;      /* 256px */;
+
+        --color-primary:        2 132 199;           /* bg-sky-600 */
+        --color-primary-soft:   224 242 254;         /* bg-sky-100 */
+        --color-secondery:      241 245 249;         /* bg-slate-100 */
+        --color-bgbody:         249 250 251;         /* bg-slate-100/60 */
+
+    } 
+    
+    .dark  {  
+
+        --color-bgbody:             15 23 42;  
+        --color-secondery:          51 65 80;
+        --color-primary-soft:       51 65 80;
+
+    } 
+
+
+    html {
+        font-family: inter, system-ui, sans-serif;
+    }
+
+    /* Basic */
+    body {
+        @apply text-gray-600 font-normal bg-bgbody dark:text-white 
+    }
+    
+     /* Basic */ 
+    input[type='text'],
+    input[type='password'],
+    input[type='email'], 
+    input[type='number'],
+    input[type='url'],
+    input[type='date'],
+    select, 
+    textarea{
+        @apply rounded-md py-2 px-4 text-sm font-medium !text-gray-600 dark:!text-white/90 placeholder:!text-gray-600 dark:placeholder:!text-white/90
+    }
+ 
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    input[type='number'],
+    input[type='url'],
+    input[type='date'],
+    input[type='datetime-local'],
+    input[type='month'],
+    input[type='week'],
+    input[type='time'],
+    input[type='search'],
+    input[type='tel'],
+    input[type='checkbox'],
+    input[type='radio'],
+    select,
+    select[multiple],
+    textarea {
+        @apply bg-slate-100 border-transparent focus:ring-black focus:border-transparent dark:bg-dark3
+    }                           
+
+    select,
+    select[multiple]                       {  @apply  focus:!ring-transparent focus:shadow}
+
+    input[type='radio'],
+    input[type='checkbox']                 {  @apply !text-sky-600 bg-slate-100 focus:ring-sky-600}
+
+    .switch-button                         { @apply bg-slate-200 dark:bg-slate-800}
+    .switch-button:before                  { @apply bg-white dark:bg-sky-600}
+    input:checked + .switch-button         { @apply bg-sky-600 dark:bg-blue-300}
+    input:checked + .switch-button:before  { @apply dark:bg-sky-600}
+
+} 
+
+/* ukit framework utitlites */
+@layer components {
+
+     /* switcher tabs */
+    .uk-switcher > :not(.uk-active)        { @apply hidden }
+    
+    /*slider tab*/
+    .uk-invisible                          { @apply !hidden }
+
+    /* tooltip */
+    .uk-tooltip                            { @apply bg-slate-800/80 hidden absolute z-[1050] top-0 text-[13px] px-2 py-1.5 text-white rounded-md font-semibold tracking-wide max-w-[200px] backdrop-blur-md}
+    .uk-tooltip.uk-active                  { @apply block } 
+
+    /* drop */
+    .uk-drop                               { @apply hidden absolute z-[1020] }
+    .uk-drop.uk-open                       { @apply !block } 
+
+    /* dropdown */
+    .uk-dropdown                           { @apply hidden absolute z-[1020] max-w-[200px] w-52 p-2 bg-white rounded-lg shadow-lg border border-gray-100 dark:border-slate-700/40 dark:bg-dark2}
+    .uk-dropdown.uk-open                   { @apply !block } 
+    .uk-dropdown nav                       { @apply font-medium text-sm text-slate-700 dark:text-white }
+    .uk-dropdown nav > a                   { @apply flex items-center gap-3 py-2 px-2.5 rounded-md hover:bg-secondery}
+    .uk-dropdown nav > hr                  { @apply my-1.5 -mx-2 border-gray-100 dark:border-slate-700/40 }
+ 
+    /* dotnav */ 
+    .uk-dotnav > * > *                     { @apply hover:scale-[1.2] block w-2.5 h-2.5 rounded-full bg-gray-200 dark:bg-white/30 overflow-hidden whitespace-nowrap ease-in-out duration-75 transition-all }
+    .uk-dotnav > * > :hover ,   
+    .uk-dotnav > * > :active ,
+    .uk-dotnav > .uk-active > *            { @apply bg-slate-600 dark:bg-white/90}
+      
+    /* Modal */ 
+    .uk-modal                              { @apply !bg-white/5 backdrop-blur-sm dark:bg-black/5 fixed top-0 right-0 bottom-0 left-0 z-[1010] overflow-y-auto opacity-0 invisible transition-transform}
+    .uk-modal.uk-open                      { @apply opacity-100 visible !flex items-center justify-center scale-100 }
+    .uk-modal-dialog                       { @apply opacity-100 scale-75}
+    .uk-open > .uk-modal-dialog            { @apply opacity-100 scale-100 }
+
+    /* Slider */ 
+    .uk-slider                             { @apply relative }
+    .uk-slider-items                       { @apply relative flex !m-0 !p-0 list-none will-change-transform touch-pan-y}
+    .uk-slider-items > *                   { @apply relative flex-none max-w-full }
+    .uk-slider-container                   { @apply overflow-hidden }
+ 
+
+    /* slideshow */ 
+    .uk-slideshow-items                    { @apply relative !m-0 !p-0 z-0 list-none overflow-hidden touch-pan-y }
+    .uk-slideshow-items > *                { @apply absolute top-0 left-0 right-0 bottom-0 overflow-hidden }
+    .uk-slideshow-items > :not(.uk-active) { @apply hidden }
+
+
+}
+
+@layer components {
+
+    /*heading */
+    h1, h2, h3, h4, h5, h6                 { @apply !text-black dark:!text-white }
+
+        
+    /* dark  */
+    .bg-dark1                              { @apply  bg-slate-900 }
+    .bg-dark2                              { @apply  bg-slate-800 }
+    .bg-dark3                              { @apply  bg-slate-700 }
+    .bg-dark4                              { @apply  bg-slate-600 }
+     
+    /* border */
+    .border1                               { @apply  border border-gray-100 dark:border-gray-700/40 }
+    .border2                               { @apply  border border-gray-200 dark:border-gray-600/40 }
+    
+    /* slider spacing*/
+    .uk-slider-items.grid-small            { @apply lg:w-[calc(100%+0.5rem)]  w-[calc(100%+0.3rem)]}
+    .uk-slider-items.grid-small > *        { @apply lg:pr-[0.5rem] pr-[0.3rem]}
+
+    /* nav buttons */
+    .nav-prev                              { @apply -left-4 w-9 h-9 top-1/2 absolute -translate-y-1/2 bg-white rounded-full grid place-items-center shadow dark:bg-dark3}
+    .nav-next                              { @apply -right-4 w-9 h-9 top-1/2 absolute -translate-y-1/2 bg-white rounded-full grid place-items-center shadow dark:bg-dark3}
+
+    /*sidebar nav links */
+    #side                           { @apply space-y-0.5 text-[14px] text-black font-medium capitalize tracking-wide dark:text-white}
+    #side a                         { @apply flex items-center gap-4  p-3 px-4 rounded-xl hover:bg-secondery dark:hover:bg-dark2 }
+    #side a svg                     { @apply !w-6 !h-6}
+
+    #side a.active svg , 
+    #side a.uk-active svg ,
+    #side .active  a , 
+    #side a.uk-active               { @apply text-primary bg-secondery dark:text-white}
+      
+    #site__sidebar .simplebar-scrollbar {   @apply w-[7px] }
+
+
+    /* button */
+    .button { @apply py-1.5 px-4 text-xs/5 text-black rounded-md gap-1 capitalize font-medium relative inline-flex items-center justify-center cursor-pointer whitespace-nowrap will-change-transform dark:text-white }
+    .button-icon                           { @apply w-8 h-8 rounded-full grid place-items-center hover:bg-secondery dark:hover:bg-dark3 }
+  
+
+    .box                 {  @apply bg-white shadow rounded-lg dark:bg-dark2 }
+    .side                {  @apply box rounded-xl }
+
+    /* card */
+    .card                                  { @apply  box relative overflow-hidden} 
+    .card-media                            { @apply  relative overflow-hidden w-full}
+    .card-media img                        { @apply  w-full h-full absolute inset-0 object-cover z-[1]}
+    .card-media .card-overly               { @apply  bg-secondery w-full h-full absolute animate-pulse z-0}
+    .card-body                             { @apply  md:p-3.5 p-2 }
+    .card-title                            { @apply  capitalize md:text-base font-medium text-black dark:!text-white}
+    .card-text                             { @apply  mt-0.5 md:text-sm text-xs text-gray-500 dark:!text-white }
+    .card-body .button                      { @apply w-full mt-2.5 }
+ 
+
+    /* card list */ 
+    .card-list                             { @apply relative flex md:gap-6 gap-4 max-sm:flex-col}
+    .card-list-media                       { @apply sm:w-56 w-full h-full max-h-full max-md:h-36 overflow-hidden rounded-lg relative shadow-sm shrink-0 }
+    .card-list-media img                   { @apply w-full h-full absolute inset-0 object-cover z-[1]}
+    .card-list-body                        { @apply flex-1}
+    .card-list-title                       { @apply text-lg font-medium capitalize text-black dark:!text-white}
+    .card-list-text                        { @apply leading-6 line-clamp-2 mt-2 text-sm text-gray-500 dark:!text-white}
+    .card-list-link                        { @apply text-sm  mt-2 text-blue-500}
+    .card-list-info                        { @apply flex items-center gap-2 text-sm mt-2 text-gray-500 dark:!text-white}
+    .card-list-divider                     { @apply my-5 border-gray-100 dark:border-slate-700}
+ 
+
+    /* heading */
+    .page-heading                          { @apply relative mb-8}
+    .page-heading .page-title              { @apply text-2xl font-semibold text-black dark:text-white}
+    .page-heading .nav__underline          { @apply  pt-2}
+
+    .page-heading .page-nav ul li.uk-active a,  
+    .page-heading .page-nav ul li.active a  { @apply  text-black border-black dark:text-white dark:border-white }
+
+    .page-nav2.page-nav                     { @apply !border-transparent }
+    .page-nav2.page-nav ul li a             { @apply !border-transparent }
+    .page-nav2.page-nav ul li.uk-active a,
+    .page-nav2.page-nav ul li.active a      { @apply after:w-1/3 after:h-1 after:bg-black after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2}
+
+
+    /* sidebar right list */
+    .side-list                             { @apply space-y-4 mt-5}
+    .side-list-image                       { @apply rounded-md w-10 h-10}
+    .side-list-item                        { @apply flex items-center gap-3 }
+    .side-list-title                       { @apply font-semibold text-sm text-black dark:text-white }
+    .side-list-info                        { @apply mt-0.5 text-xs font-normal text-gray-500 dark:text-white/80}
+    
+
+    /* Tabs */
+    .nav__underline                        { @apply border-b dark:border-slate-700}
+    .nav__underline  ul                    { @apply flex gap-7 text-sm text-center text-gray-600 capitalize font-semibold -mb-px overflow-x-auto dark:text-white/80}
+    .nav__underline  ul li a               { @apply relative inline-block py-[18px] border-b-2 border-transparent }
+    
+    .nav__underline  ul li  a[aria-expanded=true] { @apply  text-black border-black dark:text-white dark:border-white }
+
+    /* Tabs 2*/
+    .page-nav2.page-nav ul li a            { @apply !border-transparent }
+    .page-nav2.page-nav ul li.active a,
+    .page-nav2.page-nav ul li.uk-active a  { @apply after:w-1/3 after:h-1 after:bg-black after:absolute after:-bottom-1 after:left-1/2 after:-translate-x-1/2 dark:after:bg-white}
+
+     /* nav sliding */
+    .nav__wrap nav:has(li.first     a[aria-expanded=true]) .placeholder   {  @apply  left-0 }
+    .nav__wrap nav:has(li.second    a[aria-expanded=true]) .placeholder   {  @apply  left-[20%]  }
+    .nav__wrap nav:has(li.third     a[aria-expanded=true]) .placeholder   {  @apply  left-[40%]  }
+    .nav__wrap nav:has(li.four      a[aria-expanded=true]) .placeholder   {  @apply  left-[60%]  } 
+    .nav__wrap nav:has(li.last      a[aria-expanded=true]) .placeholder   {  @apply  left-full -translate-x-full}
+    
+    .nav__wrap nav ul .uk-active  a { @apply text-black dark:text-white}
+  
+
+ 
+}
+

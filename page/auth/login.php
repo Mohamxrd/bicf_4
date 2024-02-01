@@ -23,7 +23,8 @@ if (isset($_POST['submit'])) {
 		
 					$_SESSION['username'] = $user['username'];
 					$_SESSION['nom_user'] = $user['nom_user'];
-					header('location: ../screen/user/user_page.php');
+					$_SESSION['id_user'] = $user['id_user'];
+					header('location: ../screen/user/public/user_page.php');
 
 				exit();
 			} else {
