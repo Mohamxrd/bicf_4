@@ -125,7 +125,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-    <script src="assets/static/js/initTheme.js"></script>
+    <!-- <script src="assets/static/js/initTheme.js"></script> -->
 
 
     <div id="app">
@@ -633,7 +633,7 @@ if (isset($_POST['submit'])) {
 
 
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="assets/static/js/components/dark.js"></script>
+    <!-- <script src="assets/static/js/components/dark.js"></script> -->
 
 
 

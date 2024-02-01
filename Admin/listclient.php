@@ -37,7 +37,7 @@ if (!isset($_SESSION['username'])) {
 </head>
 
 <body>
-    <script src="assets/static/js/initTheme.js"></script>
+    <!-- <script src="assets/static/js/initTheme.js"></script> -->
     <div id="app">
         <div id="sidebar">
             <div class="sidebar-wrapper active">
@@ -265,7 +265,7 @@ if (!isset($_SESSION['username'])) {
     </div>
 
 
-    <script src="assets/static/js/components/dark.js"></script>
+    <!-- <script src="assets/static/js/components/dark.js"></script> -->
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 
 

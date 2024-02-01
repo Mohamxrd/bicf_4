@@ -83,7 +83,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 </head>
 
 <body>
-    <script src="assets/static/js/initTheme.js"></script>
+    <!-- <script src="assets/static/js/initTheme.js"></script> -->
     <div id="app">
         <div id="sidebar">
             <div class="sidebar-wrapper active">
@@ -402,7 +402,7 @@ if (!empty($errorMsg)) {
             });
         });
     </script>
-    <script src="assets/static/js/components/dark.js"></script>
+    <!-- <script src="assets/static/js/components/dark.js"></script> -->
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
     <script src="assets/compiled/js/app.js"></script>
     <script src="assets/extensions/simple-datatables/umd/simple-datatables.js"></script>
