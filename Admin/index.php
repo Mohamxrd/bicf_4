@@ -108,7 +108,7 @@ $nom_agent = $admin_info['nom_admin'];
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-people-fill"></i>
+                                <i class="bi bi-people-fill"></i>
                                 <span>Client</span>
                             </a>
 
@@ -131,7 +131,7 @@ $nom_agent = $admin_info['nom_admin'];
                         </li>
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-box2-fill"></i>
+                                <i class="bi bi-box2-fill"></i>
                                 <span>Produit et service</span>
                             </a>
 
@@ -155,7 +155,7 @@ $nom_agent = $admin_info['nom_admin'];
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-card-heading"></i>
+                                <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
 
@@ -176,7 +176,7 @@ $nom_agent = $admin_info['nom_admin'];
 
 
                         </li>
-                        
+
 
                         <li class="sidebar-item  ">
                             <a href="profil.php" class='sidebar-link'>
@@ -446,7 +446,11 @@ $nom_agent = $admin_info['nom_admin'];
                                                                     <?= $user['tel_user']; ?>
                                                                 </td>
                                                                 <td>
-                                                                    <?= $user['nom_admin']; ?>
+                                                                    <?php
+                                                                    // Transformez $user['nom_admin'] en lien
+                                                                    $agentId = $user['id_admin'];
+                                                                    echo "<a href='detailagent.php?id=$agentId'>" . $user['nom_admin'] . "</a>";
+                                                                    ?>
                                                                 </td>
                                                                 <td><a
                                                                         href="detailclient.php?id=<?= $user['id_user']; ?>">Details</a>
@@ -455,8 +459,8 @@ $nom_agent = $admin_info['nom_admin'];
                                                             <?php
                                                         }
                                                         ?>
-
                                                     </tbody>
+
                                                 </table>
                                                 <div class="text-center">
                                                     <a href="listclient.php">Voir plus</a>

@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 @include('../page/config.php');
 
@@ -32,6 +31,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         }
     }
 }
+
 if (isset($_POST['selectionner'])) {
     // Récupérer l'ID de l'agent à partir du formulaire
     $id_agent_selectionne = $_POST['id_agent'];
@@ -39,14 +39,15 @@ if (isset($_POST['selectionner'])) {
     // Mettre à jour la table user avec l'ID de l'agent sélectionné
     $updateUser = $conn->prepare('UPDATE user SET id_admin = :id_admin WHERE id_user = :id_user');
     $updateUser->bindParam(':id_admin', $id_agent_selectionne, PDO::PARAM_INT);
-    $updateUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);  // Assurez-vous d'avoir $id_user défini correctement
+    $updateUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
     $updateUser->execute();
-    
+
+    $_SESSION['agent_modifie'] = true;
+
     // Rediriger ou afficher un message de succès si nécessaire
-    // header('Location: ...');
+    header('Location: detailclient.php?id='.$id_user);
     // exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -256,14 +257,7 @@ if (isset($_POST['selectionner'])) {
                             <h5 class="card-title">
                                 Selectionné agent
                             </h5>
-                            <div class="row d-flex align-items-center">
-                                <p class="mb-0">
-                                    Agent actuel:
-                                </p>
-                                <h6 class="mb-0 mr-2">
-                                    <?= $nom_agent ?>
-                                </h6>
-                            </div>
+                           
                         </div>
 
                         <div class="card-body">
@@ -282,12 +276,16 @@ if (isset($_POST['selectionner'])) {
                                     $recupAdmins->bindValue(':admin_type', 'agent', PDO::PARAM_STR);
                                     $recupAdmins->execute();
 
+                                    $counter = 0;
+
                                     while ($admin = $recupAdmins->fetch()) {
                                         // Utilisez une requête pour compter le nombre de clients associés à chaque administrateur
                                         $countClients = $conn->prepare('SELECT COUNT(*) as client_count FROM user WHERE id_admin = :id_admin');
                                         $countClients->bindValue(':id_admin', $admin['id_admin'], PDO::PARAM_INT);
                                         $countClients->execute();
                                         $clientCount = $countClients->fetchColumn();
+
+                                        $counter++;
                                         ?>
                                         <tr>
                                             <td>
@@ -300,11 +298,15 @@ if (isset($_POST['selectionner'])) {
                                                 <?= $clientCount; ?>
                                             </td>
                                             <td>
-                                                <form  method="POST" action="">
+                                                <form method="POST" action="" id="agentForm<?= $counter ?>">
                                                     <!-- Ajoutez un champ caché pour stocker l'ID de l'agent -->
                                                     <input type="hidden" name="id_agent" value="<?= $admin['id_admin']; ?>">
-                                                    <input type="submit" class="btn btn-primary" name="selectionner" value="selectionner">
+                                                    <input type="submit" class="btn btn-primary btn-selectionner"
+                                                        name="selectionner" value="selectionner"
+                                                        data-agent-id="<?= $admin['id_admin']; ?>"
+                                                        id="btnSelectionner<?= $counter ?>">
                                                 </form>
+
                                             </td>
                                         </tr>
                                         <?php
@@ -324,34 +326,7 @@ if (isset($_POST['selectionner'])) {
 
     <script>
         // Ajouter un écouteur d'événement de clic au bouton "Supprimé client"
-        document.getElementById('deleteClientBtn').addEventListener('click', function (event) {
-            // Prevent the form from submitting normally
-            event.preventDefault();
 
-            // Afficher l'alerte SweetAlert
-            Swal.fire({
-                title: "Êtes-vous sûr?",
-                text: "Vous ne pourrez pas revenir en arrière!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Oui, supprimer!",
-                cancelButtonText: "Annuler",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Afficher une autre alerte si l'utilisateur confirme
-                    Swal.fire({
-                        title: "Supprimé!",
-                        text: "Votre fichier a été supprimé.",
-                        icon: "success"
-                    }).then(() => {
-                        // Submit the form after the success alert is closed
-                        this.closest('form').submit();
-                    });
-                }
-            });
-        });
     </script>
     <script src="assets/static/js/components/dark.js"></script>
     <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
@@ -368,7 +343,6 @@ if (isset($_POST['selectionner'])) {
             // Afficher l'alerte SweetAlert2
             Swal.fire({
                 title: "Êtes-vous sûr de vous déconnecter?",
-
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
@@ -382,7 +356,15 @@ if (isset($_POST['selectionner'])) {
                 }
             });
         });
+
+        
+
+
+
+
+
     </script>
+
 
 </body>
 
