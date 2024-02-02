@@ -2,7 +2,7 @@
 session_start();
 @include('../../../config.php');
 
-if(!isset($_SESSION['nom_user'])){
+if (!isset($_SESSION['nom_user'])) {
     header('location: ../../auth/login.php');
 }
 
@@ -15,22 +15,22 @@ $recupUser->execute();
 
 if ($client = $recupUser->fetch()) {
     $nom_client = $client['nom_user'];
-        $username_client = $client['username'];
-        $phonenumber = $client['tel_user'];
-        $id_agent = $client['id_admin'];
-        $actorType = $client['actorType'];
-        $activSector_user = $client['activSector_user'];
-        $adress_user = $client['adress_user'];
-        $email_user = $client['email_user'];
+    $username_client = $client['username'];
+    $phonenumber = $client['tel_user'];
+    $id_agent = $client['id_admin'];
+    $actorType = $client['actorType'];
+    $activSector_user = $client['activSector_user'];
+    $adress_user = $client['adress_user'];
+    $email_user = $client['email_user'];
 
-        // Maintenant, récupérez les informations de l'agent
-        $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
-        $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
-        $recupAgent->execute();
+    // Maintenant, récupérez les informations de l'agent
+    $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
+    $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
+    $recupAgent->execute();
 
-        if ($agent = $recupAgent->fetch()) {
-            $nom_agent = $agent['nom_admin'];
-        }
+    if ($agent = $recupAgent->fetch()) {
+        $nom_agent = $agent['nom_admin'];
+    }
     // ... Ajoutez d'autres champs au besoin ...
 } else {
     // Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
@@ -64,12 +64,12 @@ if ($client = $recupUser->fetch()) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
  
 </head>
-<body>
+<body class="light">
  
-    <div id="wrapper">
+    <div id="wrapper ">
 
         <!-- header -->
-        <header class="z-[100] h-[--m-top] fixed top-0 left-0 w-full flex items-center bg-white/80 sky-50 backdrop-blur-xl border-b border-slate-200 dark:bg-dark2 dark:border-slate-800">
+        <header class="z-[100] h-[--m-top] fixed top-0 left-0 w-full flex items-center bg-white/80 sky-50 backdrop-blur-xl border-b border-slate-200 dark:bg-dark2 dark:border-slate-800 mb-32">
 
             <div class="flex items-center w-full xl:px-6 px-2 max-lg:gap-10">
 
@@ -96,7 +96,7 @@ if ($client = $recupUser->fetch()) {
                     </div>
 
                 </div>
-                <div class="flex-1 relative">
+                <div class="flex-1 relative ">
 
                     <div class="max-w-[1220px] mx-auto flex items-center">
                         
@@ -484,20 +484,13 @@ if ($client = $recupUser->fetch()) {
                                 <hr class="dark:border-gray-600/60">
 
                                 <nav class="p-2 text-sm text-black font-normal dark:text-white">
-                                    <a href="upgrade.html">
-                                        <div class="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10 text-blue-600">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                                            </svg>
-                                            Upgrade To Premium 
-                                        </div>
-                                    </a>  
+                                     
                                     <a href="setting.html">
                                         <div class="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10"> 
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
                                             </svg>
-                                            My Billing 
+                                            Porte-feuille
                                         </div>
                                     </a>
                                     <a href="setting.html">
@@ -514,7 +507,7 @@ if ($client = $recupUser->fetch()) {
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                             </svg>
-                                            My Account
+                                            Mon compte
                                         </div>
                                     </a>
                                     <button type="button" class="w-full">
@@ -534,7 +527,7 @@ if ($client = $recupUser->fetch()) {
                                             <svg class="w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                                             </svg>
-                                            Log Out 
+                                            Se deconnecter
                                         </div>
                                     </a>
     
@@ -568,7 +561,7 @@ if ($client = $recupUser->fetch()) {
         <div id="site__sidebar" class="fixed top-0 left-0 z-[99] pt-[--m-top] overflow-hidden transition-transform xl:duration-500 max-xl:w-full max-xl:-translate-x-full">
 
             <!-- sidebar inner -->
-            <div class="p-2 max-xl:bg-white shadow-sm 2xl:w-72 sm:w-64 w-[80%] h-[calc(100vh-64px)] relative z-30 max-lg:border-r dark:max-xl:!bg-slate-700 dark:border-slate-700">
+            <div class="p-2 max-xl:bg-white shadow-sm 2xl:w-[300px] sm:w-64 w-[80%] h-[calc(100vh-64px)] relative z-30 max-lg:border-r dark:max-xl:!bg-slate-700 dark:border-slate-700">
         
                 <div class="pr-4" data-simplebar>
 
@@ -576,9 +569,12 @@ if ($client = $recupUser->fetch()) {
                     
                         <ul>
                             <li class="active">
-                                <a href="feed.html">
-                                    <img src="assets/images/icons/home.png" alt="feeds" class="w-6">
-                                    <span> Feed </span> 
+                                <a href="user_page.php">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" d="M11.3 3.3a1 1 0 0 1 1.4 0l6 6 2 2a1 1 0 0 1-1.4 1.4l-.3-.3V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3c0 .6-.4 1-1 1H7a2 2 0 0 1-2-2v-6.6l-.3.3a1 1 0 0 1-1.4-1.4l2-2 6-6Z" clip-rule="evenodd"/>
+  </svg>
+  
+                                    <span> Acceuil </span> 
                                 </a>
                             </li>
                             <li>
@@ -1194,393 +1190,81 @@ if ($client = $recupUser->fetch()) {
                 </div>
 
                 <!-- sidebar -->
+
                 <div class="flex-1"> 
-                    
-                    <div class="lg:space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6" 
-                    uk-sticky="media: 1024; end: #js-oversized; offset: 80">
-
-                    <div class="box p-5 px-6">
+                <div class="box p-5 px-6">
         
-                        <div class="flex items-baseline justify-between text-black dark:text-white">
-                            <h3 class="font-bold text-base"> People you may know </h3>
-                            <a href="#" class="text-sm text-blue-500">See all</a>
-                        </div>
+        <div class="flex items-baseline justify-between text-black dark:text-white">
+            <h3 class="font-bold text-base"> People you may know </h3>
+            <a href="#" class="text-sm text-blue-500">See all</a>
+        </div>
 
-                        <div class="side-list">
+        <div class="side-list">
 
-                            <div class="side-list-item">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-2.jpg" alt="" class="side-list-image rounded-full">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="side-list-title">  John Michael </h4></a>
-                                    <div class="side-list-info"> 125k Following </div>
-                                </div>
-                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                            </div>
-
-                            <div class="side-list-item">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-3.jpg" alt="" class="side-list-image rounded-full">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="side-list-title"> Monroe Parker </h4></a>
-                                    <div class="side-list-info"> 320k Following </div>
-                                </div>
-                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                            </div>  
-                            
-                            <div class="side-list-item">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-5.jpg" alt="" class="side-list-image rounded-full">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="side-list-title"> James Lewis</h4></a>
-                                    <div class="side-list-info"> 125k Following </div>
-                                </div>
-                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                            </div>
-                            
-                            <div class="side-list-item">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-6.jpg" alt="" class="side-list-image rounded-full">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="side-list-title">  Alexa stella </h4></a>
-                                    <div class="side-list-info"> 192k Following </div>
-                                </div>
-                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                            </div>
-
-                            <div class="side-list-item">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-2.jpg" alt="" class="side-list-image rounded-full">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="side-list-title"> John Michael </h4></a>
-                                    <div class="side-list-info"> 320k Following </div>
-                                </div>
-                                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                            </div>  
-                            
-                            <button class="bg-secondery button w-full mt-2 hidden">See all</button>
-
-                        </div>
-
-                    </div>
-
-                    <!-- peaple you might know -->
-                    <div class="box p-5 px-6 border1 dark:bg-dark2 hidden">
-                                    
-                        <div class="flex justify-between text-black dark:text-white">
-                            <h3 class="font-bold text-base"> Peaple You might know </h3>
-                            <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
-                        </div>
-
-                        <div class="space-y-4 capitalize text-xs font-normal mt-5 mb-2 text-gray-500 dark:text-white/80">
-
-                            <div class="flex items-center gap-3">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-7.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white">  Johnson smith</h4></a>
-                                    <div class="mt-0.5"> Suggested For You </div>
-                                </div>
-                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-5.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white"> James Lewis</h4></a>
-                                    <div class="mt-0.5"> Followed by Johnson </div>
-                                </div>
-                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-2.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white"> John Michael</h4></a>
-                                    <div class="mt-0.5"> Followed by Monroe  </div>
-                                </div>
-                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-3.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white">  Monroe Parker</h4></a>
-                                    <div class="mt-0.5"> Suggested For You </div>
-                                </div>
-                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                            </div> 
-                            <div class="flex items-center gap-3">
-                                <a href="timeline.html">
-                                    <img src="assets/images/avatars/avatar-4.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                </a>
-                                <div class="flex-1">
-                                    <a href="timeline.html"><h4 class="font-semibold text-sm text-black dark:text-white">  Martin Gray</h4></a>
-                                    <div class="mt-0.5"> Suggested For You </div>
-                                </div>
-                                <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <!-- latest marketplace items -->
-                    <div class="box p-5 px-6 border1 dark:bg-dark2">
-                        
-                        <div class="flex justify-between text-black dark:text-white">
-                            <h3 class="font-bold text-base"> Premium Photos </h3>
-                            <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
-                        </div>
-
-                        <div class="relative capitalize font-medium text-sm text-center mt-4 mb-2" tabindex="-1" uk-slider="autoplay: true;finite: true">
-
-                            <div class="overflow-hidden uk-slider-container">
-                            
-                                <ul class="-ml-2 uk-slider-items w-[calc(100%+0.5rem)]">
-                                    
-                                    <li class="w-1/2 pr-2">
-
-                                         <a href="#">
-                                            <div class="relative overflow-hidden rounded-lg">
-                                                <div class="relative w-full h-40">
-                                                    <img src="assets/images/product/product-1.jpg" alt="" class="object-cover w-full h-full inset-0">
-                                                </div> 
-                                                <div class="absolute right-0 top-0 m-2 bg-white/60 rounded-full py-0.5 px-2 text-sm font-semibold dark:bg-slate-800/60"> $12 </div>
-                                            </div>
-                                            <div class="mt-3 w-full"> Chill Lotion </div>
-                                        </a>
-                                    </li>
-                                    <li class="w-1/2 pr-2">
-
-                                         <a href="#">
-                                            <div class="relative overflow-hidden rounded-lg">
-                                                <div class="relative w-full h-40">
-                                                    <img src="assets/images/product/product-3.jpg" alt="" class="object-cover w-full h-full inset-0">
-                                                </div> 
-                                                <div class="absolute right-0 top-0 m-2 bg-white/60 rounded-full py-0.5 px-2 text-sm font-semibold dark:bg-slate-800/60"> $18 </div>
-                                            </div>
-                                            <div class="mt-3 w-full">  Gaming mouse </div>
-                                        </a>
-
-                                    </li>
-                                    <li class="w-1/2 pr-2">
-
-                                        <a href="#">
-                                            <div class="relative overflow-hidden rounded-lg">
-                                                <div class="relative w-full h-40">
-                                                    <img src="assets/images/product/product-5.jpg" alt="" class="object-cover w-full h-full inset-0">
-                                                </div> 
-                                                <div class="absolute right-0 top-0 m-2 bg-white/60 rounded-full py-0.5 px-2 text-sm font-semibold dark:bg-slate-800/60"> $12 </div>
-                                            </div>
-                                            <div class="mt-3 w-full">  Herbal Shampoo </div>
-                                        </a>
-
-                                    </li>
-
-                                </ul>
-
-                                <button type="button" class="absolute bg-white rounded-full top-16 -left-4 grid w-9 h-9 place-items-center shadow dark:bg-dark3"  uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl"></ion-icon></button>
-                                <button type="button" class="absolute -right-4 bg-white rounded-full top-16 grid w-9 h-9 place-items-center shadow dark:bg-dark3" uk-slider-item="next"> <ion-icon name="chevron-forward" class="text-2xl"></ion-icon></button>
-
-                            </div>
-                        
-                        </div>
-
-
-                    </div>
-                    
-                    <!-- online friends -->
-                    <div class="box p-5 px-6 border1 dark:bg-dark2">
-                        
-                        <div class="flex justify-between text-black dark:text-white">
-                            <h3 class="font-bold text-base"> Online Friends </h3>
-                            <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
-                        </div>
-
-                        <div class="grid grid-cols-6 gap-3 mt-4">
-
-                            <a href="timeline.html"> 
-                                <div class="w-10 h-10 relative">
-                                    <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
-                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
-                                </div> 
-                            </a>
-                            <a href="timeline.html"> 
-                                <div class="w-10 h-10 relative">
-                                    <img src="assets/images/avatars/avatar-3.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
-                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
-                                </div>
-                            </a>
-                            <a href="timeline.html">  
-                                <div class="w-10 h-10 relative">
-                                    <img src="assets/images/avatars/avatar-4.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
-                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
-                                </div> 
-                            </a>
-                            <a href="timeline.html"> 
-                                <div class="w-10 h-10 relative">
-                                    <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
-                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
-                                </div> 
-                            </a>
-                            <a href="timeline.html"> 
-                                <div class="w-10 h-10 relative">
-                                    <img src="assets/images/avatars/avatar-6.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
-                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
-                                </div> 
-                            </a>
-                            <a href="timeline.html"> 
-                                <div class="w-10 h-10 relative">
-                                    <img src="assets/images/avatars/avatar-7.jpg" alt="" class="w-full h-full absolute inset-0 rounded-full">
-                                    <div class="absolute bottom-0 right-0 m-0.5 bg-green-500 rounded-full w-2 h-2"></div>
-                                </div> 
-                            </a>
-
-                        </div>
-
-                        
-                    </div>
-
-                    <!-- Pro Members -->
-                    <div class="box p-5 px-6 border1 dark:bg-dark2">
-                        
-                        <div class="flex justify-between text-black dark:text-white">
-                            <h3 class="font-bold text-base"> Pro Members </h3>
-                        </div>
-
-                        <div class="relative capitalize font-normal text-sm mt-4 mb-2" tabindex="-1" uk-slider="autoplay: true;finite: true">
-
-                            <div class="overflow-hidden uk-slider-container">
-                            
-                                <ul class="-ml-2 uk-slider-items w-[calc(100%+0.5rem)]">
-                                    
-                                    <li class="w-1/2 pr-2">
-                                    <a href="timeline.html"> 
-                                        <div class="flex flex-col items-center shadow-sm p-2 rounded-xl border1">
-                                            <a href="timeline.html"> 
-                                                <div class="relative w-16 h-16 mx-auto mt-2">
-                                                    <img src="assets/images/avatars/avatar-5.jpg" alt="" class="h-full object-cover rounded-full shadow w-full">
-                                                </div>
-                                            </a>
-                                            <div class="mt-5 text-center w-full">
-                                                <a href="timeline.html"> <h5 class="font-semibold"> Martin Gray</h5> </a>
-                                                <div class="text-xs text-gray-400 mt-0.5 font-medium"> 12K Followers</div>
-                                                <button type="button" class="bg-secondery block font-semibold mt-4 py-1.5 rounded-lg text-sm w-full border1"> Follow </button>
-                                            </div>
-                                        </div>
-                                    
-                                    </li>
-                                    <li class="w-1/2 pr-2">
-                                        <div class="flex flex-col items-center shadow-sm p-2 rounded-xl border1">
-                                            <a href="timeline.html"> 
-                                                <div class="relative w-16 h-16 mx-auto mt-2">
-                                                    <img src="assets/images/avatars/avatar-4.jpg" alt="" class="h-full object-cover rounded-full shadow w-full">
-                                                </div>
-                                            </a> 
-                                            <div class="mt-5 text-center w-full">
-                                                <a href="timeline.html"> <h5 class="font-semibold"> Alexa Park</h5> </a>
-                                                <div class="text-xs text-gray-400 mt-0.5 font-medium"> 12K Followers</div>
-                                                <button type="button" class="bg-secondery block font-semibold mt-4 py-1.5 rounded-lg text-sm w-full border1"> Follow </button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="w-1/2 pr-2">
-                                        <div class="flex flex-col items-center shadow-sm p-2 rounded-xl border1">
-                                            <a href="timeline.html"> 
-                                                <div class="relative w-16 h-16 mx-auto mt-2">
-                                                    <img src="assets/images/avatars/avatar-4.jpg" alt="" class="h-full object-cover rounded-full shadow w-full">
-                                                </div>
-                                            </a> 
-                                            <div class="mt-5 text-center w-full">
-                                                <a href="timeline.html"> <h5 class="font-semibold"> James Lewis</h5> </a>
-                                                <div class="text-xs text-gray-400 mt-0.5 font-medium"> 15K Followers</div>
-                                                <button type="button" class="bg-secondery block font-semibold mt-4 py-1.5 rounded-lg text-sm w-full border1"> Follow </button>
-                                            </div>
-                                        </div>
-                                    </li>
-                                
-
-                                </ul>
-
-                                <button type="button" class="absolute -translate-y-1/2 bg-slate-100 rounded-full top-1/2 -left-4 grid w-9 h-9 place-items-center dark:bg-dark3"  uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl"></ion-icon></button>
-                                <button type="button" class="absolute -right-4 -translate-y-1/2 bg-slate-100 rounded-full top-1/2 grid w-9 h-9 place-items-center dark:bg-dark3" uk-slider-item="next"> <ion-icon name="chevron-forward" class="text-2xl"></ion-icon></button>
-
-                            </div>
-                        
-                        </div>
-
-
-                    </div>
-
-                    <!-- Trends -->
-                    <div class="box p-5 px-6 border1 dark:bg-dark2">
-                        
-                        <div class="flex justify-between text-black dark:text-white">
-                            <h3 class="font-bold text-base"> Trends for you </h3>
-                            <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
-                        </div>
-
-                        <div class="space-y-3.5 capitalize text-xs font-normal mt-5 mb-2 text-gray-600 dark:text-white/80">
-                            <a href="#">
-                                <div class="flex items-center gap-3 p"> 
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                                    </svg>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold text-black dark:text-white text-sm">  artificial intelligence </h4>
-                                        <div class="mt-0.5"> 1,245,62 post </div>
-                                    </div> 
-                                </div>
-                            </a>
-                            <a href="#" class="block">
-                                <div class="flex items-center gap-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                                    </svg>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold text-black dark:text-white text-sm">  Web developers</h4>
-                                        <div class="mt-0.5"> 1,624 post </div>
-                                    </div> 
-                                </div>
-                            </a>
-                            <a href="#" class="block">
-                                <div class="flex items-center gap-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                                    </svg>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold text-black dark:text-white text-sm">  Ui Designers</h4>
-                                        <div class="mt-0.5"> 820 post </div>
-                                    </div> 
-                                </div>
-                            </a>
-                            <a href="#" class="block">
-                                <div class="flex items-center gap-3">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                                    </svg>
-                                    <div class="flex-1">
-                                        <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                        <div class="mt-0.5"> 480 post </div>
-                                    </div> 
-                                </div>
-                            </a>
-                        </div>
-
-                        
-                    </div>
-
+            <div class="side-list-item">
+                <a href="timeline.html">
+                    <img src="assets/images/avatars/avatar-2.jpg" alt="" class="side-list-image rounded-full">
+                </a>
+                <div class="flex-1">
+                    <a href="timeline.html"><h4 class="side-list-title">  John Michael </h4></a>
+                    <div class="side-list-info"> 125k Following </div>
                 </div>
+                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+            </div>
+
+            <div class="side-list-item">
+                <a href="timeline.html">
+                    <img src="assets/images/avatars/avatar-3.jpg" alt="" class="side-list-image rounded-full">
+                </a>
+                <div class="flex-1">
+                    <a href="timeline.html"><h4 class="side-list-title"> Monroe Parker </h4></a>
+                    <div class="side-list-info"> 320k Following </div>
+                </div>
+                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+            </div>  
+            
+            <div class="side-list-item">
+                <a href="timeline.html">
+                    <img src="assets/images/avatars/avatar-5.jpg" alt="" class="side-list-image rounded-full">
+                </a>
+                <div class="flex-1">
+                    <a href="timeline.html"><h4 class="side-list-title"> James Lewis</h4></a>
+                    <div class="side-list-info"> 125k Following </div>
+                </div>
+                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+            </div>
+            
+            <div class="side-list-item">
+                <a href="timeline.html">
+                    <img src="assets/images/avatars/avatar-6.jpg" alt="" class="side-list-image rounded-full">
+                </a>
+                <div class="flex-1">
+                    <a href="timeline.html"><h4 class="side-list-title">  Alexa stella </h4></a>
+                    <div class="side-list-info"> 192k Following </div>
+                </div>
+                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+            </div>
+
+            <div class="side-list-item">
+                <a href="timeline.html">
+                    <img src="assets/images/avatars/avatar-2.jpg" alt="" class="side-list-image rounded-full">
+                </a>
+                <div class="flex-1">
+                    <a href="timeline.html"><h4 class="side-list-title"> John Michael </h4></a>
+                    <div class="side-list-info"> 320k Following </div>
+                </div>
+                <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
+            </div>  
+            
+            <button class="bg-secondery button w-full mt-2 hidden">See all</button>
+
+        </div>
+
+    </div>
+                </div>
+
+                
+                
                 </div>
                 
             </div>
