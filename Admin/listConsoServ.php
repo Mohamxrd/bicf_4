@@ -274,9 +274,9 @@ if (!isset($_SESSION['id_admin'])) {
                                                         <td>
                                                             <?= $conserv['zoneAct']; ?>
                                                         </td>
-                                                        <td>
-                                                            <?= $conserv['nom_user']; ?>
-                                                        </td>
+                                                        <td><a href="detailclient.php?id=<?= $conserv['id_user']; ?>">
+                                                    <?= $conserv['nom_user']; ?>
+                                                </a></td>
                                                     </tr>
                                                     <?php
                                                 }

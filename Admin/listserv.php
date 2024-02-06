@@ -122,7 +122,7 @@ if (!isset($_SESSION['id_admin'])) {
                         </li>
                         <li class="sidebar-item active has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-box2-fill"></i>
+                                <i class="bi bi-box2-fill"></i>
                                 <span>Produit et service</span>
                             </a>
 
@@ -146,7 +146,7 @@ if (!isset($_SESSION['id_admin'])) {
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-card-heading"></i>
+                                <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
 
@@ -214,9 +214,9 @@ if (!isset($_SESSION['id_admin'])) {
 
             <div class="page-content">
                 <div class="card">
-                <div class="card-header d-flex justify-content-between">
+                    <div class="card-header d-flex justify-content-between">
                         <h5 class="card-title">
-                           Liste des Produits
+                            Liste des Produits
                         </h5>
                     </div>
                     <div class="card-body">
@@ -269,10 +269,10 @@ if (!isset($_SESSION['id_admin'])) {
                                             <td>
                                                 <?= $user['zonecoServ']; ?>
                                             </td>
-                                            <td>
-                                                <?= $user['nom_user']; ?>
-                                            </td>
-                                            
+                                            <td><a href="detailclient.php?id=<?= $user['id_user']; ?>">
+                                                    <?= $user['nom_user']; ?>
+                                                </a></td>
+
                                         </tr>
                                         <?php
                                     }
@@ -283,7 +283,7 @@ if (!isset($_SESSION['id_admin'])) {
                     </div>
                 </div>
 
-                
+
             </div>
         </div>
     </div>

@@ -277,9 +277,9 @@ if (!isset($_SESSION['id_admin'])) {
                                             <td>
                                                 <?= $user['zoneAct']; ?>
                                             </td>
-                                            <td>
-                                                <?= $user['nom_user']; ?>
-                                            </td>
+                                            <td><a href="detailclient.php?id=<?= $user['id_user']; ?>">
+                                                    <?= $user['nom_user']; ?>
+                                                </a></td>
                                         </tr>
                                         <?php
                                     }
