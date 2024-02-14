@@ -82,7 +82,7 @@ if (isset($_POST['submit-info'])) {
             $admin_info = array(
                 'nom_admin' => $new_name,
                 'username_admin' => $new_username,
-                'phonenumber' => $new_phone
+                'phonenumber' => $new_phone,
             );
         } else {
             $errorMsg2 = 'Une erreur s\'est produite lors de la mise à jour des informations.';
@@ -196,7 +196,7 @@ if (isset($_POST['submit-info'])) {
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-box2-fill"></i>
+                                <i class="bi bi-box2-fill"></i>
                                 <span>Produit et service</span>
                             </a>
 
@@ -220,7 +220,7 @@ if (isset($_POST['submit-info'])) {
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-card-heading"></i>
+                                <i class="bi bi-card-heading"></i>
                                 <span>Consommation</span>
                             </a>
 
@@ -376,32 +376,24 @@ if (isset($_POST['submit-info'])) {
 
                                                         <div class="card-body">
 
-                                                            <?php
+                                                            <?php if (!empty($successMsg2)): ?>
+                                                                <div
+                                                                    class="alert alert-light-success alert-dismissible show fade">
+                                                                    <?= $successMsg2 ?>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                </div>
+                                                            <?php endif; ?>
 
-                                                            if (!empty($successMsg2)) {
+                                                            <?php if (!empty($errorMsg2)): ?>
+                                                                <div
+                                                                    class="alert alert-light-danger alert-dismissible show fade">
+                                                                    <?= $errorMsg2 ?>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                </div>
+                                                            <?php endif; ?>
 
-                                                                echo '
-<div class="alert alert-light-success alert-dismissible show fade">
-' . $successMsg2 . '
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-';
-                                                            }
-
-                                                            ?>
-                                                            <?php
-
-                                                            if (!empty($errorMsg2)) {
-
-                                                                echo '
-<div class="alert alert-light-danger alert-dismissible show fade">
-' . $errorMsg2 . '
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-';
-                                                            }
-
-                                                            ?>
 
                                                             <form action="#" method="post">
                                                                 <div class="form-group">
@@ -441,32 +433,22 @@ if (isset($_POST['submit-info'])) {
                                                     <div class="card-header">
                                                         <h5 class="card-title">Changer votre mot de passe</h5>
                                                     </div>
-                                                    <?php
+                                                    <?php if (!empty($successMsg)): ?>
+                                                        <div class="alert alert-light-success alert-dismissible show fade">
+                                                            <?= $successMsg ?>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                    <?php endif; ?>
 
-                                                    if (!empty($successMsg)) {
+                                                    <?php if (!empty($errorMsg)): ?>
+                                                        <div class="alert alert-light-danger alert-dismissible show fade">
+                                                            <?= $errorMsg ?>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                                aria-label="Close"></button>
+                                                        </div>
+                                                    <?php endif; ?>
 
-                                                        echo '
-<div class="alert alert-light-success alert-dismissible show fade">
-' . $successMsg . '
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-';
-                                                    }
-
-                                                    ?>
-                                                    <?php
-
-                                                    if (!empty($errorMsg)) {
-
-                                                        echo '
-<div class="alert alert-light-danger alert-dismissible show fade">
-' . $errorMsg . '
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-';
-                                                    }
-
-                                                    ?>
                                                     <div class="card-body">
                                                         <form action="#" method="post">
                                                             <div class="form-group my-2">
@@ -500,7 +482,6 @@ if (isset($_POST['submit-info'])) {
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>

@@ -6,8 +6,45 @@ if (!isset($_SESSION['nom_user'])) {
     header('location: ../../../auth/login.php');
 }
 
-
+$errorMsg = '';
+$successMsg = '';
 $id_user = $_SESSION['id_user'];
+
+if (isset($_POST['submit-mode'])) {
+    $new_name = $_POST['nomuser'];
+    $new_username = $_POST['username'];
+    $new_email = $_POST['email'];
+    $new_phone = $_POST['teluser'];
+
+    // Vérifier si le nouveau nom d'utilisateur existe déjà
+    $check_username = $conn->prepare('SELECT id_user FROM user WHERE username = :new_username AND id_user != :id_user');
+    $check_username->bindParam(':new_username', $new_username, PDO::PARAM_STR);
+    $check_username->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+    $check_username->execute();
+
+    if ($check_username->fetchColumn()) {
+        $errorMsg = 'Le nom d\'utilisateur existe déjà.';
+    } else {
+        // Mettre à jour les informations dans la table user
+        $update_info = $conn->prepare('UPDATE user SET nom_user = :new_name, username = :new_username, email_user = :new_email, tel_user = :new_phone WHERE id_user = :id_user');
+        $update_info->bindParam(':new_name', $new_name, PDO::PARAM_STR);
+        $update_info->bindParam(':new_username', $new_username, PDO::PARAM_STR);
+        $update_info->bindParam(':new_email', $new_email, PDO::PARAM_STR);
+        $update_info->bindParam(':new_phone', $new_phone, PDO::PARAM_STR);
+        $update_info->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+
+        if ($update_info->execute()) {
+            $successMsg = 'Les informations ont été mises à jour avec succès.';
+            // Rafraîchir les informations de l'utilisateur après la mise à jour
+            $nom_client = $new_name;
+            $username_client = $new_username;
+            $email_user = $new_email;
+            $phonenumber = $new_phone;
+        } else {
+            $errorMsg = 'Une erreur s\'est produite lors de la mise à jour des informations.';
+        }
+    }
+}
 
 $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
 $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
@@ -24,13 +61,15 @@ if ($client = $recupUser->fetch()) {
     $email_user = $client['email_user'];
 
     // Maintenant, récupérez les informations de l'agent
-    $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
+    $recupAgent = $conn->prepare('SELECT nom_admin, phonenumber FROM admintable WHERE id_admin = :id_admin');
     $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
     $recupAgent->execute();
 
     if ($agent = $recupAgent->fetch()) {
         $nom_agent = $agent['nom_admin'];
+        $phone_agent = $agent['phonenumber'];
     }
+
     // ... Ajoutez d'autres champs au besoin ...
 } else {
     // Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
@@ -38,7 +77,6 @@ if ($client = $recupUser->fetch()) {
     exit();
 }
 ?>
-
 
 
 <!DOCTYPE html>
@@ -357,8 +395,8 @@ if ($client = $recupUser->fetch()) {
                     <nav id="side">
 
                         <ul>
-                            <li class="active">
-                                <a href="#">
+                            <li>
+                                <a href="user_page.php">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                         <path fill-rule="evenodd" d="M11.3 3.3a1 1 0 0 1 1.4 0l6 6 2 2a1 1 0 0 1-1.4 1.4l-.3-.3V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3c0 .6-.4 1-1 1H7a2 2 0 0 1-2-2v-6.6l-.3.3a1 1 0 0 1-1.4-1.4l2-2 6-6Z" clip-rule="evenodd" />
                                     </svg>
@@ -432,7 +470,7 @@ if ($client = $recupUser->fetch()) {
 
                         <ul class="mt-2 -space-y-2" uk-nav="multiple: true">
 
-                            <li>
+                            <li class="active">
                                 <a href="profile.php">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a9 9 0 0 0 5-1.5 4 4 0 0 0-4-3.5h-2a4 4 0 0 0-4 3.5 9 9 0 0 0 5 1.5Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -502,422 +540,278 @@ if ($client = $recupUser->fetch()) {
         <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
             <!-- timeline -->
-            <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
 
-                <!-- search -->
-
-
-                <div class="max-w-[680px] mx-auto">
-
-                    <!-- stories -->
+            <div class="max-w-3xl mx-auto">
 
 
-                    <!-- feed story -->
-                    <div class="md:max-w-[600px] mx-auto flex-1 xl:space-y-6 space-y-3">
+                <div class="box relative rounded-lg shadow-md">
 
-                        <!-- add story -->
-
-
-                        <!--  post image-->
+                    <div class="flex md:gap-8 gap-4 items-center md:p-8 p-6 md:pb-4">
 
 
-                        <!--  post image with slider-->
+                        <div class="relative md:w-20 md:h-20 w-12 h-12 shrink-0">
 
-                        <div class="flex items-center py-3 dark:border-gray-600">
+                            <label for="file" class="cursor-pointer">
+                                <img id="img" src="assets/images/avatars/avatar-3.jpg" class="object-cover w-full h-full rounded-full" alt="" />
+                                <input type="file" id="file" class="hidden" />
+                            </label>
 
-                            <!-- Champ de recherche -->
-                            <input type="text" placeholder="Rechercher un produit" class="flex-1 border-none bg-transparent focus:outline-none dark:text-white rounded-l-md" />
-                            <!-- Bouton de suffixe -->
-                            <button class="flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-md ml-2">
-                                <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+                            <label for="file" class="md:p-1 p-0.5 rounded-full bg-slate-600 md:border-4 border-white absolute -bottom-2 -right-2 cursor-pointer dark:border-slate-700">
+
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="md:w-4 md:h-4 w-3 h-3 fill-white">
+                                    <path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" />
+                                    <path fill-rule="evenodd" d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 01-3 3h-15a3 3 0 01-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 001.11-.71l.822-1.315a2.942 2.942 0 012.332-1.39zM6.75 12.75a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0zm12-1.5a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
                                 </svg>
-                            </button>
-                        </div>
 
-                        <div class="flex justify-between">
-                            <!-- Dropdown 1 -->
-                            <div class="dropdown" style="width: calc(25% - 10px);">
-                                <!-- Dropdown Trigger -->
-                                <select class="dropdown-trigger w-full">
-                                    <option value="" disabled selected>Achat</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                    <option value="option4">Option 4</option>
-                                    <option value="option5">Option 5</option>
-                                </select>
-                            </div>
-                            <!-- Dropdown 2 -->
-                            <div class="dropdown" style="width: calc(25% - 10px);">
-                                <!-- Dropdown Trigger -->
-                                <select class="dropdown-trigger w-full">
-                                    <option value="" disabled selected>Domaine</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                    <option value="option4">Option 4</option>
-                                    <option value="option5">Option 5</option>
-                                </select>
-                            </div>
-                            <!-- Dropdown 3 -->
-                            <div class="dropdown" style="width: calc(25% - 10px);">
-                                <!-- Dropdown Trigger -->
-                                <select class="dropdown-trigger w-full">
-                                    <option value="" disabled selected>Pays</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                    <option value="option4">Option 4</option>
-                                    <option value="option5">Option 5</option>
-                                </select>
-                            </div>
-                            <!-- Dropdown 4 -->
-                            <div class="dropdown" style="width: calc(25%);">
-                                <!-- Dropdown Trigger -->
-                                <select class="dropdown-trigger w-full">
-                                    <option value="" disabled selected>Detaillant</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                    <option value="option4">Option 4</option>
-                                    <option value="option5">Option 5</option>
-                                </select>
-                            </div>
-                        </div>
+                                <input id="file" type="file" class="hidden" />
 
-
-
-                        <!-- post text-->
-                        <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 mb-2">
-
-
-
-                            <!-- post heading -->
-                            <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                                <div class="flex-1">
-                                    <a href="timeline.html">
-                                        <h4 class="text-lg text-black dark:text-white">Titre de l'annonce </h4>
-                                    </a>
-                                    <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
-                                        <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span class="ml-1">Abouasso</span>
-
-
-                                    </div>
-                                </div>
-                                <div class="flex bg-teal-100 text-teal-600 p-3 rounded-md items-center">Demande</div>
-                            </div>
-
-
-                            <div class="sm:px-4 p-2.5 pt-0">
-                                <p class="font-normal"> Photography is the art of capturing light with a camera. It can be used to create images that tell stories, express emotions, or document reality. it can be fun, challenging, or rewarding. It can also be a hobby, a profession, or a passion. 📷 </p>
-                            </div>
-
-                            <!-- post icons -->
-
-
-                            <!-- comments -->
-
-                            <!-- add comment -->
-                            <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                                <button class="text-white p-2 bg-blue-500 rounded-md">Répondre à la demande</button>
-                                <div class="text-xs text-gray-500">2 hours ago</div>
-                            </div>
-
-
-
+                            </label>
 
                         </div>
 
-                        <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 mb-2">
-
-
-
-                            <!-- post heading -->
-                            <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-
-                                <div class="flex-1">
-                                    <a href="timeline.html">
-                                        <h4 class="text-lg text-black dark:text-white">Titre de l'annonce </h4>
-                                    </a>
-                                    <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
-                                        <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span class="ml-1">San pedro</span>
-
-
-                                    </div>
-
-                                </div>
-
-                                <div class="flex bg-orange-100 text-orange-600 p-3 rounded-md items-center">Offre</div>
-
-
-
-                            </div>
-
-                            <div class="sm:px-4 p-2.5 pt-0">
-                                <p class="font-normal"> Photography is the art of capturing light with a camera. It can be used to create images that tell stories, express emotions, or document reality. it can be fun, challenging, or rewarding. It can also be a hobby, a profession, or a passion. 📷 </p>
-                            </div>
-
-                            <!-- post icons -->
-
-
-                            <!-- comments -->
-
-                            <!-- add comment -->
-                            <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                                <button class="text-white p-2 bg-blue-500 rounded-md">Envoyé une demande</button>
-                                <div class="text-xs text-gray-500">2 hours ago</div>
-                            </div>
-
-
-
-
+                        <div class="flex-1">
+                            <h3 class="md:text-xl text-base font-semibold text-black dark:text-white"><?= $nom_client ?></h3>
+                            <p class="text-sm text-blue-600 mt-1 font-normal"><?= '@' . $username_client ?></p>
                         </div>
-
-                        <!-- placeholder -->
 
 
                     </div>
 
-                </div>
+                    <!-- nav tabs -->
+                    <div class="relative border-b" tabindex="-1" uk-slider="finite: true">
 
-                <!-- sidebar -->
-                <div class="flex-1">
+                        <nav class="uk-slider-container overflow-hidden nav__underline px-6 p-0 border-transparent -mb-px">
 
-                    <div class="lg:space-y-4 lg:pb-8 max-lg:grid sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+                            <ul class="uk-slider-items w-[calc(100%+10px)] !overflow-hidden" uk-switcher="connect: #setting_tab ; animation: uk-animation-slide-right-medium, uk-animation-slide-left-medium">
 
-                        <div class="box p-5 px-6">
-
-                            <div class="flex items-baseline justify-between text-black dark:text-white">
-                                <h3 class="font-bold text-base"> People you may know </h3>
-                                <a href="#" class="text-sm text-blue-500">See all</a>
-                            </div>
-
-                            <div class="side-list">
-
-                                <div class="side-list-item">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-2.jpg" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="side-list-title"> John Michael </h4>
-                                        </a>
-                                        <div class="side-list-info"> 125k Following </div>
-                                    </div>
-                                    <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                                </div>
-
-                                <div class="side-list-item">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-3.jpg" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="side-list-title"> Monroe Parker </h4>
-                                        </a>
-                                        <div class="side-list-info"> 320k Following </div>
-                                    </div>
-                                    <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                                </div>
-
-                                <div class="side-list-item">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-5.jpg" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="side-list-title"> James Lewis</h4>
-                                        </a>
-                                        <div class="side-list-info"> 125k Following </div>
-                                    </div>
-                                    <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                                </div>
-
-                                <div class="side-list-item">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-6.jpg" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="side-list-title"> Alexa stella </h4>
-                                        </a>
-                                        <div class="side-list-info"> 192k Following </div>
-                                    </div>
-                                    <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                                </div>
-
-                                <div class="side-list-item">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-2.jpg" alt="" class="side-list-image rounded-full">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="side-list-title"> John Michael </h4>
-                                        </a>
-                                        <div class="side-list-info"> 320k Following </div>
-                                    </div>
-                                    <button class="button bg-primary-soft text-primary dark:text-white">follow</button>
-                                </div>
-
-                                <button class="bg-secondery button w-full mt-2 hidden">See all</button>
-
-                            </div>
-
-                        </div>
-
-                        <!-- peaple you might know -->
-                        <div class="box p-5 px-6 border1  dark:bg-dark2 hidden">
-
-                            <div class="flex justify-between text-black dark:text-white">
-                                <h3 class="font-bold text-base"> Peaple You might know </h3>
-                                <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
-                            </div>
-
-                            <div class="space-y-4 capitalize text-xs font-normal mt-5 mb-2 text-gray-500 dark:text-white/80">
-
-                                <div class="flex items-center gap-3">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-7.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="font-semibold text-sm text-black dark:text-white"> Johnson smith</h4>
-                                        </a>
-                                        <div class="mt-0.5"> Suggested For You </div>
-                                    </div>
-                                    <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-5.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="font-semibold text-sm text-black dark:text-white"> James Lewis</h4>
-                                        </a>
-                                        <div class="mt-0.5"> Followed by Johnson </div>
-                                    </div>
-                                    <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-2.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="font-semibold text-sm text-black dark:text-white"> John Michael</h4>
-                                        </a>
-                                        <div class="mt-0.5"> Followed by Monroe </div>
-                                    </div>
-                                    <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-3.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="font-semibold text-sm text-black dark:text-white"> Monroe Parker</h4>
-                                        </a>
-                                        <div class="mt-0.5"> Suggested For You </div>
-                                    </div>
-                                    <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <a href="timeline.html">
-                                        <img src="assets/images/avatars/avatar-4.jpg" alt="" class="bg-gray-200 rounded-full w-10 h-10">
-                                    </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html">
-                                            <h4 class="font-semibold text-sm text-black dark:text-white"> Martin Gray</h4>
-                                        </a>
-                                        <div class="mt-0.5"> Suggested For You </div>
-                                    </div>
-                                    <button type="button" class="text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery"> Follow </button>
-                                </div>
-                            </div>
-
-                        </div>
+                                <li class="w-auto pr-2.5"> <a href="#"> Information personnel </a> </li>
+                                <li class="w-auto pr-2.5"> <a href="#"> Modifier profile</a> </li>
+                                <li class="w-auto pr-2.5"> <a href="#"> Modifier mot de passe</a> </li>
 
 
-                        <!-- latest marketplace items -->
+                            </ul>
 
+                        </nav>
 
-                        <!-- online friends -->
-
-
-                        <!-- Pro Members -->
-
-
-                        <!-- Trends -->
-                        <div class="box p-5 px-6 border1 dark:bg-dark2">
-
-                            <div class="flex justify-between text-black dark:text-white">
-                                <h3 class="font-bold text-base"> Trends for you </h3>
-                                <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
-                            </div>
-
-                            <div class="space-y-3.5 capitalize text-xs font-normal mt-5 mb-2 text-gray-600 dark:text-white/80">
-                                <a href="#">
-                                    <div class="flex items-center gap-3 p">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> artificial intelligence </h4>
-                                            <div class="mt-0.5"> 1,245,62 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> Web developers</h4>
-                                            <div class="mt-0.5"> 1,624 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> Ui Designers</h4>
-                                            <div class="mt-0.5"> 820 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 -mt-2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5l-3.9 19.5m-2.1-19.5l-3.9 19.5" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-
-
-                        </div>
+                        <a class="absolute -translate-y-1/2 top-1/2 left-0 flex items-center w-20 h-full p-2 py-1 justify-start bg-gradient-to-r from-white via-white dark:from-slate-800 dark:via-slate-800" href="#" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-2xl ml-1"></ion-icon> </a>
+                        <a class="absolute right-0 -translate-y-1/2 top-1/2 flex items-center w-20 h-full p-2 py-1 justify-end bg-gradient-to-l from-white via-white dark:from-slate-800 dark:via-slate-800" href="#" uk-slider-item="next"> <ion-icon name="chevron-forward" class="text-2xl mr-1"></ion-icon> </a>
 
                     </div>
+
+
+                    <div id="setting_tab" class="uk-switcher md:py-12 md:px-20 p-6 overflow-hidden text-black text-sm">
+
+
+                        <!-- tab user basic info -->
+                        <div>
+
+                            <div>
+
+                                <div class="space-y-6">
+
+                                    <div class="md:flex items-center gap-10">
+                                        <h5 class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80">Nom</h5>
+                                        <div class="flex-1 max-md:mt-4 text-blue-500">
+                                            <?= $nom_client ?>
+                                        </div>
+                                    </div>
+                                    <div class="md:flex items-center gap-10">
+                                        <h5 class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80">Username</h5>
+                                        <div class="flex-1 max-md:mt-4 text-blue-500">
+                                            <?= $username_client ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-10">
+                                        <h5 class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80">Email</h5>
+                                        <div class="flex-1 max-md:mt-4 text-blue-500">
+                                            <?= $email_user ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-10">
+                                        <h5 class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80">Télephone</h5>
+                                        <div class="flex-1 max-md:mt-4 text-blue-500">
+                                            <?= $phonenumber ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-10">
+                                        <h5 class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80">Type d'acteur</h5>
+                                        <div class="flex-1 max-md:mt-4 text-blue-500">
+                                            <?= $actorType ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-10">
+                                        <h5 class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80">Secteur d'activité</h5>
+                                        <div class="flex-1 max-md:mt-4 text-blue-500">
+                                            <?= $activSector_user ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-10">
+                                        <h5 class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80">Adress</h5>
+                                        <div class="flex-1 max-md:mt-4 text-blue-500">
+                                            <?= $adress_user ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-10">
+                                        <h5 class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80">Conctact Agent</h5>
+                                        <div class="flex-1 max-md:mt-4 text-blue-500">
+                                            <?= $phone_agent ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- tab socialinks -->
+                        <div>
+
+                            <div>
+
+                                <form action="" method="post">
+
+                                    <div class="space-y-6">
+
+
+                                        <div class="md:flex items-center gap-10">
+                                            <label class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80"> Nom </label>
+                                            <div class="flex-1 max-md:mt-4">
+                                                <input type="text" name="nomuser" value="<?= $nom_client ?>" class="lg:w-1/2 w-full">
+                                            </div>
+                                        </div>
+
+                                        <div class="md:flex items-center gap-10">
+                                            <label class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80"> Username </label>
+                                            <div class="flex-1 max-md:mt-4">
+                                                <input type="text" name="username" value="<?= $username_client ?>" class="lg:w-1/2 w-full">
+                                            </div>
+                                        </div>
+
+                                        <div class="md:flex items-center gap-10">
+                                            <label class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80"> Email </label>
+                                            <div class="flex-1 max-md:mt-4">
+                                                <input type="email" name="email" value="<?= $email_user ?>" class="lg:w-1/2 w-full">
+                                            </div>
+                                        </div>
+
+                                        <div class="md:flex items-center gap-10">
+                                            <label class="md:w-32 text-right text-gray-500 text-xs dark:text-white/80"> Télephone </label>
+                                            <div class="flex-1 max-md:mt-4">
+                                                <input type="text" name="teluser" value="<?= $phonenumber ?>" class="lg:w-1/2 w-full">
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="flex items-center gap-4 mt-16 lg:pl-[10.5rem]">
+                                        <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1"> Annuler</button>
+                                        <button type="submit" name="submit-mode" class="button lg:px-10 bg-primary text-white max-md:flex-1"> Enregistrer <span class="ripple-overlay"></span></button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                        <!-- tab checkbox -->
+
+                        <div>
+
+                            <div>
+
+                                <div class="space-y-6 max-w-lg mx-auto">
+
+                                    <div class="md:flex items-center gap-16 justify-between max-md:space-y-3">
+                                        <label class="md:w-40 text-right text-xs dark:text-white/80"> Mot de passe actuel </label>
+                                        <div class="flex-1 max-md:mt-4">
+                                            <input type="password" placeholder="******" class="w-full">
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-16 justify-between max-md:space-y-3">
+                                        <label class="md:w-40 text-right text-xs dark:text-white/80"> Nouveau mot de passe</label>
+                                        <div class="flex-1 max-md:mt-4">
+                                            <input type="password" placeholder="******" class="w-full">
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-16 justify-between max-md:space-y-3">
+                                        <label class="md:w-40 text-right text-xs dark:text-white/80"> Confirmer mot de passe </label>
+                                        <div class="flex-1 max-md:mt-4">
+                                            <input type="password" placeholder="******" class="w-full">
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+                                <div class="flex items-center justify-center gap-4 mt-16">
+                                    <button type="submit" class="button lg:px-6 bg-secondery max-md:flex-1"> Annuler</button>
+                                    <button type="submit" class="button lg:px-10 bg-primary text-white max-md:flex-1"> Enregistrer</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- tab toggle options-->
+
+                        <!-- tab password-->
+                        <div>
+
+                            <div>
+
+                                <div class="space-y-6 max-w-lg mx-auto">
+
+                                    <div class="md:flex items-center gap-16 justify-between max-md:space-y-3">
+                                        <label class="md:w-40 text-right"> Current Password </label>
+                                        <div class="flex-1 max-md:mt-4">
+                                            <input type="password" placeholder="******" class="w-full">
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-16 justify-between max-md:space-y-3">
+                                        <label class="md:w-40 text-right"> New password </label>
+                                        <div class="flex-1 max-md:mt-4">
+                                            <input type="password" placeholder="******" class="w-full">
+                                        </div>
+                                    </div>
+
+                                    <div class="md:flex items-center gap-16 justify-between max-md:space-y-3">
+                                        <label class="md:w-40 text-right"> Repeat password </label>
+                                        <div class="flex-1 max-md:mt-4">
+                                            <input type="password" placeholder="******" class="w-full">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="flex items-center justify-center gap-4 mt-16">
+                                    <button type="submit" class="button lg:px-6 bg-secondery max-md:flex-1"> Cancle</button>
+                                    <button type="submit" class="button lg:px-10 bg-primary text-white max-md:flex-1"> Save</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
                 </div>
+
 
             </div>
+
 
         </main>
 
