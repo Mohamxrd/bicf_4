@@ -35,7 +35,7 @@ if ($client = $recupUser->fetch()) {
 } else {
     // Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
     echo "Erreur: Utilisateur non trouvé dans la base de données.";
-    exit();
+    header("location: ../../../auth/login.php");
 }
 ?>
 
@@ -155,6 +155,7 @@ if ($client = $recupUser->fetch()) {
                                             </a>
                                         </ul>
                                     </div>
+
 
 
                                     <!-- slide nav icons -->
@@ -494,7 +495,7 @@ if ($client = $recupUser->fetch()) {
                                     <span> Notifications </span>
                                 </a>
                             </li>
-                            <li>
+                            <li >
                                 <a href="listprod.php">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -507,7 +508,7 @@ if ($client = $recupUser->fetch()) {
                                     <span> Mes produits </span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="active">
                                 <a href="liqstcons.php">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -650,99 +651,133 @@ if ($client = $recupUser->fetch()) {
 
             <!-- timeline -->
 
+            <div class="box p-5">
 
-            <div class="max-w-3xl mx-auto">
-                <div class="box relative rounded-lg shadow-md p-6">
+                <div class=" text-black font-medium dark:text-white py-4">Liste de consomation en produits et services</div>
 
-                    <div class="flex-1">
-                        <h3 class="md:text-xl text-base font-semibold text-black dark:text-white mb-4">Ajouter une
-                            Consommation en
-                            produit ou
-                            un service</h3>
+                <nav class="nav__underline px-3.5">
 
-                    </div>
-                    <nav class="nav__underline px-3.5">
+                    <ul class="group"
+                        uk-switcher="connect: #group-tabs ; animation: uk-animation-slide-right-medium, uk-animation-slide-left-medium">
 
-                        <ul class="group"
-                            uk-switcher="connect: #group-tabs ; animation: uk-animation-slide-right-medium, uk-animation-slide-left-medium">
-
-                            <li class="uk-active"> <a href="#" aria-expanded="true"> Produits </a> </li>
-                            <li class=""> <a href="#" aria-expanded="false"> Services </a> </li>
+                        <li class="uk-active"> <a href="#" aria-expanded="true"> Produits </a> </li>
+                        <li class=""> <a href="#" aria-expanded="false"> Services </a> </li>
 
 
-                        </ul>
+                    </ul>
 
-                    </nav>
+                </nav>
 
-                    <div id="group-tabs" class="uk-switcher text-sm">
+                <div id="group-tabs" class="uk-switcher text-sm">
 
-                        <div>
+                    <div>
 
-                            <div class="p-4 space-y-2">
-                                <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Nom du produit">
-                                    <input type="text" class="w-full mb-3" placeholder="Type de produit">
-                                    <input type="text" class="w-full mb-3" placeholder="Conditionnalité">
-                                    <input type="text" class="w-full mb-3" placeholder="Format">
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité">
-                                    <input type="text" class="w-full mb-3" placeholder="Frequence">
-                                    <input type="text" class="w-full mb-3" placeholder="Zone economique">
-                                    <input type="text" class="w-full mb-3" placeholder="Jour d'achat">
+                        <div class="p-4 space-y-2">
+                            
 
-                                    <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
-                                        <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
-                                            Annuler</button>
-                                        <button type="submit" name="submit-mode"
-                                            class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span
-                                                class="ripple-overlay"></span></button>
-                                    </div>
-                                </form>
-
-
-                            </div>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Product name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Color
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Category
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Price
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Apple MacBook Pro 17"
+                </th>
+                <td class="px-6 py-4">
+                    Silver
+                </td>
+                <td class="px-6 py-4">
+                    Laptop
+                </td>
+                <td class="px-6 py-4">
+                    $2999
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Microsoft Surface Pro
+                </th>
+                <td class="px-6 py-4">
+                    White
+                </td>
+                <td class="px-6 py-4">
+                    Laptop PC
+                </td>
+                <td class="px-6 py-4">
+                    $1999
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+            <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Magic Mouse 2
+                </th>
+                <td class="px-6 py-4">
+                    Black
+                </td>
+                <td class="px-6 py-4">
+                    Accessories
+                </td>
+                <td class="px-6 py-4">
+                    $99
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
                         </div>
-                        <div>
-
-                            <div class="p-4 space-y-2">
-                                <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Nom du metier">
-                                    <input type="text" class="w-full mb-3" placeholder="Qualification du service">
-
-
-
-
-
-                                    <input type="text" class="w-full mb-3" placeholder="Spectialité">
-
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité ">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité">
-                               
-                                    <input type="text" class="w-full mb-3" placeholder="Frequence">
-                                    <input type="text" class="w-full mb-3" placeholder="Zone economique">
-
-                                    <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
-                                        <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
-                                            Annuler</button>
-                                        <button type="submit" name="submit-mode"
-                                            class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span
-                                                class="ripple-overlay"></span></button>
-                                    </div>
-                                </form>
-
-                            </div>
-
-                        </div>
-
-
 
                     </div>
+                    <div>
+
+                        <div class="p-4 space-y-2">
+                            <p class="font-normal leading-relaxed"> Lorem ipsum dolor sit amet, consectetuer adipiscing
+                                elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam</p>
+                            <p class="font-normal leading-relaxed"> Lorem ipsum dolor sit amet, consectetuer adipiscing
+                                elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
+                                volutpat. Ut wisi enim ad minim laoreet dolore magna aliquam erat volutpat</p>
+                        </div>
+
+                    </div>
+
+
+
                 </div>
 
 
 
+
+
             </div>
+
+
 
         </main>
 
@@ -754,7 +789,7 @@ if ($client = $recupUser->fetch()) {
 
 
     <!-- post preview modal -->
-
+    
 
     <!-- create status -->
 

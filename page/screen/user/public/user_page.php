@@ -390,7 +390,7 @@ if ($client = $recupUser->fetch()) {
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="liqstcons.php">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                         <path fill-rule="evenodd" d="M4 4a2 2 0 0 0-2 2v12.6l3-8a1 1 0 0 1 1-.6h12V9a2 2 0 0 0-2-2h-4.5l-2-2.3A2 2 0 0 0 8 4H4Zm2.7 8h-.2l-3 8H18l3-8H6.7Z" clip-rule="evenodd" />
                                     </svg>
@@ -591,7 +591,7 @@ if ($client = $recupUser->fetch()) {
                         </div>
                     </div>
 
-                    <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">
+                    <!-- <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="300" height="250" viewBox="0 0 709.53268 558.59384" xmlns:xlink="http://www.w3.org/1999/xlink">
                             <rect x="0.27492" y="0.36501" width="643.86162" height="412.35762" fill="#e6e6e6" />
                             <rect x="18.68599" y="52.08494" width="607.03947" height="336.24257" fill="#fff" />
@@ -625,19 +625,19 @@ if ($client = $recupUser->fetch()) {
                             <path d="M804.52567,490.18022,802.43021,470.274l28.76245-15.86914-18.75244-22.70019L815.5,406.20512l7.61987-3.26562.23707.30469c3.593,4.62011,35.10522,45.28076,35.10522,50.30713,0,5.16259-6.02856,20.32324-14.27637,24.44726-7.95581,3.978-37.83081,11.70947-39.09863,12.03711Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
                             <path d="M953.76634,729.29692h-381a1,1,0,1,1,0-2h381a1,1,0,0,1,0,2Z" transform="translate(-245.23366 -170.70308)" fill="#ccc" />
                         </svg>
-                        <!-- #region -->
+                    
 
 
                         <div class="text-sm text-gray-500 mt-6 text-center">Tapez dans la barre de recherche le produit ou le service dont vous avez besoin</div>
-                    </div>
+                    </div> -->
 
 
 
-                    <!-- <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
+                    <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
                         <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
                             <div class="flex-1">
-                                <a href="timeline.html">
-                                    <h4 class="text-lg text-black dark:text-white">Titre de l'annonce </h4>
+                                <a href="detailprod.php">
+                                    <h4 class="text-lg text-black dark:text-white">Ordinateur portable </h4>
                                 </a>
                                 <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
                                     <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
@@ -648,7 +648,7 @@ if ($client = $recupUser->fetch()) {
 
                                 </div>
                             </div>
-                            <div class="flex bg-teal-100 text-teal-600 p-3 rounded-md items-center">Demande</div>
+                           
                         </div>
 
 
@@ -657,10 +657,68 @@ if ($client = $recupUser->fetch()) {
                         </div>
 
                         <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                            <button class="text-white p-2 bg-blue-500 rounded-md">Répondre à la demande</button>
+                            <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
                             <div class="text-xs text-gray-500">2 hours ago</div>
                         </div>
-                    </div> -->
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
+                        <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
+                            <div class="flex-1">
+                                <a href="detailprod.php">
+                                    <h4 class="text-lg text-black dark:text-white">Regime de banane</h4>
+                                </a>
+                                <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
+                                    <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="ml-1">San-Pedro</span>
+
+
+                                </div>
+                            </div>
+                           
+                        </div>
+
+
+                        <div class="sm:px-4 p-2.5 pt-0">
+                            <p class="font-normal"> Photography is the art of capturing light with a camera. It can be used to create images that tell stories, express emotions, or document reality. it can be fun, challenging, or rewarding. It can also be a hobby, a profession, or a passion. 📷 </p>
+                        </div>
+
+                        <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
+                            <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
+                            <div class="text-xs text-gray-500">2 hours ago</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
+                        <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
+                            <div class="flex-1">
+                                <a href="detailprod.php">
+                                    <h4 class="text-lg text-black dark:text-white">Merceders</h4>
+                                </a>
+                                <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
+                                    <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="ml-1">Man</span>
+
+
+                                </div>
+                            </div>
+                           
+                        </div>
+
+
+                        <div class="sm:px-4 p-2.5 pt-0">
+                            <p class="font-normal"> Photography is the art of capturing light with a camera. It can be used to create images that tell stories, express emotions, or document reality. it can be fun, challenging, or rewarding. It can also be a hobby, a profession, or a passion. 📷 </p>
+                        </div>
+
+                        <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
+                            <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
+                            <div class="text-xs text-gray-500">2 hours ago</div>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -738,61 +796,8 @@ if ($client = $recupUser->fetch()) {
                                         </div>
                                     </div>
                                 </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
+                               
+                               
                             </div>
 
 
