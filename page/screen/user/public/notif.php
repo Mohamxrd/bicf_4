@@ -56,9 +56,11 @@ if ($client = $recupUser->fetch()) {
     <title>Socialite</title>
     <meta name="description" content="Socialite - Social sharing network HTML Template">
 
+
     <!-- css files -->
     <link rel="stylesheet" href="assets/css/tailwind.css">
     <link rel="stylesheet" href="assets/css/style.css">
+
 
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap"
@@ -310,9 +312,7 @@ if ($client = $recupUser->fetch()) {
                                         </a>
                                         <a href="#"
                                             class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
-                                            <div class="relative w-12 h-12 shrink-0"> <img
-                                                    src="assets/images/avatars/avatar-2.jpg" alt=""
-                                                    class="object-cover w-full h-full rounded-full"></div>
+
                                             <div class="flex-1 ">
                                                 <p> <b class="font-bold mr-1"> Lewis Lewis</b> mentioned you in a story.
                                                     Check it out and reply. 📣 </p>
@@ -530,7 +530,6 @@ if ($client = $recupUser->fetch()) {
                                             d="M5 14c0-.6.4-1 1-1h2a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1Zm5 0c0-.6.4-1 1-1h5a1 1 0 1 1 0 2h-5a1 1 0 0 1-1-1Z"
                                             clip-rule="evenodd" />
                                     </svg>
-
                                     <span> Porte-feuille </span>
                                 </a>
                             </li>
@@ -649,101 +648,91 @@ if ($client = $recupUser->fetch()) {
             class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
             <!-- timeline -->
+            <div class="mb-3">
+                <h2 class="text-2xl text-center font-bold text-gray-800 dark:text-white">Notifications</h2>
+            </div>
 
 
-            <div class="max-w-3xl mx-auto">
-                <div class="box relative rounded-lg shadow-md p-6">
-
-                    <div class="flex-1">
-                        <h3 class="md:text-xl text-base font-semibold text-black dark:text-white mb-4">Ajouter un
-                            produit ou
-                            un service</h3>
-
-                    </div>
-                    <nav class="nav__underline px-3.5">
-
-                        <ul class="group"
-                            uk-switcher="connect: #group-tabs ; animation: uk-animation-slide-right-medium, uk-animation-slide-left-medium">
-
-                            <li class="uk-active"> <a href="#" aria-expanded="true"> Produits </a> </li>
-                            <li class=""> <a href="#" aria-expanded="false"> Services </a> </li>
+            <div class="relative z-20 p-10  overflow-y-auto">
 
 
-                        </ul>
+                <div class="space-y-3 text-sm font-semibold dark:text-white"
+                    uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
 
-                    </nav>
-
-                    <div id="group-tabs" class="uk-switcher text-sm">
-
-                        <div>
-
-                            <div class="p-4 space-y-2">
-                                <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Titre du produit">
-                                    <input type="text" class="w-full mb-3" placeholder="Type de produit">
-                                   
-                              
-                                        
-
-                                
-                                    <input type="text" class="w-full mb-3" placeholder="Conditionnalité">
-                                    <input type="text" class="w-full mb-3" placeholder="Format">
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité">
-                                    <input type="text" class="w-full mb-3" placeholder="Mode de paiement">
-                                    <input type="text" class="w-full mb-3" placeholder="Capacité de livrer">
-                                    <input type="text" class="w-full mb-3" placeholder="Zone economique">
-
-                                    <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
-                                        <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
-                                            Annuler</button>
-                                        <button type="submit" name="submit-mode"
-                                            class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span
-                                                class="ripple-overlay"></span></button>
-                                    </div>
-                                </form>
-
-
-                            </div>
+                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
+                        <div class="flex-1"> Ordinateur portable
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Quantité: 28
+                            </span>
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Mode de livrason: Wave
+                            </span>
 
                         </div>
-                        <div>
-
-                            <div class="p-4 space-y-2">
-                            <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Nom du metier">
-                                    <input type="text" class="w-full mb-3" placeholder="Qualification du service">
-                                   
-                              
-                                        
-
-                                
-                                    <input type="text" class="w-full mb-3" placeholder="Spectialité">
-                               
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité ">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité">
-                                    <input type="text" class="w-full mb-3" placeholder="Mode de paiement">
-                          
-                                    <input type="text" class="w-full mb-3" placeholder="Zone economique">
-
-                                    <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
-                                        <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
-                                            Annuler</button>
-                                        <button type="submit" name="submit-mode"
-                                            class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span
-                                                class="ripple-overlay"></span></button>
-                                    </div>
-                                </form>
-
-                            </div>
-
-                        </div>
-
-
-
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
+                            Refuser</a>
                     </div>
+
+                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
+                        <div class="flex-1"> Banane
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Quantité: 28
+                            </span>
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Mode de livrason: Wave
+                            </span>
+                        </div>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
+                            Refuser</a>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
+                        <div class="flex-1"> Johm smith
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Quantité: 28
+                            </span>
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Mode de livrason: Wave
+                            </span>
+                        </div>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
+                            Refuser</a>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
+                        <div class="flex-1"> Sac a main
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Quantité: 28
+                            </span>
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Mode de livrason: Wave
+                            </span>
+                        </div>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
+                            Refuser</a>
+                    </div>
+
+                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
+                        <div class="flex-1"> Voiture
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Quantité: 28
+                            </span>
+                            <span class="block text-xs font-medium  dark:text-white/70">
+                                Mode de livrason: Wave
+                            </span>
+                        </div>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
+                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
+                            Refuser</a>
+                    </div>
+
+
+
                 </div>
-
 
 
             </div>
