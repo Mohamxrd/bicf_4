@@ -152,28 +152,33 @@ if ($client = $recupUser->fetch()) {
                             </button>
                             <div class="hidden bg-white p-4 rounded-lg overflow-hidden drop-shadow-xl dark:bg-slate-700 md:w-[324px] w-screen border2" uk-drop="offset:6;pos: bottom-right; mode: click; animate-out: true; animation: uk-animation-scale-up uk-transform-origin-top-right ">
 
-                                <h3 class="font-bold text-md"> Create </h3>
+                                <h3 class="font-bold text-md"> Ajouter </h3>
 
                                 <!-- slider -->
                                 <div class="mt-4" tabindex="-1" uk-slider="finite:true;sets: true">
 
                                     <div class="uk-slider-container pb-1">
                                         <ul class="uk-slider-items grid grid-cols-2 gap-4" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
-                                            <li class="w-full" uk-scrollspy-class="uk-animation-fade">
-                                                <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">
-                                                    <ion-icon name="cart" class="text-2xl drop-shadow-md"></ion-icon>
-                                                    <div class="mt-1.5 text-sm font-medium"> Demande </div>
-                                                </div>
-                                            </li>
-                                            <li class="w-full">
-                                                <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">
-                                                    <ion-icon name="pricetags" class="text-2xl drop-shadow-md"></ion-icon>
+                                            <a href="addprod.php">
+                                                <li class="w-full" uk-scrollspy-class="uk-animation-fade">
+                                                    <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">
+                                                        <ion-icon name="cart" class="text-2xl drop-shadow-md"></ion-icon>
+                                                        <div class="mt-1.5 text-sm font-medium"> Produit </div>
+                                                    </div>
+                                                </li>
+                                            </a>
+                                            <a href="addcons.php">
+                                                <li class="w-full">
+                                                    <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">
+                                                        <ion-icon name="pricetags" class="text-2xl drop-shadow-md"></ion-icon>
 
-                                                    <div class="mt-1.5 text-sm font-medium"> Offre </div>
-                                                </div>
-                                            </li>
+                                                        <div class="mt-1.5 text-sm font-medium"> Consommation </div>
+                                                    </div>
+                                                </li>
+                                            </a>
                                         </ul>
                                     </div>
+
 
 
                                     <!-- slide nav icons -->
@@ -414,13 +419,13 @@ if ($client = $recupUser->fetch()) {
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="addprod.php">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M12.3 6A2 2 0 0 0 14 9h1v1a2 2 0 0 0 3 1.7l-.3 1.5a1 1 0 0 1-1 .8h-8l.2 1H16a3 3 0 1 1-2.8 2h-2.4a3 3 0 1 1-4-1.8L4.7 5H4a1 1 0 0 1 0-2h1.5c.5 0 .9.3 1 .8L6.9 6h5.4Z" />
                                         <path d="M18 4a1 1 0 1 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 1 0 2 0V8h2a1 1 0 1 0 0-2h-2V4Z" />
                                     </svg>
 
-                                    <span> Mes annonces </span>
+                                    <span> Mes produits </span>
                                 </a>
                             </li>
                             <li>
