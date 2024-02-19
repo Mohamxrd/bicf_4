@@ -680,19 +680,159 @@ if ($client = $recupUser->fetch()) {
                             <div class="p-4 space-y-2">
                                 <form action="" method="post">
                                     <input type="text" class="w-full mb-3" placeholder="Titre du produit">
-                                    <input type="text" class="w-full mb-3" placeholder="Type de produit">
-                                   
-                              
-                                        
+                                    <select class="w-full mb-3">
+                                        <option value="" disabled selected>Type de produit</option>
+                                        <option value="Alimentaires">Alimentaires</option>
+                                        <option value="Boissons">Boissons</option>
+                                        <option value="Tabac">Tabac</option>
+                                        <option value="Bois">Bois</option>
+                                        <option value="Papier">Papier</option>
+                                        <option value="Imprimerie">Imprimerie</option>
+                                        <option value="Chimique">Chimique</option>
+                                        <option value="Pharmaceutique">Pharmaceutique</option>
+                                        <option value="Caoutchouc et plastique">Caoutchouc et plastique</option>
+                                        <option value="Produits non métalliques">Produits non métalliques</option>
+                                        <option value="Métallurgie et produits métalliques">
+                                            Métallurgie et produits métalliques
+                                        </option>
+                                        <option value="Machines et équipements">Machines et équipements</option>
+                                        <option value="Matériels de transport">Matériels de transport</option>
+                                        <option value="Réparation et installation de machines et d'équipements">
+                                            Réparation et installation de machines et d'équipements
+                                        </option>
+                                        <option value="Distribution d'électricité">Distribution d'électricité</option>
+                                        <option value="istribution de gaz">Distribution de gaz</option>
+                                        <option value="Habitation">Habitation</option>
+                                        <option value="Usine">Usine</option>
+                                        <option value="Pont & Chaussée">Pont & Chaussée</option>
+                                        <option value="Commerce">Commerce</option>
+                                        <option value="Réparation d'automobiles et de motocycles">
+                                            Réparation d'automobiles et de motocycles
+                                        </option>
+                                        <option value="Transports et entreposage">
+                                            Transports et entreposage
+                                        </option>
+                                        <option value="Hébergement et restauration">Hébergement et restauration</option>
+                                        <option value="Activités financières et d'assurance">
+                                            Activités financières et d'assurance
+                                        </option>
+                                        <option value="Activités immobilières">Activités immobilières</option>
+                                        <option value="Service juridiques">Service juridiques</option>
+                                        <option value="Service comptables">Service comptables</option>
+                                        <option value="Service de gestion">Service de gestion</option>
+                                        <option value="Service d'architecture">Service d'architecture</option>
+                                        <option value="Service d'ingénierie">Service d'ingénierie</option>
+                                        <option value="Service de contrôle et d'analyses techniques">
+                                            Service de contrôle et d'analyses techniques
+                                        </option>
+                                        <option value="Autres activités spécialisées, scientifiques et techniques">
+                                            Autres activités spécialisées, scientifiques et techniques
+                                        </option>
+                                        <option value="Services administratifs">Services administratifs</option>
+                                        <option value="Service de soutien">Service de soutien</option>
+                                        <option value="Administration publique">Administration publique</option>
+                                        <option value="Enseignement">Enseignement</option>
+                                        <option value="Service santé humaine">Service santé humaine</option>
+                                        <option value="Arts, spectacles et activités récréatives">
+                                            Arts, spectacles et activités récréatives
+                                        </option>
+                                        <option value="Autres activités de services">Autres activités de services
+                                        </option>
 
-                                
-                                    <input type="text" class="w-full mb-3" placeholder="Conditionnalité">
-                                    <input type="text" class="w-full mb-3" placeholder="Format">
+                                    </select>
+
+
+
+
+
+
+                                    <select class="w-full mb-3">
+                                        <option value="" disabled selected>Conditionnement</option>
+                                        <option value="Unité individuelle">Unité individuelle</option>
+                                        <option value="Boîte">Boîte</option>
+                                        <option value="Sachet">Sachet</option>
+                                        <option value="Bouteille">Bouteille</option>
+                                        <option value="Pot">Pot</option>
+                                        <option value="Tube">Tube</option>
+                                        <option value="Paquet">Paquet</option>
+                                        <option value="En vrac">En vrac</option>
+                                        <option value="Autre">Autre</option>
+                                    </select>
+
+                                    <input type="text" class="w-full mb-3" placeholder="Format (facultatif)">
                                     <input type="number" class="w-full mb-3" placeholder="Quantité">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité">
-                                    <input type="text" class="w-full mb-3" placeholder="Mode de paiement">
-                                    <input type="text" class="w-full mb-3" placeholder="Capacité de livrer">
-                                    <input type="text" class="w-full mb-3" placeholder="Zone economique">
+                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité (FCFA)">
+
+                                    <select class="w-full mb-3">
+                                        <option value="" disabled selected>Livraison</option>
+                                        <option value="Oui">Oui</option>
+                                        <option value="Non">Non</option>
+                                    </select>
+
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Zone economique</option>
+                                        <option value="Proximité">Proximité</option>
+                                        <option value="Locale">Locale</option>
+                                        <option value="Nationale">Nationale</option>
+                                        <option value="Sous Régionale">Sous Régionale</option>
+                                        <option value="Continentale">Continentale</option>
+                                        <option value="Internationale">Internationale</option>
+                                    </select>
+
+
+
+                                    <select class="w-full mb-3" name="ville" id="ville">
+                                        <option value="" disabled selected>Ville</option>
+                                        <option value="Abidjan">Abidjan</option>
+                                        <option value="Yamoussoukro">Yamoussoukro</option>
+                                        <option value="Bouaké">Bouaké</option>
+                                        <option value="Daloa">Daloa</option>
+                                        <option value="Korhogo">Korhogo</option>
+                                        <option value="San Pedro">San Pedro</option>
+                                        <option value="Man">Man</option>
+                                        <option value="Divo">Divo</option>
+                                        <option value="Gagnoa">Gagnoa</option>
+                                        <option value="Sassandra">Sassandra</option>
+                                        <option value="Agboville">Agboville</option>
+                                        <option value="Bondoukou">Bondoukou</option>
+                                        <option value="Grand-Bassam">Grand-Bassam</option>
+                                        <option value="Dimbokro">Dimbokro</option>
+                                        <option value="Odienné">Odienné</option>
+                                        <option value="Aboisso">Aboisso</option>
+                                        <option value="Tiassalé">Tiassalé</option>
+                                        <option value="Toumodi">Toumodi</option>
+                                        <option value="Séguéla">Séguéla</option>
+                                        <option value="Bouna">Bouna</option>
+                                    </select>
+
+                                    <input type="text" class="w-full mb-3" placeholder="Commune ou quartier">
+
+                                 
+
+
+                                    <div class="flex justify-between p-3 items-center">
+                                        <h3 class="text-black dark:text-white text-xl">Ajouter une photo</h3>
+                                        <div class="p-4 border-dotted border-2 border-gray-400 rounded-md relative">
+                                            <label for="file-upload" class="w-[100px] cursor-pointer">
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.5 4.6A2 2 0 0 1 8.9 4h6.2c.5 0 1 .2 1.4.6L17.9 6H19a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h1l1.5-1.4ZM10 12a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm2-4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </label>
+                                            <input id="file-upload" class="hidden" type="file"
+                                                onchange="previewImage(this)">
+                                            <img id="image-preview"
+                                                class="absolute inset-0 w-full h-full object-cover hidden">
+                                            <button onclick="removeImage()" id="remove-button"
+                                                class="absolute top-2 right-3 text-red-500 text-xl font-bold rounded-full bg-white p-1 hidden">&times;</button>
+                                        </div>
+                                    </div>
+                                    <textarea class="w-full h-20" name="" id="" cols="30" rows="10"
+                                        placeholder="Description"></textarea>
+
 
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
@@ -710,21 +850,85 @@ if ($client = $recupUser->fetch()) {
                         <div>
 
                             <div class="p-4 space-y-2">
-                            <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Nom du metier">
-                                    <input type="text" class="w-full mb-3" placeholder="Qualification du service">
-                                   
-                              
-                                        
+                                <form action="" method="post">
+                                    <input type="text" class="w-full mb-3" placeholder="Nom du service">
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Experiance dans le domaine</option>
+                                        <option value="Moins de 1 ans">Moins de 1 ans</option>
+                                        <option value="De 1 à 5 ans">De 1 à 5 ans</option>
+                                        <option value="De 5 a 10 ans">De 5 a 10 ans</option>
+                                        <option value="Pus de 10 ans">Pus de 10 ans</option>
+                                    </select>
 
-                                
+
+
+
+
                                     <input type="text" class="w-full mb-3" placeholder="Spectialité">
-                               
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité ">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité">
-                                    <input type="text" class="w-full mb-3" placeholder="Mode de paiement">
-                          
-                                    <input type="text" class="w-full mb-3" placeholder="Zone economique">
+
+                                    <input type="number" class="w-full mb-3" placeholder="Nombre de personnel ">
+                                    <input type="number" class="w-full mb-3" placeholder="Prix du service">
+                                   
+
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Zone economique</option>
+                                        <option value="Proximité">Proximité</option>
+                                        <option value="Locale">Locale</option>
+                                        <option value="Nationale">Nationale</option>
+                                        <option value="Sous Régionale">Sous Régionale</option>
+                                        <option value="Continentale">Continentale</option>
+                                        <option value="Internationale">Internationale</option>
+
+                                    </select>
+                                    <select class="w-full mb-3" name="ville" id="ville">
+                                        <option value="" disabled selected>Ville</option>
+                                        <option value="Abidjan">Abidjan</option>
+                                        <option value="Yamoussoukro">Yamoussoukro</option>
+                                        <option value="Bouaké">Bouaké</option>
+                                        <option value="Daloa">Daloa</option>
+                                        <option value="Korhogo">Korhogo</option>
+                                        <option value="San Pedro">San Pedro</option>
+                                        <option value="Man">Man</option>
+                                        <option value="Divo">Divo</option>
+                                        <option value="Gagnoa">Gagnoa</option>
+                                        <option value="Sassandra">Sassandra</option>
+                                        <option value="Agboville">Agboville</option>
+                                        <option value="Bondoukou">Bondoukou</option>
+                                        <option value="Grand-Bassam">Grand-Bassam</option>
+                                        <option value="Dimbokro">Dimbokro</option>
+                                        <option value="Odienné">Odienné</option>
+                                        <option value="Aboisso">Aboisso</option>
+                                        <option value="Tiassalé">Tiassalé</option>
+                                        <option value="Toumodi">Toumodi</option>
+                                        <option value="Séguéla">Séguéla</option>
+                                        <option value="Bouna">Bouna</option>
+                                    </select>
+
+                                    <input type="text" class="w-full mb-3" placeholder="Commune ou quartier">
+
+
+                                    <div class="flex justify-between p-3 items-center">
+                                        <h3 class="text-black dark:text-white text-xl">Ajouter une photo</h3>
+                                        <div class="p-4 border-dotted border-2 border-gray-400 rounded-md relative">
+                                            <label for="file-upload2" class="w-[100px] cursor-pointer">
+                                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path fill-rule="evenodd"
+                                                        d="M7.5 4.6A2 2 0 0 1 8.9 4h6.2c.5 0 1 .2 1.4.6L17.9 6H19a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h1l1.5-1.4ZM10 12a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm2-4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                            </label>
+                                            <input id="file-upload2" class="hidden" type="file"
+                                                onchange="previewImage2(this)">
+                                            <img id="image-preview2"
+                                                class="absolute inset-0 w-full h-full object-cover hidden">
+                                            <button onclick="removeImage2()" id="remove-button2"
+                                                class="absolute top-2 right-3 text-red-500 text-xl font-bold rounded-full bg-white p-1 hidden">&times;</button>
+                                        </div>
+                                    </div>
+                                    <textarea class="w-full h-20" name="" id="" cols="30" rows="10"
+                                        placeholder="Description"></textarea>
 
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
@@ -778,5 +982,72 @@ if ($client = $recupUser->fetch()) {
 
 
 </body>
+
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('image-preview');
+        const removeButton = document.getElementById('remove-button');
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.classList.remove('hidden');
+            removeButton.classList.remove('hidden');
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.classList.add('hidden');
+            removeButton.classList.add('hidden');
+        }
+    }
+
+    function removeImage() {
+        const preview = document.getElementById('image-preview');
+        const removeButton = document.getElementById('remove-button');
+        const fileInput = document.getElementById('file-upload');
+
+        preview.src = '';
+        preview.classList.add('hidden');
+        removeButton.classList.add('hidden');
+        fileInput.value = ''; // Clear the file input
+    }
+
+    function previewImage2(input) {
+        const preview = document.getElementById('image-preview2');
+        const removeButton = document.getElementById('remove-button2');
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            preview.src = reader.result;
+            preview.classList.remove('hidden');
+            removeButton.classList.remove('hidden');
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.classList.add('hidden');
+            removeButton.classList.add('hidden');
+        }
+    }
+
+    function removeImage2() {
+        const preview = document.getElementById('image-preview2');
+        const removeButton = document.getElementById('remove-button2');
+        const fileInput = document.getElementById('file-upload2');
+
+        preview.src = '';
+        preview.classList.add('hidden');
+        removeButton.classList.add('hidden');
+        fileInput.value = ''; // Clear the file input
+    }
+    
+</script>
 
 </html>

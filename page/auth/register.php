@@ -59,15 +59,15 @@ if (isset($_POST['submit'])) {
             if ($actorType == "Personne physique") {
                 $entreSize = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
             } elseif ($actorType == "Personne morale") {
-                $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
+                $socialStatus_user = $age_user = $sexe_user = $Servtype = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
             } elseif ($actorType == "Service public") {
-                $entreSize = $socialStatus_user = $age_user = $sexe_user  = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
+                $entreSize = $socialStatus_user = $age_user = $sexe_user = $orgaType = $orgaType2 = $comType = $menaType = $menaStat = null;
             } elseif ($actorType == "Organisme") {
-                $entreSize = $socialStatus_user = $age_user = $sexe_user  = $comType = $menaType = $menaStat = null;
+                $entreSize = $socialStatus_user = $age_user = $sexe_user = $comType = $menaType = $menaStat = null;
             } elseif ($actorType == "Comunauté") {
-                $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2  = $menaType = $menaStat = null;
+                $entreSize = $socialStatus_user = $age_user = $sexe_user = $Servtype = $orgaType = $orgaType2 = $menaType = $menaStat = null;
             } elseif ($actorType == "Menage") {
-                $entreSize = $socialStatus_user = $age_user = $sexe_user  = $Servtype = $orgaType = $orgaType2    = null;
+                $entreSize = $socialStatus_user = $age_user = $sexe_user = $Servtype = $orgaType = $orgaType2 = null;
             }
 
 
@@ -79,17 +79,17 @@ if (isset($_POST['submit'])) {
             } elseif ($activSector_user == "Commerce") {
                 $indus_user = $bat_user = $serv_user = null;
             } elseif ($activSector_user == "Service") {
-                $indus_user = $bat_user = $comm_user  = null;
+                $indus_user = $bat_user = $comm_user = null;
             } elseif ($activSector_user == "Autre") {
-                $indus_user = $bat_user = $comm_user = $serv_user  = null;
+                $indus_user = $bat_user = $comm_user = $serv_user = null;
             }
-            
+
 
 
 
 
             $insertUser = $conn->prepare('INSERT INTO user(nom_user, prenom_user, username, password, actorType, sexe_user, age_user, socialStatus_user, entreSize, Servtype, orgaType, orgaType2, comType, menaType, menaStat, activSector_user, indus_user, bat_user, comm_user, serv_user, pays_user, tel_user, local_user, adress_user, email_user, ActivZone_user, id_admin) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )');
-            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat,  $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user, null));
+            $insertUser->execute(array($nom_user, $prenom_user, $username, $password, $actorType, $sexe_user, $age_user, $socialStatus_user, $entreSize, $Servtype, $orgaType, $orgaType2, $comType, $menaType, $menaStat, $activSector_user, $indus_user, $bat_user, $comm_user, $serv_user, $pays_user, $tel_user, $local_user, $adress_user, $email_user, $ActivZone_user, null));
 
             header('location: login.php');
             exit();
@@ -174,7 +174,8 @@ if (isset($_POST['submit'])) {
                             <input type="password" name="cpassword" class="input" id="cpassword" required />
                         </div>
                         <div class="pass_error">Les mots de passe ne correspondent pas</div>
-                        <div class="pass_lengh">Votre mot de passe doit contenir au moins 8 carractères et une majuscule</div>
+                        <div class="pass_lengh">Votre mot de passe doit contenir au moins 8 carractères et une majuscule
+                        </div>
                         <div class="error-msg">Veillez remplire tout les champs obligatoires</div>
 
                         <?php
@@ -406,7 +407,8 @@ if (isset($_POST['submit'])) {
                         <div class="input_wrap" style="width: 500px; max-width: 100%; margin: 0 auto 20px">
                             <label for="phone">Téléphone</label>
                             <div>
-                                <input type="tel" name="phone" class="input" id="phone" placeholder="Numéro de téléphone" required />
+                                <input type="tel" name="phone" class="input" id="phone"
+                                    placeholder="Numéro de téléphone" required />
                             </div>
                         </div>
                         <div class="input_wrap">
@@ -430,7 +432,6 @@ if (isset($_POST['submit'])) {
                                 <option value="Sous Régionale">Sous Régionale</option>
                                 <option value="Continentale">Continentale</option>
                                 <option value="Internationale">Internationale</option>
-                                <option value="Mondiale">Mondiale</option>
                             </select>
                         </div>
                     </div>
