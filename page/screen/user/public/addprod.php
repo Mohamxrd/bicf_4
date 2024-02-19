@@ -644,7 +644,6 @@ if ($client = $recupUser->fetch()) {
 
         <!-- main contents -->
 
-
         <main id="site__main"
             class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
@@ -740,11 +739,6 @@ if ($client = $recupUser->fetch()) {
                                         </option>
 
                                     </select>
-
-
-
-
-
 
                                     <select class="w-full mb-3">
                                         <option value="" disabled selected>Conditionnement</option>
@@ -860,13 +854,9 @@ if ($client = $recupUser->fetch()) {
                                         <option value="Pus de 10 ans">Pus de 10 ans</option>
                                     </select>
 
-
-
-
-
                                     <input type="text" class="w-full mb-3" placeholder="Spectialité">
 
-                                    <input type="number" class="w-full mb-3" placeholder="Nombre de personnel ">
+                                    <input type="number" class="w-full mb-3" placeholder="Nombre de personnel">
                                     <input type="number" class="w-full mb-3" placeholder="Prix du service">
                                    
 

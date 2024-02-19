@@ -681,15 +681,130 @@ if ($client = $recupUser->fetch()) {
                             <div class="p-4 space-y-2">
                                 <form action="" method="post">
                                     <input type="text" class="w-full mb-3" placeholder="Nom du produit">
-                                    <input type="text" class="w-full mb-3" placeholder="Type de produit">
-                                    <input type="text" class="w-full mb-3" placeholder="Conditionnalité">
-                                    <input type="text" class="w-full mb-3" placeholder="Format">
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité">
-                                    <input type="text" class="w-full mb-3" placeholder="Frequence">
-                                    <input type="text" class="w-full mb-3" placeholder="Zone economique">
-                                    <input type="text" class="w-full mb-3" placeholder="Jour d'achat">
+                                    <select class="w-full mb-3">
+                                        <option value="" disabled selected>Type de produit</option>
+                                        <option value="Alimentaires">Alimentaires</option>
+                                        <option value="Boissons">Boissons</option>
+                                        <option value="Tabac">Tabac</option>
+                                        <option value="Bois">Bois</option>
+                                        <option value="Papier">Papier</option>
+                                        <option value="Imprimerie">Imprimerie</option>
+                                        <option value="Chimique">Chimique</option>
+                                        <option value="Pharmaceutique">Pharmaceutique</option>
+                                        <option value="Caoutchouc et plastique">Caoutchouc et plastique</option>
+                                        <option value="Produits non métalliques">Produits non métalliques</option>
+                                        <option value="Métallurgie et produits métalliques">
+                                            Métallurgie et produits métalliques
+                                        </option>
+                                        <option value="Machines et équipements">Machines et équipements</option>
+                                        <option value="Matériels de transport">Matériels de transport</option>
+                                        <option value="Réparation et installation de machines et d'équipements">
+                                            Réparation et installation de machines et d'équipements
+                                        </option>
+                                        <option value="Distribution d'électricité">Distribution d'électricité</option>
+                                        <option value="istribution de gaz">Distribution de gaz</option>
+                                        <option value="Habitation">Habitation</option>
+                                        <option value="Usine">Usine</option>
+                                        <option value="Pont & Chaussée">Pont & Chaussée</option>
+                                        <option value="Commerce">Commerce</option>
+                                        <option value="Réparation d'automobiles et de motocycles">
+                                            Réparation d'automobiles et de motocycles
+                                        </option>
+                                        <option value="Transports et entreposage">
+                                            Transports et entreposage
+                                        </option>
+                                        <option value="Hébergement et restauration">Hébergement et restauration</option>
+                                        <option value="Activités financières et d'assurance">
+                                            Activités financières et d'assurance
+                                        </option>
+                                        <option value="Activités immobilières">Activités immobilières</option>
+                                        <option value="Service juridiques">Service juridiques</option>
+                                        <option value="Service comptables">Service comptables</option>
+                                        <option value="Service de gestion">Service de gestion</option>
+                                        <option value="Service d'architecture">Service d'architecture</option>
+                                        <option value="Service d'ingénierie">Service d'ingénierie</option>
+                                        <option value="Service de contrôle et d'analyses techniques">
+                                            Service de contrôle et d'analyses techniques
+                                        </option>
+                                        <option value="Autres activités spécialisées, scientifiques et techniques">
+                                            Autres activités spécialisées, scientifiques et techniques
+                                        </option>
+                                        <option value="Services administratifs">Services administratifs</option>
+                                        <option value="Service de soutien">Service de soutien</option>
+                                        <option value="Administration publique">Administration publique</option>
+                                        <option value="Enseignement">Enseignement</option>
+                                        <option value="Service santé humaine">Service santé humaine</option>
+                                        <option value="Arts, spectacles et activités récréatives">
+                                            Arts, spectacles et activités récréatives
+                                        </option>
+                                        <option value="Autres activités de services">Autres activités de services
+                                        </option>
 
+                                    </select>
+                                    <select class="w-full mb-3">
+                                        <option value="" disabled selected>Conditionnement</option>
+                                        <option value="Unité individuelle">Unité individuelle</option>
+                                        <option value="Boîte">Boîte</option>
+                                        <option value="Sachet">Sachet</option>
+                                        <option value="Bouteille">Bouteille</option>
+                                        <option value="Pot">Pot</option>
+                                        <option value="Tube">Tube</option>
+                                        <option value="Paquet">Paquet</option>
+                                        <option value="En vrac">En vrac</option>
+                                        <option value="Autre">Autre</option>
+                                    </select>
+                                    <input type="text" class="w-full mb-3" placeholder="Format  (facultatif)">
+                                    <input type="number" class="w-full mb-3" placeholder="Quantité">
+                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité (FCFA)">
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Frequence</option>
+                                        <option value="Proximité">1 - 5</option>
+                                        <option value="Proximité">5 - 10</option>
+                                        <option value="Proximité">10 et plus</option>
+                                    </select>
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Zone economique</option>
+                                        <option value="Proximité">Proximité</option>
+                                        <option value="Locale">Locale</option>
+                                        <option value="Nationale">Nationale</option>
+                                        <option value="Sous Régionale">Sous Régionale</option>
+                                        <option value="Continentale">Continentale</option>
+                                        <option value="Internationale">Internationale</option>
+                                    </select>
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Jour d'achat</option>
+                                        <option value="Proximité">Lundi</option>
+                                        <option value="Locale">Mardi</option>
+                                        <option value="Nationale">Mercredi</option>
+                                        <option value="Sous Régionale">Jeudi</option>
+                                        <option value="Continentale">Vendredi</option>
+                                        <option value="Internationale">Samedi</option>
+                                        <option value="Internationale">Dimanche</option>
+                                        <option value="Internationale">Plusieurs Jours a La Fois</option>
+                                    </select>
+                                    <select class="w-full mb-3" name="ville" id="ville">
+                                        <option value="" disabled selected>Ville</option>
+                                        <option value="Abidjan">Abidjan</option>
+                                        <option value="Yamoussoukro">Yamoussoukro</option>
+                                        <option value="Bouaké">Bouaké</option>
+                                        <option value="Daloa">Daloa</option>
+                                        <option value="Korhogo">Korhogo</option>
+                                        <option value="San Pedro">San Pedro</option>
+                                        <option value="Man">Man</option>
+                                        <option value="Divo">Divo</option>
+                                        <option value="Gagnoa">Gagnoa</option>
+                                        <option value="Sassandra">Sassandra</option>
+                                        <option value="Agboville">Agboville</option>
+                                        <option value="Bondoukou">Bondoukou</option>
+                                        <option value="Grand-Bassam">Grand-Bassam</option>
+                                        <option value="Dimbokro">Dimbokro</option>
+                                        <option value="Odienné">Odienné</option>
+                                        <option value="Aboisso">Aboisso</option>
+                                        <option value="Tiassalé">Tiassalé</option>
+                                        <option value="Toumodi">Toumodi</option>
+                                        <option value="Séguéla">Séguéla</option>
+                                        <option value="Bouna">Bouna</option>
+                                    </select>
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
                                             Annuler</button>
@@ -699,7 +814,6 @@ if ($client = $recupUser->fetch()) {
                                     </div>
                                 </form>
 
-
                             </div>
 
                         </div>
@@ -707,20 +821,59 @@ if ($client = $recupUser->fetch()) {
 
                             <div class="p-4 space-y-2">
                                 <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Nom du metier">
-                                    <input type="text" class="w-full mb-3" placeholder="Qualification du service">
-
-
-
-
+                                    <input type="text" class="w-full mb-3" placeholder="Nom du service">
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Experiance dans le domaine</option>
+                                        <option value="Moins de 1 ans">Moins de 1 ans</option>
+                                        <option value="De 1 à 5 ans">De 1 à 5 ans</option>
+                                        <option value="De 5 a 10 ans">De 5 a 10 ans</option>
+                                        <option value="Pus de 10 ans">Pus de 10 ans</option>
+                                    </select>
 
                                     <input type="text" class="w-full mb-3" placeholder="Spectialité">
 
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité ">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité">
+                                    <input type="number" class="w-full mb-3" placeholder="Nombre de personnel">
+                                    <input type="number" class="w-full mb-3" placeholder="Prix par service">
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Frequence</option>
+                                        <option value="Proximité">1 - 5</option>
+                                        <option value="Proximité">5 - 10</option>
+                                        <option value="Proximité">10 et plus</option>
+                                    </select>
                                
-                                    <input type="text" class="w-full mb-3" placeholder="Frequence">
-                                    <input type="text" class="w-full mb-3" placeholder="Zone economique">
+                                    <select class="w-full mb-3" name="" id="">
+                                        <option value="" disabled selected>Zone economique</option>
+                                        <option value="Proximité">Proximité</option>
+                                        <option value="Locale">Locale</option>
+                                        <option value="Nationale">Nationale</option>
+                                        <option value="Sous Régionale">Sous Régionale</option>
+                                        <option value="Continentale">Continentale</option>
+                                        <option value="Internationale">Internationale</option>
+
+                                    </select>
+                                    <select class="w-full mb-3" name="ville" id="ville">
+                                        <option value="" disabled selected>Ville</option>
+                                        <option value="Abidjan">Abidjan</option>
+                                        <option value="Yamoussoukro">Yamoussoukro</option>
+                                        <option value="Bouaké">Bouaké</option>
+                                        <option value="Daloa">Daloa</option>
+                                        <option value="Korhogo">Korhogo</option>
+                                        <option value="San Pedro">San Pedro</option>
+                                        <option value="Man">Man</option>
+                                        <option value="Divo">Divo</option>
+                                        <option value="Gagnoa">Gagnoa</option>
+                                        <option value="Sassandra">Sassandra</option>
+                                        <option value="Agboville">Agboville</option>
+                                        <option value="Bondoukou">Bondoukou</option>
+                                        <option value="Grand-Bassam">Grand-Bassam</option>
+                                        <option value="Dimbokro">Dimbokro</option>
+                                        <option value="Odienné">Odienné</option>
+                                        <option value="Aboisso">Aboisso</option>
+                                        <option value="Tiassalé">Tiassalé</option>
+                                        <option value="Toumodi">Toumodi</option>
+                                        <option value="Séguéla">Séguéla</option>
+                                        <option value="Bouna">Bouna</option>
+                                    </select>
 
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
@@ -747,19 +900,6 @@ if ($client = $recupUser->fetch()) {
         </main>
 
     </div>
-
-
-    <!-- open chat box -->
-
-
-
-    <!-- post preview modal -->
-
-
-    <!-- create status -->
-
-
-    <!-- create story -->
 
 
     <!-- Javascript  -->
