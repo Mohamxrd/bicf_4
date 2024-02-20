@@ -37,6 +37,60 @@ if ($client = $recupUser->fetch()) {
     echo "Erreur: Utilisateur non trouvé dans la base de données.";
     exit();
 }
+
+// Insertion de consommation produit
+if(isset($_POST['submit'])) {
+    // Récupération des valeurs du formulaire
+    $Nom_du_produit = htmlspecialchars($_POST['Nom_du_produit']);
+    $Type_de_produit = htmlspecialchars($_POST['Type_de_produit']);
+    $Conditionnement = htmlspecialchars($_POST['Conditionnement']);
+    $format = htmlspecialchars($_POST['format']);
+    $quantité = htmlspecialchars($_POST['quantité']);
+    $Prix_par_unité = htmlspecialchars($_POST['Prix_par_unité']);
+    $frequence = htmlspecialchars($_POST['frequence']);
+    $Zone_economique = htmlspecialchars($_POST['Zone_economique']);
+    $Jour_achat = htmlspecialchars($_POST['Jour_achat']);
+    $ville = htmlspecialchars($_POST['ville']);
+
+    // Récupération de l'ID de l'utilisateur à partir de la session
+    $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+
+    // Requête préparée pour l'insertion
+    $insertConsommation = $conn->prepare('INSERT INTO consproduser(id_user, nom_art, type_prov, cond_cons, format_cons, qte_cons, prix_cons, frqce_conse, jourAch_cons, zoneAct, villeCons) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $insertConsommation->execute(array($id_utilisateur, $Nom_du_produit, $Type_de_produit, $Conditionnement, $format, $quantité, $Prix_par_unité, $frequence, $Jour_achat, $Zone_economique, $ville));
+}
+
+// Insertion de consommation service
+if (isset($_POST['submit2'])) {
+    // Récupération des valeurs du formulaire
+    $Nom_du_service = isset($_POST['Nom_du_service']) ? htmlspecialchars($_POST['Nom_du_service']) : '';
+    $Experience = isset($_POST['Experience']) ? htmlspecialchars($_POST['Experience']) : '';
+    $specialite = isset($_POST['specialite']) ? htmlspecialchars($_POST['specialite']) : '';
+    $nombre_Personnel = isset($_POST['nombre_Personnel']) ? htmlspecialchars($_POST['nombre_Personnel']) : '';
+    $prix_Service = isset($_POST['prix_Service']) ? htmlspecialchars($_POST['prix_Service']) : '';
+    $frequence = isset($_POST['frequence']) ? htmlspecialchars($_POST['frequence']) : '';
+    $Zone_economique = isset($_POST['Zone_economique']) ? htmlspecialchars($_POST['Zone_economique']) : '';
+    $ville = isset($_POST['ville']) ? htmlspecialchars($_POST['ville']) : '';
+
+    // Récupération de l'ID de l'utilisateur à partir de la session
+    $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+
+    // Requête préparée pour l'insertion
+    $insertConsommationService = $conn->prepare('INSERT INTO consservuser(id_user, nom_met, qalif_user, spetia_user, prix_cons, frqce_conse, qte_cons, zoneAct, villeCons) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+    $insertConsommationService->execute(array($id_utilisateur, $Nom_du_service, $Experience, $specialite, $prix_Service, $frequence, $nombre_Personnel, $Zone_economique, $ville));
+}
+
+
+
+
+
+
+
+
+
+
+
+
 ?>
 
 
@@ -680,9 +734,9 @@ if ($client = $recupUser->fetch()) {
 
                             <div class="p-4 space-y-2">
                                 <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Nom du produit">
-                                    <select class="w-full mb-3">
-                                        <option value="" disabled selected>Type de produit</option>
+                                    <input type="text" class="w-full mb-3" name="Nom_du_produit" placeholder="Nom du produit">
+                                    <select class="w-full mb-3" name="Type_de_produit">
+                                        <option  disabled selected>Type de produit</option>
                                         <option value="Alimentaires">Alimentaires</option>
                                         <option value="Boissons">Boissons</option>
                                         <option value="Tabac">Tabac</option>
@@ -741,7 +795,7 @@ if ($client = $recupUser->fetch()) {
                                         </option>
 
                                     </select>
-                                    <select class="w-full mb-3">
+                                    <select class="w-full mb-3" name="Conditionnement">
                                         <option value="" disabled selected>Conditionnement</option>
                                         <option value="Unité individuelle">Unité individuelle</option>
                                         <option value="Boîte">Boîte</option>
@@ -753,16 +807,16 @@ if ($client = $recupUser->fetch()) {
                                         <option value="En vrac">En vrac</option>
                                         <option value="Autre">Autre</option>
                                     </select>
-                                    <input type="text" class="w-full mb-3" placeholder="Format  (facultatif)">
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité (FCFA)">
-                                    <select class="w-full mb-3" name="" id="">
+                                    <input type="text" class="w-full mb-3" name="format" placeholder="Format  (facultatif)">
+                                    <input type="number" class="w-full mb-3" name="quantité" placeholder="Quantité">
+                                    <input type="number" class="w-full mb-3" name="Prix_par_unité" placeholder="Prix par unité (FCFA)">
+                                    <select class="w-full mb-3" name="frequence" id="">
                                         <option value="" disabled selected>Frequence</option>
                                         <option value="Proximité">1 - 5</option>
                                         <option value="Proximité">5 - 10</option>
                                         <option value="Proximité">10 et plus</option>
                                     </select>
-                                    <select class="w-full mb-3" name="" id="">
+                                    <select class="w-full mb-3" name="Zone_economique" id="">
                                         <option value="" disabled selected>Zone economique</option>
                                         <option value="Proximité">Proximité</option>
                                         <option value="Locale">Locale</option>
@@ -771,7 +825,7 @@ if ($client = $recupUser->fetch()) {
                                         <option value="Continentale">Continentale</option>
                                         <option value="Internationale">Internationale</option>
                                     </select>
-                                    <select class="w-full mb-3" name="" id="">
+                                    <select class="w-full mb-3" name="Jour_achat" id="">
                                         <option value="" disabled selected>Jour d'achat</option>
                                         <option value="Proximité">Lundi</option>
                                         <option value="Locale">Mardi</option>
@@ -808,9 +862,9 @@ if ($client = $recupUser->fetch()) {
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
                                             Annuler</button>
-                                        <button type="submit" name="submit-mode"
-                                            class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span
-                                                class="ripple-overlay"></span></button>
+                                        <button type="submit" name="submit" class="button lg:px-10 bg-primary text-white max-md:flex-1"> 
+                                            Ajouter <span class="ripple-overlay"></span>
+                                        </button>
                                     </div>
                                 </form>
 
@@ -821,27 +875,27 @@ if ($client = $recupUser->fetch()) {
 
                             <div class="p-4 space-y-2">
                                 <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Nom du service">
-                                    <select class="w-full mb-3" name="" id="">
-                                        <option value="" disabled selected>Experiance dans le domaine</option>
+                                    <input type="text" class="w-full mb-3" name="Nom_du_service" placeholder="Nom du service">
+                                    <select class="w-full mb-3" name="Experience" id="">
+                                        <option value="" disabled selected>Experience dans le domaine</option>
                                         <option value="Moins de 1 ans">Moins de 1 ans</option>
                                         <option value="De 1 à 5 ans">De 1 à 5 ans</option>
                                         <option value="De 5 a 10 ans">De 5 a 10 ans</option>
                                         <option value="Pus de 10 ans">Pus de 10 ans</option>
                                     </select>
 
-                                    <input type="text" class="w-full mb-3" placeholder="Spectialité">
+                                    <input type="text" class="w-full mb-3" name ="specialite" placeholder="Spectialité">
 
-                                    <input type="number" class="w-full mb-3" placeholder="Nombre de personnel">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par service">
-                                    <select class="w-full mb-3" name="" id="">
+                                    <input type="number" class="w-full mb-3" name="nombre_Personnel" placeholder="Nombre de personnel">
+                                    <input type="number" class="w-full mb-3" name="prix_Service" placeholder="Prix par service">
+                                    <select class="w-full mb-3" name="frequence" id="">
                                         <option value="" disabled selected>Frequence</option>
                                         <option value="Proximité">1 - 5</option>
                                         <option value="Proximité">5 - 10</option>
                                         <option value="Proximité">10 et plus</option>
                                     </select>
                                
-                                    <select class="w-full mb-3" name="" id="">
+                                    <select class="w-full mb-3" name="zone_economique" id="">
                                         <option value="" disabled selected>Zone economique</option>
                                         <option value="Proximité">Proximité</option>
                                         <option value="Locale">Locale</option>
@@ -878,7 +932,7 @@ if ($client = $recupUser->fetch()) {
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
                                             Annuler</button>
-                                        <button type="submit" name="submit-mode"
+                                        <button type="submit2" name="submit2"
                                             class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span
                                                 class="ripple-overlay"></span></button>
                                     </div>
