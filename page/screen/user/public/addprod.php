@@ -40,6 +40,10 @@ if ($client = $recupUser->fetch()) {
 
 
 
+
+
+
+
 ?>
 
 
@@ -574,9 +578,9 @@ if ($client = $recupUser->fetch()) {
                         <div>
 
                             <div class="p-4 space-y-2">
-                                <form action="" method="post">
-                                    <input type="text" class="w-full mb-3" placeholder="Titre du produit" name="nomArt">
-                                    <select class="w-full mb-3" name="">
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    <input type="text" class="w-full mb-3" placeholder="Titre du produit" name="titre_prod">
+                                    <select class="w-full mb-3" name="type_prod">
                                         <option value="" disabled selected>Type de produit</option>
                                         <option value="Alimentaires">Alimentaires</option>
                                         <option value="Boissons">Boissons</option>
@@ -637,7 +641,7 @@ if ($client = $recupUser->fetch()) {
 
                                     </select>
 
-                                    <select class="w-full mb-3">
+                                    <select class="w-full mb-3" name="condprod">
                                         <option value="" disabled selected>Conditionnement</option>
                                         <option value="Unité individuelle">Unité individuelle</option>
                                         <option value="Boîte">Boîte</option>
@@ -650,17 +654,17 @@ if ($client = $recupUser->fetch()) {
                                         <option value="Autre">Autre</option>
                                     </select>
 
-                                    <input type="text" class="w-full mb-3" placeholder="Format (facultatif)">
+                                    <input type="text" class="w-full mb-3" placeholder="Format (facultatif)" name="formatprod">
                                     <input type="number" class="w-full mb-3" placeholder="Quantité">
                                     <input type="number" class="w-full mb-3" placeholder="Prix par unité (FCFA)">
 
-                                    <select class="w-full mb-3">
+                                    <select class="w-full mb-3" name="livraisonProd">
                                         <option value="" disabled selected>Livraison</option>
                                         <option value="Oui">Oui</option>
                                         <option value="Non">Non</option>
                                     </select>
 
-                                    <select class="w-full mb-3" name="" id="">
+                                    <select class="w-full mb-3" name="zoneeco" id="">
                                         <option value="" disabled selected>Zone economique</option>
                                         <option value="Proximité">Proximité</option>
                                         <option value="Locale">Locale</option>
@@ -696,7 +700,7 @@ if ($client = $recupUser->fetch()) {
                                         <option value="Bouna">Bouna</option>
                                     </select>
 
-                                    <input type="text" class="w-full mb-3" placeholder="Commune ou quartier">
+                                    <input type="text" class="w-full mb-3" placeholder="Commune ou quartier" name="comnprod">
 
                                  
 
@@ -721,14 +725,14 @@ if ($client = $recupUser->fetch()) {
                                                 class="absolute top-2 right-3 text-red-500 text-xl font-bold rounded-full bg-white p-1 hidden">&times;</button>
                                         </div>
                                     </div>
-                                    <textarea class="w-full h-20" name="" id="" cols="30" rows="10"
+                                    <textarea class="w-full h-20" name="desProd" id="" cols="30" rows="10"
                                         placeholder="Description"></textarea>
 
 
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
                                             Annuler</button>
-                                        <button type="submit" name="submit-mode"
+                                        <button type="submit" name="submit"
                                             class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span
                                                 class="ripple-overlay"></span></button>
                                     </div>
@@ -741,7 +745,7 @@ if ($client = $recupUser->fetch()) {
                         <div>
 
                             <div class="p-4 space-y-2">
-                                <form action="" method="post">
+                                <form action="" method="post" enctype="multipart/form-data">
                                     <input type="text" class="w-full mb-3" placeholder="Nom du service">
                                     <select class="w-full mb-3" name="" id="">
                                         <option value="" disabled selected>Experiance dans le domaine</option>
@@ -807,7 +811,7 @@ if ($client = $recupUser->fetch()) {
                                                 </svg>
                                             </label>
                                             <input id="file-upload2" class="hidden" type="file"
-                                                onchange="previewImage2(this)">
+                                                onchange="previewImage2(this)" name="file">
                                             <img id="image-preview2"
                                                 class="absolute inset-0 w-full h-full object-cover hidden">
                                             <button onclick="removeImage2()" id="remove-button2"
@@ -820,7 +824,7 @@ if ($client = $recupUser->fetch()) {
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
                                             Annuler</button>
-                                        <button type="submit" name="submit-mode"
+                                        <button type="submit" name="submit2"
                                             class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span
                                                 class="ripple-overlay"></span></button>
                                     </div>
