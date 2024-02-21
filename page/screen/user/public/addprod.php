@@ -2,9 +2,12 @@
 session_start();
 @include('../../../config.php');
 
+
+
 if (!isset($_SESSION['nom_user'])) {
     header('location: ../../../auth/login.php');
 }
+
 
 
 $id_user = $_SESSION['id_user'];
@@ -38,9 +41,103 @@ if ($client = $recupUser->fetch()) {
     exit();
 }
 
+if(isset($_POST['submit'])){
+    // Assurez-vous que le formulaire est soumis
+
+    // Assurez-vous que les données sont présentes et validez-les si nécessaire
+    $Nom_du_produit = htmlspecialchars($_POST['titre_prod']);
+    $Type_de_produit = htmlspecialchars($_POST['type_prod']);
+    $Conditionnement = htmlspecialchars($_POST['condprod']);
+    $format = htmlspecialchars($_POST['formatprod']);
+    $quantité = htmlspecialchars($_POST['Quantité']);
+    $Prix_par_unité = htmlspecialchars($_POST['prixprod']);
+    $livraison = htmlspecialchars($_POST['livraisonProd']);
+    $Zone_economique = htmlspecialchars($_POST['zoneeco']);
+    $ville = htmlspecialchars($_POST['ville']);
+    $comn = htmlspecialchars($_POST['comnprod']);
+    $descrip = htmlspecialchars($_POST['desProd']);
+
+    // Assurez-vous que le fichier image est téléchargé avec succès
+    if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $image_name = $_FILES['image']['name']; // Nom de l'image
+        $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
+        $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
+        $target_file = $target_dir . basename($image_name);
+
+        // Déplacer l'image téléchargée vers le dossier de destination
+        if (move_uploaded_file($image_tmp_name, $target_file)) {
+            // L'image a été téléchargée avec succès
+            
+            // Récupération de l'ID de l'utilisateur à partir de la session
+            $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+
+            // Insertion des données dans la base de données
+            $insertProd = $conn->prepare('INSERT INTO prodUser(id_user, nomArt, typeProd, condProd, formatProd, qteProd, PrixProd, LivreCapProd, zonecoProd, villePro, comnProd, imgProd, desProd) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
+            if($insertProd->execute(array($id_utilisateur, $Nom_du_produit, $Type_de_produit, $Conditionnement, $format, $quantité, $Prix_par_unité, $livraison, $Zone_economique, $ville, $comn, $target_file, $descrip))) {
+                // Succès de l'insertion
+               
+            } else {
+                // Erreur lors de l'insertion
+                echo "Une erreur s'est produite lors de l'insertion des données dans la base de données.";
+            }
+        } else {
+            // Erreur lors du téléchargement de l'image
+            echo "Une erreur s'est produite lors du téléchargement de l'image.";
+        }
+    } else {
+        // Erreur lors du téléchargement du fichier image
+        echo "Une erreur s'est produite lors du téléchargement du fichier image.";
+    }
+}
+
+if(isset($_POST['submit2'])){
+    // Assurez-vous que le formulaire est soumis
+
+    $Nom_du_service = isset($_POST['nomserv']) ? htmlspecialchars($_POST['nomserv']) : '';
+    $Experience = isset($_POST['experience']) ? htmlspecialchars($_POST['experience']) : '';
+    $specialite = isset($_POST['specia']) ? htmlspecialchars($_POST['specia']) : '';
+    $nombre_Personnel = isset($_POST['nombre']) ? htmlspecialchars($_POST['nombre']) : '';
+    $prix_Service = isset($_POST['prix']) ? htmlspecialchars($_POST['prix']) : '';
+    $Zone_economique = isset($_POST['zoneeco']) ? htmlspecialchars($_POST['zoneeco']) : '';
+    $ville = isset($_POST['ville']) ? htmlspecialchars($_POST['ville']) : '';
+    $comn = isset($_POST['comn']) ? htmlspecialchars($_POST['comn']) : '';
+    $descrip = isset($_POST['descrip'])? htmlspecialchars($_POST['descrip']) : '';
+
+   
 
 
+    // Assurez-vous que le fichier image est téléchargé avec succès
+    if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $image_name = $_FILES['image']['name']; // Nom de l'image
+        $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
+        $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
+        $target_file = $target_dir . basename($image_name);
 
+        // Déplacer l'image téléchargée vers le dossier de destination
+        if (move_uploaded_file($image_tmp_name, $target_file)) {
+            // L'image a été téléchargée avec succès
+            
+            // Récupération de l'ID de l'utilisateur à partir de la session
+            $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+
+            // Insertion des données dans la base de données
+            $insertProd = $conn->prepare('INSERT INTO servUser(id_user, nomMet, qalifServ, sepServ, qteServ, PrixServ, zonecoServ, villeServ, comnServ, imgServ, desServ) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
+            if($insertProd->execute(array($id_utilisateur, $Nom_du_service, $Experience, $specialite, $nombre_Personnel, $prix_Service, $Zone_economique, $ville, $comn, $target_file, $descrip))) {
+                // Succès de l'insertion
+               
+            } else {
+                // Erreur lors de l'insertion
+                echo "Une erreur s'est produite lors de l'insertion des données dans la base de données.";
+            }
+        } else {
+            // Erreur lors du téléchargement de l'image
+            echo "Une erreur s'est produite lors du téléchargement de l'image.";
+        }
+    } else {
+        // Erreur lors du téléchargement du fichier image
+        echo "Une erreur s'est produite lors du téléchargement du fichier image.";
+    }
+}
 
 
 
@@ -655,8 +752,8 @@ if ($client = $recupUser->fetch()) {
                                     </select>
 
                                     <input type="text" class="w-full mb-3" placeholder="Format (facultatif)" name="formatprod">
-                                    <input type="number" class="w-full mb-3" placeholder="Quantité">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité (FCFA)">
+                                    <input type="number" class="w-full mb-3" placeholder="Quantité" name="Quantité">
+                                    <input type="number" class="w-full mb-3" placeholder="Prix par unité (FCFA)" name="prixprod">
 
                                     <select class="w-full mb-3" name="livraisonProd">
                                         <option value="" disabled selected>Livraison</option>
@@ -718,14 +815,14 @@ if ($client = $recupUser->fetch()) {
                                                 </svg>
                                             </label>
                                             <input id="file-upload" class="hidden" type="file"
-                                                onchange="previewImage(this)">
+                                                onchange="previewImage(this)" name="image">
                                             <img id="image-preview"
                                                 class="absolute inset-0 w-full h-full object-cover hidden">
                                             <button onclick="removeImage()" id="remove-button"
                                                 class="absolute top-2 right-3 text-red-500 text-xl font-bold rounded-full bg-white p-1 hidden">&times;</button>
                                         </div>
                                     </div>
-                                    <textarea class="w-full h-20" name="desProd" id="" cols="30" rows="10"
+                                    <textarea class="w-full h-20" name="desProd" id="" cols="30" rows="10" 
                                         placeholder="Description"></textarea>
 
 
@@ -746,8 +843,8 @@ if ($client = $recupUser->fetch()) {
 
                             <div class="p-4 space-y-2">
                                 <form action="" method="post" enctype="multipart/form-data">
-                                    <input type="text" class="w-full mb-3" placeholder="Nom du service">
-                                    <select class="w-full mb-3" name="" id="">
+                                    <input type="text" class="w-full mb-3" placeholder="Nom du service" name="nomserv">
+                                    <select class="w-full mb-3" name="experience" id="">
                                         <option value="" disabled selected>Experiance dans le domaine</option>
                                         <option value="Moins de 1 ans">Moins de 1 ans</option>
                                         <option value="De 1 à 5 ans">De 1 à 5 ans</option>
@@ -755,13 +852,13 @@ if ($client = $recupUser->fetch()) {
                                         <option value="Pus de 10 ans">Pus de 10 ans</option>
                                     </select>
 
-                                    <input type="text" class="w-full mb-3" placeholder="Spectialité">
+                                    <input type="text" class="w-full mb-3" placeholder="Spectialité" name="specia">
 
-                                    <input type="number" class="w-full mb-3" placeholder="Nombre de personnel">
-                                    <input type="number" class="w-full mb-3" placeholder="Prix du service">
+                                    <input type="number" class="w-full mb-3" placeholder="Nombre de personnel" name="nombre">
+                                    <input type="number" class="w-full mb-3" placeholder="Prix du service" name="prix">
                                    
 
-                                    <select class="w-full mb-3" name="" id="">
+                                    <select class="w-full mb-3" name="zoneeco" id="">
                                         <option value="" disabled selected>Zone economique</option>
                                         <option value="Proximité">Proximité</option>
                                         <option value="Locale">Locale</option>
@@ -795,7 +892,7 @@ if ($client = $recupUser->fetch()) {
                                         <option value="Bouna">Bouna</option>
                                     </select>
 
-                                    <input type="text" class="w-full mb-3" placeholder="Commune ou quartier">
+                                    <input type="text" class="w-full mb-3" placeholder="Commune ou quartier" name="comn">
 
 
                                     <div class="flex justify-between p-3 items-center">
@@ -811,14 +908,14 @@ if ($client = $recupUser->fetch()) {
                                                 </svg>
                                             </label>
                                             <input id="file-upload2" class="hidden" type="file"
-                                                onchange="previewImage2(this)" name="file">
+                                                onchange="previewImage2(this)" name="image">
                                             <img id="image-preview2"
                                                 class="absolute inset-0 w-full h-full object-cover hidden">
                                             <button onclick="removeImage2()" id="remove-button2"
                                                 class="absolute top-2 right-3 text-red-500 text-xl font-bold rounded-full bg-white p-1 hidden">&times;</button>
                                         </div>
                                     </div>
-                                    <textarea class="w-full h-20" name="" id="" cols="30" rows="10"
+                                    <textarea class="w-full h-20" name="descrip" id="" cols="30" rows="10"
                                         placeholder="Description"></textarea>
 
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">

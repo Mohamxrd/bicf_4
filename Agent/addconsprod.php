@@ -6,7 +6,7 @@ if (!isset($_SESSION['username'])) {
     header('location: ../page/auth/adlogin.php');
 }
 $errorMsg = '';
-$successMsg = ''; 
+$successMsg = '';
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_user = $_GET['id'];
@@ -20,7 +20,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $nom_client = $client['nom_user'];
     }
 
-    if(isset($_POST['submit'])){
+    if (isset($_POST['submit'])) {
         $nom_produit = htmlspecialchars($_POST['pname']);
         $type_produit = htmlspecialchars($_POST['typep']);
         $conditionnalite = htmlspecialchars($_POST['cond']);
@@ -30,13 +30,13 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $frequence = htmlspecialchars($_POST['fqce']);
         $jour_achat = htmlspecialchars($_POST['jourAch']);
         $zone_economique = htmlspecialchars($_POST['zone_eco']);
-        
-        if(empty($nom_produit) || empty($conditionnalite) || empty($prix)){
+
+        if (empty($nom_produit) || empty($conditionnalite) || empty($prix)) {
             $errorMsg = "Veuillez remplir tous les champs obligatoires";
         } else {
             $inserConsprod = $conn->prepare("INSERT INTO consprodUser (nom_art, type_prov, cond_cons, format_cons, qte_cons, prix_cons, frqce_conse, jourAch_cons, zoneAct, id_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $inserConsprod->execute(array($nom_produit, $type_produit, $conditionnalite, $format, $quantite, $prix, $frequence, $jour_achat, $zone_economique, $id_user));
-            
+
             $successMsg = "Consommation ajoutée avec succès !";
         }
     }
@@ -59,8 +59,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <link rel="shortcut icon" href="./assets/compiled/svg/favicon.svg" type="image/x-icon">
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.1.0/uicons-bold-rounded/css/uicons-bold-rounded.css'>
 
-    <link rel='stylesheet'
-        href='https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+    <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.1.0/uicons-solid-straight/css/uicons-solid-straight.css'>
 
     <link rel="stylesheet" href="assets/extensions/simple-datatables/style.css">
 
@@ -114,7 +113,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <li class="sidebar-item  ">
                             <a href="listclient.php" class='sidebar-link'>
-                            <i class="bi bi-people-fill"></i>
+                                <i class="bi bi-people-fill"></i>
                                 <span>Liste des clients</span>
                             </a>
 
@@ -123,7 +122,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <li class="sidebar-item  has-sub">
                             <a href="#" class='sidebar-link'>
-                            <i class="bi bi-box2-fill"></i>
+                                <i class="bi bi-box2-fill"></i>
                                 <span>Produit et service</span>
                             </a>
 
@@ -197,103 +196,93 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                     <div class="col-12">
                         <div class="card">
 
-                       
+
 
                             <div class="card-content">
-                                <div class="card-body" >
+                                <div class="card-body">
                                     <form class="form form-vertical" method="post">
 
-                                    <?php
+                                        <?php
 
-if (!empty($successMsg)) {
+                                        if (!empty($successMsg)) {
 
-    echo '
-<div class="alert alert-light-success alert-dismissible show fade">
-' . $successMsg . '
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-';
-}
+                                            echo '
+                                            <div class="alert alert-light-success alert-dismissible show fade">
+                                            ' . $successMsg . '
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                            ';
+                                        }
 
-?>
-<?php
+                                        ?>
+                                        <?php
 
-if (!empty($errorMsg)) {
+                                        if (!empty($errorMsg)) {
 
-    echo '
+                                            echo '
 <div class="alert alert-light-danger alert-dismissible show fade">
 ' . $errorMsg . '
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 ';
-}
+                                        }
 
-?>
+                                        ?>
                                         <div class="form-body">
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="first-name-vertical">Nom du produit *</label>
-                                                        <input type="text" id="first-name-vertical" class="form-control"
-                                                            name="pname" placeholder="Nom du produit">
+                                                        <input type="text" id="first-name-vertical" class="form-control" name="pname" placeholder="Nom du produit">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="email-id-vertical">Type (Locale/importer)</label>
-                                                        <input type="text" id="email-id-vertical" class="form-control"
-                                                            name="typep" placeholder="type">
+                                                        <input type="text" id="email-id-vertical" class="form-control" name="typep" placeholder="type">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="contact-info-vertical">Conditionnalité *</label>
-                                                        <input type="text" id="contact-info-vertical"
-                                                            class="form-control" name="cond"
-                                                            placeholder="Conditionnalité">
+                                                        <input type="text" id="contact-info-vertical" class="form-control" name="cond" placeholder="Conditionnalité">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="password-vertical">Format</label>
-                                                        <input type="text" id="password-vertical" class="form-control"
-                                                            name="format" placeholder="Format">
+                                                        <input type="text" id="password-vertical" class="form-control" name="format" placeholder="Format">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="password-vertical">Quantité</label>
-                                                        <input type="number" id="password-vertical" class="form-control"
-                                                            name="qte_prod" placeholder="Quantité">
+                                                        <input type="number" id="password-vertical" class="form-control" name="qte_prod" placeholder="Quantité">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="password-vertical">Prix *</label>
-                                                        <input type="number" id="password-vertical" class="form-control"
-                                                            name="prix" placeholder="Prix">
+                                                        <input type="number" id="password-vertical" class="form-control" name="prix" placeholder="Prix">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="password-vertical">Frequence</label>
-                                                        <input type="text" id="password-vertical" class="form-control"
-                                                            name="fqce" placeholder="Frequence">
+                                                        <input type="text" id="password-vertical" class="form-control" name="fqce" placeholder="Frequence">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="password-vertical">Jour(Achat)</label>
-                                                        <input type="text" id="password-vertical" class="form-control"
-                                                            name="jourAch" placeholder="Jour(Achat)">
+                                                        <input type="text" id="password-vertical" class="form-control" name="jourAch" placeholder="Jour(Achat)">
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label for="zone-economique">Zone économique</label>
-                                                        <select id="zone-economique" class="form-control"
-                                                            name="zone_eco">
-                                                            
+                                                        <select id="zone-economique" class="form-control" name="zone_eco">
+
                                                             <option value="local" selected>Local</option>
                                                             <option value="proximite">Proximité</option>
                                                             <option value="international">International</option>
@@ -302,10 +291,8 @@ if (!empty($errorMsg)) {
                                                 </div>
 
                                                 <div class="col-12 d-flex justify-content-end">
-                                                    <button type="submit" name="submit"
-                                                        class="btn btn-primary me-1 mb-1">Ajouter</button>
-                                                    <button type="reset"
-                                                        class="btn btn-light-secondary me-1 mb-1">Effacer</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary me-1 mb-1">Ajouter</button>
+                                                    <button type="reset" class="btn btn-light-secondary me-1 mb-1">Effacer</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -327,7 +314,7 @@ if (!empty($errorMsg)) {
 
     <script>
         // Ajouter un écouteur d'événement de clic au bouton "Supprimé client"
-        document.getElementById('deleteClientBtn').addEventListener('click', function (event) {
+        document.getElementById('deleteClientBtn').addEventListener('click', function(event) {
             // Prevent the form from submitting normally
             event.preventDefault();
 
@@ -364,7 +351,7 @@ if (!empty($errorMsg)) {
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <script>
-        document.getElementById('logoutBtn').addEventListener('click', function (event) {
+        document.getElementById('logoutBtn').addEventListener('click', function(event) {
             // Empêcher le comportement par défaut du lien
             event.preventDefault();
 

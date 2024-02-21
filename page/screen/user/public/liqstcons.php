@@ -59,6 +59,7 @@ if ($client = $recupUser->fetch()) {
     <!-- css files -->
     <link rel="stylesheet" href="assets/css/tailwind.css">
     <link rel="stylesheet" href="assets/css/style.css">
+ 
 
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap"
@@ -673,235 +674,183 @@ if ($client = $recupUser->fetch()) {
 
                     <div>
 
-                        <div class="p-4 space-y-2">
+
 
 
                         <div class="relative overflow-x-auto ">
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead
-                                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">
-                                                Nom du produit
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Type de produit
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Coditionnalité
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Format
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                               Quantité
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                               Prix
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                               Details
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead
+                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Nom du produit
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Type du produit
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Conditionnement
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Format
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Quantité
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Prix par unité
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Frequence
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Zone economique
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Jour d'achat
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Ville
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    // Utilisez une jointure LEFT JOIN pour obtenir les informations de consprodUser et user
+                                    $id_user = $_SESSION['id_user'];
+
+                                    $requete = $conn->prepare('SELECT * FROM consprodUser WHERE id_user = :id_user');
+                                    $requete->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                    $requete->execute();
+
+                                    while ($user = $requete->fetch()) { // Utiliser $requete au lieu de $recupUsers
+                                        ?>
                                         <tr
-                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Apple MacBook Pro 17"
-                                            </th>
+                                            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                             <td class="px-6 py-4">
-                                                Silver
+                                                <?= $user['nom_art']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                Laptop
+                                                <?= $user['type_prov']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                $2999
+                                                <?= $user['cond_cons']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                $2999
+                                                <?= $user['format_cons']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                $2999
+                                                <?= $user['qte_cons']; ?>
                                             </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">modifier</a>
+                                            <td class="px-6 py-4">
+                                                <?= $user['prix_cons']; ?>
                                             </td>
+                                            <td class="px-6 py-4">
+                                                <?= $user['frqce_conse']; ?>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <?= $user['jourAch_cons']; ?>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <?= $user['zoneAct']; ?>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <?= $user['villeCons']; ?>
+                                            </td>
+
                                         </tr>
-                                        <tr
-                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Apple MacBook Pro 17"
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                Silver
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Laptop
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">modifier</a>
-                                            </td>
-                                        </tr>
-                                        <tr
-                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Apple MacBook Pro 17"
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                Silver
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Laptop
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">modifier</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
                         </div>
+
+
 
                     </div>
                     <div>
 
-                        <div class="p-4 space-y-2">
                         <div class="relative overflow-x-auto ">
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead
-                                        class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">
-                                                Nom du produit
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Type de produit
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Coditionnalité
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Format
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                               Quantité
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                               Prix
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                               Details
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead
+                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-white">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            Nom du service
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Experiance
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Specialité
+                                        </th>
+
+                                        <th scope="col" class="px-6 py-3">
+                                            Nombre du personnel
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Prix
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Frequence
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Zone economique
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Ville
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    // Utilisez une jointure LEFT JOIN pour obtenir les informations de consprodUser et user
+                                    $id_user = $_SESSION['id_user'];
+
+                                    $requete = $conn->prepare('SELECT * FROM consservUser WHERE id_user = :id_user');
+                                    $requete->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                    $requete->execute();
+
+                                    while ($user = $requete->fetch()) { // Utiliser $requete au lieu de $recupUsers
+                                        ?>
                                         <tr
-                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Apple MacBook Pro 17"
-                                            </th>
+                                            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                             <td class="px-6 py-4">
-                                                Silver
+                                                <?= $user['nom_met']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                Laptop
+                                                <?= $user['qalif_user']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                $2999
+                                                <?= $user['spetia_user']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                $2999
+                                                <?= $user['qte_cons']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                                $2999
+                                                <?= $user['prix_cons']; ?>
                                             </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">modifier</a>
+                                            <td class="px-6 py-4">
+                                                <?= $user['frqce_conse']; ?>
                                             </td>
+                                            <td class="px-6 py-4">
+                                                <?= $user['zoneAct']; ?>
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <?= $user['villeCons']; ?>
+                                            </td>
+
                                         </tr>
-                                        <tr
-                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Apple MacBook Pro 17"
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                Silver
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Laptop
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">modifier</a>
-                                            </td>
-                                        </tr>
-                                        <tr
-                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row"
-                                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Apple MacBook Pro 17"
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                Silver
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Laptop
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                $2999
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">modifier</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                        <?php
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+
                         </div>
 
                     </div>
@@ -945,6 +894,7 @@ if ($client = $recupUser->fetch()) {
     <!-- Ion icon -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 
 
 </body>
