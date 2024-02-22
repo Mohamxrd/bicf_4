@@ -122,22 +122,22 @@ if ($client = $recupUser->fetch()) {
                                     <div class="uk-slider-container pb-1">
                                         <ul class="uk-slider-items grid grid-cols-2 gap-4" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
                                             <a href="addprod.php">
-                                            <li class="w-full" uk-scrollspy-class="uk-animation-fade">
-                                                <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">
-                                                    <ion-icon name="cart" class="text-2xl drop-shadow-md"></ion-icon>
-                                                    <div class="mt-1.5 text-sm font-medium"> Produit </div>
-                                                </div>
-                                            </li>
+                                                <li class="w-full" uk-scrollspy-class="uk-animation-fade">
+                                                    <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">
+                                                        <ion-icon name="cart" class="text-2xl drop-shadow-md"></ion-icon>
+                                                        <div class="mt-1.5 text-sm font-medium"> Produit </div>
+                                                    </div>
+                                                </li>
                                             </a>
-                                           <a href="addcons.php">
-                                           <li class="w-full">
-                                                <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">
-                                                    <ion-icon name="pricetags" class="text-2xl drop-shadow-md"></ion-icon>
+                                            <a href="addcons.php">
+                                                <li class="w-full">
+                                                    <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">
+                                                        <ion-icon name="pricetags" class="text-2xl drop-shadow-md"></ion-icon>
 
-                                                    <div class="mt-1.5 text-sm font-medium"> Consommation </div>
-                                                </div>
-                                            </li>
-                                           </a>
+                                                        <div class="mt-1.5 text-sm font-medium"> Consommation </div>
+                                                    </div>
+                                                </li>
+                                            </a>
                                         </ul>
                                     </div>
 
@@ -633,92 +633,42 @@ if ($client = $recupUser->fetch()) {
 
 
 
-                    <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
-                        <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                            <div class="flex-1">
-                                <a href="detailprod.php">
-                                    <h4 class="text-lg text-black dark:text-white">Ordinateur portable </h4>
-                                </a>
-                                <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
-                                    <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
-                                    </svg>
-                                    <span class="ml-1">Abouasso</span>
 
+                    <?php
+                    $requete = $conn->prepare('SELECT * FROM prodUser ORDER BY date_ajout DESC');
+                    $requete->execute();
 
+                    while ($produit = $requete->fetch()) {
+                    ?>
+                        <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
+                            <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
+                                <div class="flex-1">
+                                    <a href="detailprod.php"> 
+                                        <h4 class="text-lg text-black dark:text-white"><?= $produit['nomArt']; ?></h4>
+                                    </a>
+                                    <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
+                                        <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span class="ml-1"><?= $produit['villePro']; ?></span>
+                                    </div>
                                 </div>
                             </div>
-                           
-                        </div>
-
-
-                        <div class="sm:px-4 p-2.5 pt-0">
-                            <p class="font-normal"> Photography is the art of capturing light with a camera. It can be used to create images that tell stories, express emotions, or document reality. it can be fun, challenging, or rewarding. It can also be a hobby, a profession, or a passion. 📷 </p>
-                        </div>
-
-                        <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                            <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
-                            <div class="text-xs text-gray-500">2 hours ago</div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
-                        <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                            <div class="flex-1">
-                                <a href="detailprod.php">
-                                    <h4 class="text-lg text-black dark:text-white">Regime de banane</h4>
-                                </a>
-                                <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
-                                    <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
-                                    </svg>
-                                    <span class="ml-1">San-Pedro</span>
-
-
-                                </div>
+                            <div class="sm:px-4 p-2.5 pt-0">
+                                <p class="font-normal"><?= $produit['desProd']; ?></p>
                             </div>
-                           
-                        </div>
-
-
-                        <div class="sm:px-4 p-2.5 pt-0">
-                            <p class="font-normal"> Photography is the art of capturing light with a camera. It can be used to create images that tell stories, express emotions, or document reality. it can be fun, challenging, or rewarding. It can also be a hobby, a profession, or a passion. 📷 </p>
-                        </div>
-
-                        <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                            <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
-                            <div class="text-xs text-gray-500">2 hours ago</div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
-                        <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                            <div class="flex-1">
-                                <a href="detailprod.php">
-                                    <h4 class="text-lg text-black dark:text-white">Merceders</h4>
-                                </a>
-                                <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
-                                    <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
-                                    </svg>
-                                    <span class="ml-1">Man</span>
-
-
-                                </div>
+                            <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
+                                <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
+                                <div class="text-xs text-gray-500">2 hours ago</div>
                             </div>
-                           
                         </div>
+                    <?php
+                    }
+                    ?>
 
 
-                        <div class="sm:px-4 p-2.5 pt-0">
-                            <p class="font-normal"> Photography is the art of capturing light with a camera. It can be used to create images that tell stories, express emotions, or document reality. it can be fun, challenging, or rewarding. It can also be a hobby, a profession, or a passion. 📷 </p>
-                        </div>
 
-                        <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                            <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
-                            <div class="text-xs text-gray-500">2 hours ago</div>
-                        </div>
-                    </div>
+
                 </div>
 
 
@@ -796,8 +746,8 @@ if ($client = $recupUser->fetch()) {
                                         </div>
                                     </div>
                                 </a>
-                               
-                               
+
+
                             </div>
 
 
@@ -819,7 +769,7 @@ if ($client = $recupUser->fetch()) {
 
 
     <!-- post preview modal -->
-   
+
 
     <!-- create status -->
 
