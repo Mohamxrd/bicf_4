@@ -634,9 +634,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                         </div>
 
                         <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->
-                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
-                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Achat Négocier</a>
-                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Achat Grouper</a>
+                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
+                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Négocier</a>
+                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Grouper</a>
                         </div>
 
                     </div>
