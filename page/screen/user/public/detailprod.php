@@ -640,9 +640,9 @@ if ($client = $recupUser->fetch()) {
 
                 <!-- image -->
 
-                <div class="flex-1 items-center justify-center" style="width: 350px; ">
+                <div class="flex-1 items-center justify-center">
 
-                    <div class="lg:space-y-4 lg:pb-8  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+                    <div class="lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
                         <div class=" p-5 m-5  px-6 border1 dark:bg-dark2">
                             <img src="assets/images/avatars/informatique_0.jpg" alt="">
