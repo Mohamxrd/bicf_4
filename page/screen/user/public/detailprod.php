@@ -37,6 +37,30 @@ if ($client = $recupUser->fetch()) {
     echo "Erreur: Utilisateur non trouvé dans la base de données.";
     exit();
 }
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id_prod = $_GET['id'];
+
+    $recupprods = $conn->prepare("SELECT * FROM prodUser WHERE id_prod = :id_prod ");
+    $recupprods->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+    $recupprods->execute();
+
+    if ($prods = $recupprods->fetch()) {
+        $nom_prod = $prods['nomArt'];
+        $description_prod = $prods['desProd'];
+        $prix_prod = $prods['PrixProd'];
+        $type_prod = $prods['typeProd'];
+        $conditionnement_prod = $prods['condProd'];
+        $format_prod = $prods['formatProd'];
+        $quantite_prod = $prods['qteProd']; // Modifier en fonction du nom de la colonne
+        $livraison_prod = $prods['LivreCapProd']; // Modifier en fonction du nom de la colonne
+        $zone_economique_prod = $prods['zonecoProd']; // Modifier en fonction du nom de la colonne
+        $ville_prod = $prods['villePro']; // Modifier en fonction du nom de la colonne
+        $comn = $prods['comnProd']; // Modifier en fonction du nom de la colonne
+        // Ajoutez d'autres attributs au besoin
+    }
+}
+
+
 ?>
 
 
@@ -545,10 +569,10 @@ if ($client = $recupUser->fetch()) {
 
                     <div class="md:max-w-[650px] mx-auto flex-1 xl:space-y-6 space-y-3">
 
-                        <div class="flex items-center py-3 dark:border-gray-600">
+                        <div class="flex items-center py-3 dark:border-gray-600 my-3">
 
                             <!--  TITRE DU PRODUIT  -->
-                            <h1 class="text-xl">TITRE DU PRODUIT</h1>
+                            <h1 class="text-xl"><?= $nom_prod ?></h1>
 
                         </div>
                     </div>
@@ -560,31 +584,24 @@ if ($client = $recupUser->fetch()) {
                                 <a href="timeline-page.html">
                                     <h4 class="card-title "> Type du produit </h4>
                                 </a>
-                                <p>Lorem upsum</p>
+                                <p><?= $type_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> conditionnalité </h4>
+                                    <h4 class="card-title"> conditionnement </h4>
                                 </a>
-                                <p>Lorem upsum</p>
+                                <p><?= $conditionnement_prod ?></p>
                             </div>
                         </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
-                                    <h4 class="card-title"> Titre du produit </h4>
-                                </a>
-                                <p>Lorem upsum</p>
-                            </div>
-                        </div>
+
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> format </h4>
                                 </a>
-                                <p>Lorem upsum</p>
+                                <p><?= $format_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
@@ -592,60 +609,55 @@ if ($client = $recupUser->fetch()) {
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> Quantité </h4>
                                 </a>
-                                <p>Lorem upsum</p>
+                                <p><?= $quantite_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> Quantité </h4>
+                                    <h4 class="card-title"> Prix par unité </h4>
                                 </a>
-                                <p>Lorem upsum</p>
+                                <p><?= $prix_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> prix par unité </h4>
+                                    <h4 class="card-title">Capacité de livré</h4>
                                 </a>
-                                <p>Lorem upsum</p>
+                                <p><?= $livraison_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> mode de paiement </h4>
+                                    <h4 class="card-title"> Zone economique </h4>
                                 </a>
-                                <p>Lorem upsum</p>
+                                <p><?= $zone_economique_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> capacité de livrer </h4>
+                                    <h4 class="card-title"> Ville, Commune</h4>
                                 </a>
-                                <p>Lorem upsum</p>
+                                <p><?= $ville_prod ?>, <?= $comn ?></p>
                             </div>
                         </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
-                                    <h4 class="card-title"> zone econo </h4>
-                                </a>
-                                <p>Lorem upsum</p>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
                 <!-- image -->
 
-                <div class="flex-1 items-center justify-center" style="width: 350px; ">
+                <div class="flex-1 items-center justify-center">
 
-                    <div class="lg:space-y-4 lg:pb-8  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+                    <div class="lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
                         <div class=" p-5 m-5  px-6 border1 dark:bg-dark2">
-                            <img src="assets/images/avatars/informatique_0.jpg" alt="">
+                            <?php if (!empty($prods['imgProd'])) : ?>
+                                <img src="<?= $prods['imgProd'] ?>" alt="Image du produit" >
+                            <?php endif; ?>
                         </div>
 
                         <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->

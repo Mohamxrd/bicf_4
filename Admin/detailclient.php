@@ -11,7 +11,7 @@ $nom_agent = "Aucun agent";  // Définir une valeur par défaut
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_user = $_GET['id'];
 
-    // Récupérer les informations de l'utilisateur
+    // Récupérer les informations de l'utilisate    ur
     $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
     $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
     $recupUser->execute();

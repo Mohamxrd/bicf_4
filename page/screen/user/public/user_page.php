@@ -643,7 +643,7 @@ if ($client = $recupUser->fetch()) {
                         <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
                             <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
                                 <div class="flex-1">
-                                    <a href="detailprod.php?id=<?= $produit['id_prod'] ?>"> 
+                                    <a href="detailprod.php?id=<?= $produit['id_prod'] ?>">
                                         <h4 class="text-lg text-black dark:text-white"><?= $produit['nomArt']; ?></h4>
                                     </a>
                                     <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
@@ -667,7 +667,7 @@ if ($client = $recupUser->fetch()) {
                     }
                     ?>
 
-<?php
+                    <?php
                     $requete = $conn->prepare('SELECT * FROM servUser ORDER BY date_ajout DESC');
                     $requete->execute();
 
@@ -676,14 +676,14 @@ if ($client = $recupUser->fetch()) {
                         <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
                             <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
                                 <div class="flex-1">
-                                    <a href="detailprod.php?id=<?= $service['id_serv'] ?>"> 
+                                    <a href="detailserv.php?id=<?= $service['id_serv'] ?>">
                                         <h4 class="text-lg text-black dark:text-white"><?= $service['nomMet']; ?></h4>
                                     </a>
                                     <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
                                         <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                             <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
                                         </svg>
-                                        <span class="ml-1"><?= $service['villeServ']; ?>, <?= $service['comnServ']?></span>
+                                        <span class="ml-1"><?= $service['villeServ']; ?>, <?= $service['comnServ'] ?></span>
                                     </div>
                                 </div>
                                 <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">Service</div>

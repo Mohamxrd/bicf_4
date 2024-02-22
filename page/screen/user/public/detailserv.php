@@ -37,6 +37,29 @@ if ($client = $recupUser->fetch()) {
     echo "Erreur: Utilisateur non trouvé dans la base de données.";
     exit();
 }
+
+
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id_serv = $_GET['id'];
+
+    $recupServ = $conn->prepare("SELECT * FROM servUser WHERE id_serv = :id_serv ");
+    $recupServ->bindParam(':id_serv', $id_serv, PDO::PARAM_INT);
+    $recupServ->execute();
+
+    if ($service = $recupServ->fetch()) {
+        $nom_service = $service['nomMet'];
+        $description_service = $service['desServ'];
+        $prix_service = $service['PrixServ'];
+        $qualif_service = $service['qalifServ'];
+        $sep_service = $service['sepServ'];
+        $qte_service = $service['qteServ'];
+        $zone_economique_service = $service['zonecoServ'];
+        $ville_service = $service['villeServ'];
+        $comn_service = $service['comnServ'];
+        // Ajoutez d'autres attributs au besoin
+    }
+}
+
 ?>
 
 
@@ -401,10 +424,8 @@ if ($client = $recupUser->fetch()) {
                             </li>
                             <li>
                                 <a href="#">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2Zm-13.2-.8a1 1 0 0 1-1-1c0-2.3.9-4.6 2.5-6.4a1 1 0 1 1 1.5 1.4 7.4 7.4 0 0 0-2 5 1 1 0 0 1-1 1Zm16.2 0a1 1 0 0 1-1-1c0-1.8-.7-3.6-2-5a1 1 0 0 1 1.5-1.4c1.6 1.8 2.5 4 2.5 6.4a1 1 0 0 1-1 1ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2Zm-13.2-.8a1 1 0 0 1-1-1c0-2.3.9-4.6 2.5-6.4a1 1 0 1 1 1.5 1.4 7.4 7.4 0 0 0-2 5 1 1 0 0 1-1 1Zm16.2 0a1 1 0 0 1-1-1c0-1.8-.7-3.6-2-5a1 1 0 0 1 1.5-1.4c1.6 1.8 2.5 4 2.5 6.4a1 1 0 0 1-1 1ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
                                     </svg>
 
                                     <span> Notifications </span>
@@ -550,7 +571,7 @@ if ($client = $recupUser->fetch()) {
                         <div class="flex items-center py-3 dark:border-gray-600">
 
                             <!--  TITRE DU PRODUIT  -->
-                            <h1 class="text-xl">TITRE DU PRODUIT</h1>
+                            <h1 class="text-xl"><?= $nom_service ?></h1>
 
                         </div>
                     </div>
@@ -560,83 +581,52 @@ if ($client = $recupUser->fetch()) {
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title "> Type du produit </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                              
+                                    <h4 class="card-title "> Experance</h4>
+                                </a>
+                                <p><?= $qualif_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> conditionnalité </h4>
-                                </a>    
-                                <p>Lorem upsum</p>                              
+                                    <h4 class="card-title"> Spectialité </h4>
+                                </a>
+                                <p><?= $sep_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> Titre du produit </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                                
+                                    <h4 class="card-title">Nombre du personneml</h4>
+                                </a>
+                                <p><?= $qte_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> format </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                                
+                                    <h4 class="card-title"> Prix du service </h4>
+                                </a>
+                                <p><?= $prix_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
-                                    <h4 class="card-title"> Quantité </h4>
-                                </a>     
-                                <p>Lorem upsum</p>                             
+                                    <h4 class="card-title"> Zone economique </h4>
+                                </a>
+                                <p><?= $zone_economique_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
-                                    <h4 class="card-title"> Quantité </h4>
-                                </a>    
-                                <p>Lorem upsum</p>                              
+
+                                <h4 class="card-title"> Ville, Commune </h4>
+
+                                <p><?= $ville_service ?>, <?= $comn_service ?></p>
                             </div>
                         </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
-                                    <h4 class="card-title"> prix par unité </h4>
-                                </a>   
-                                <p>Lorem upsum</p>                               
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
-                                    <h4 class="card-title"> mode de paiement </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                                
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
-                                    <h4 class="card-title"> capacité de livrer </h4>
-                                </a>   
-                                <p>Lorem upsum</p>                               
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
-                                    <h4 class="card-title"> zone econo </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                                
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 
@@ -647,18 +637,20 @@ if ($client = $recupUser->fetch()) {
 
                 <div class="flex-2 items-center justify-center" style="width: 350px; ">
 
-    <div class="lg:space-y-4 lg:pb-8 max-lg:hidden sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+                    <div class="lg:space-y-4 lg:pb-8 max-lg:hidden sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
-        <div class=" p-5 px-6 border1 dark:bg-dark2">
-            <img src="assets/images/avatars/informatique_0.jpg" alt="">
-        </div>
+                        <div class=" p-5 px-6 border1 dark:bg-dark2">
+                        <?php if (!empty($service['imgServ'])) : ?>
+                                <img src="<?= $service['imgServ'] ?>" alt="Image du produit" >
+                            <?php endif; ?>
+                        </div>
 
-        <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->
-            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Commander</a>
-        </div>
+                        <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->
+                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Commander</a>
+                        </div>
 
-    </div>
-</div>
+                    </div>
+                </div>
 
 
 
