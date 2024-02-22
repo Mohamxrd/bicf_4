@@ -581,66 +581,50 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title "> Type du produit </h4>
-                                </a>
                                 <p><?= $type_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> conditionnement </h4>
-                                </a>
                                 <p><?= $conditionnement_prod ?></p>
                             </div>
                         </div>
 
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> format </h4>
-                                </a>
                                 <p><?= $format_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> Quantité </h4>
-                                </a>
                                 <p><?= $quantite_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> Prix par unité </h4>
-                                </a>
                                 <p><?= $prix_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title">Capacité de livré</h4>
-                                </a>
                                 <p><?= $livraison_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> Zone economique </h4>
-                                </a>
                                 <p><?= $zone_economique_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> Ville, Commune</h4>
-                                </a>
                                 <p><?= $ville_prod ?>, <?= $comn ?></p>
                             </div>
                         </div>
@@ -660,8 +644,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                             <?php endif; ?>
                         </div>
 
-                        <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->
-                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Commander</a>
+                        <div class="flex flex-col justify-center mt-4 "> <!-- Utilisation de flexbox pour centrer verticalement -->
+                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
+                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Négocier</a>
+                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Grouper</a>
                         </div>
 
                     </div>

@@ -580,49 +580,37 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title "> Experance</h4>
-                                </a>
                                 <p><?= $qualif_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> Spectialité </h4>
-                                </a>
                                 <p><?= $sep_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title">Nombre du personneml</h4>
-                                </a>
                                 <p><?= $qte_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> Prix du service </h4>
-                                </a>
                                 <p><?= $prix_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                <a href="timeline-page.html">
                                     <h4 class="card-title"> Zone economique </h4>
-                                </a>
                                 <p><?= $zone_economique_service ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-
                                 <h4 class="card-title"> Ville, Commune </h4>
-
                                 <p><?= $ville_service ?>, <?= $comn_service ?></p>
                             </div>
                         </div>
@@ -646,7 +634,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                         </div>
 
                         <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->
-                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Commander</a>
+                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
+                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Achat Négocier</a>
+                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Achat Grouper</a>
                         </div>
 
                     </div>
