@@ -623,9 +623,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                 <!-- sidebar -->
 
-                <div class="flex-2 items-center justify-center" style="width: 350px; ">
+                <div class="flex-1 items-center justify-center">
 
-                    <div class="lg:space-y-4 lg:pb-8 max-lg:hidden sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+                    <div class="lg:space-y-4 max-lg:w-full lg:pb-8  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
                         <div class=" p-5 px-6 border1 dark:bg-dark2">
                         <?php if (!empty($service['imgServ'])) : ?>
