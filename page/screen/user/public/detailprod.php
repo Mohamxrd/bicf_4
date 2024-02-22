@@ -401,10 +401,8 @@ if ($client = $recupUser->fetch()) {
                             </li>
                             <li>
                                 <a href="#">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2Zm-13.2-.8a1 1 0 0 1-1-1c0-2.3.9-4.6 2.5-6.4a1 1 0 1 1 1.5 1.4 7.4 7.4 0 0 0-2 5 1 1 0 0 1-1 1Zm16.2 0a1 1 0 0 1-1-1c0-1.8-.7-3.6-2-5a1 1 0 0 1 1.5-1.4c1.6 1.8 2.5 4 2.5 6.4a1 1 0 0 1-1 1ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2Zm-13.2-.8a1 1 0 0 1-1-1c0-2.3.9-4.6 2.5-6.4a1 1 0 1 1 1.5 1.4 7.4 7.4 0 0 0-2 5 1 1 0 0 1-1 1Zm16.2 0a1 1 0 0 1-1-1c0-1.8-.7-3.6-2-5a1 1 0 0 1 1.5-1.4c1.6 1.8 2.5 4 2.5 6.4a1 1 0 0 1-1 1ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
                                     </svg>
 
                                     <span> Notifications </span>
@@ -561,104 +559,101 @@ if ($client = $recupUser->fetch()) {
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title "> Type du produit </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                              
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> conditionnalité </h4>
-                                </a>    
-                                <p>Lorem upsum</p>                              
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> Titre du produit </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                                
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> format </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                                
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> Quantité </h4>
-                                </a>     
-                                <p>Lorem upsum</p>                             
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> Quantité </h4>
-                                </a>    
-                                <p>Lorem upsum</p>                              
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> prix par unité </h4>
-                                </a>   
-                                <p>Lorem upsum</p>                               
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> mode de paiement </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                                
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> capacité de livrer </h4>
-                                </a>   
-                                <p>Lorem upsum</p>                               
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <a href="timeline-page.html">
                                     <h4 class="card-title"> zone econo </h4>
-                                </a>  
-                                <p>Lorem upsum</p>                                
+                                </a>
+                                <p>Lorem upsum</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- image -->
 
+                <div class="flex-1 items-center justify-center" style="width: 350px; ">
 
+                    <div class="lg:space-y-4 lg:pb-8  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
-                <!-- sidebar -->
+                        <div class=" p-5 m-5  px-6 border1 dark:bg-dark2">
+                            <img src="assets/images/avatars/informatique_0.jpg" alt="">
+                        </div>
 
-                <div class="flex-2 items-center justify-center" style="width: 350px; ">
+                        <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->
+                            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Commander</a>
+                        </div>
 
-    <div class="lg:space-y-4 lg:pb-8 max-lg:hidden sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
-
-        <div class=" p-5 px-6 border1 dark:bg-dark2">
-            <img src="assets/images/avatars/informatique_0.jpg" alt="">
-        </div>
-
-        <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->
-            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Commander</a>
-        </div>
-
-    </div>
-</div>
+                    </div>
+                </div>
 
 
 
@@ -668,19 +663,6 @@ if ($client = $recupUser->fetch()) {
         </main>
 
     </div>
-
-
-    <!-- open chat box -->
-
-
-
-    <!-- post preview modal -->
-
-
-    <!-- create status -->
-
-
-    <!-- create story -->
 
 
     <!-- Javascript  -->
