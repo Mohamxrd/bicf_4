@@ -6,12 +6,13 @@ session_start();
 
 if (!isset($_SESSION['nom_user'])) {
     header('location: ../../../auth/login.php');
+    exit(); // Ajout pour terminer l'exécution après la redirection
 }
 
 
 
 $id_user = $_SESSION['id_user'];
-
+// Récupération des informations de l'utilisateur
 $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
 $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $recupUser->execute();
@@ -41,7 +42,7 @@ if ($client = $recupUser->fetch()) {
     exit();
 }
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
     // Assurez-vous que le formulaire est soumis
 
     // Assurez-vous que les données sont présentes et validez-les si nécessaire
@@ -58,7 +59,7 @@ if(isset($_POST['submit'])){
     $descrip = htmlspecialchars($_POST['desProd']);
 
     // Assurez-vous que le fichier image est téléchargé avec succès
-    if(isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $image_name = $_FILES['image']['name']; // Nom de l'image
         $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
         $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
@@ -73,9 +74,10 @@ if(isset($_POST['submit'])){
 
             // Insertion des données dans la base de données
             $insertProd = $conn->prepare('INSERT INTO prodUser(id_user, nomArt, typeProd, condProd, formatProd, qteProd, PrixProd, LivreCapProd, zonecoProd, villePro, comnProd, imgProd, desProd) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
-            if($insertProd->execute(array($id_utilisateur, $Nom_du_produit, $Type_de_produit, $Conditionnement, $format, $quantité, $Prix_par_unité, $livraison, $Zone_economique, $ville, $comn, $target_file, $descrip))) {
+            
+            if ($insertProd->execute([$id_utilisateur, $Nom_du_produit, $Type_de_produit, $Conditionnement, $format, $quantité, $Prix_par_unité, $livraison, $Zone_economique, $ville, $comn, $target_file, $descrip])) {
                 // Succès de l'insertion
-               
+                echo "Le produit a été ajouté avec succès.";
             } else {
                 // Erreur lors de l'insertion
                 echo "Une erreur s'est produite lors de l'insertion des données dans la base de données.";
@@ -89,6 +91,7 @@ if(isset($_POST['submit'])){
         echo "Une erreur s'est produite lors du téléchargement du fichier image.";
     }
 }
+
 
 if(isset($_POST['submit2'])){
     // Assurez-vous que le formulaire est soumis
@@ -138,8 +141,6 @@ if(isset($_POST['submit2'])){
         echo "Une erreur s'est produite lors du téléchargement du fichier image.";
     }
 }
-
-
 
 ?>
 
