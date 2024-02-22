@@ -367,7 +367,7 @@ if ($client = $recupUser->fetch()) {
                                         <path fill-rule="evenodd" d="M11.3 3.3a1 1 0 0 1 1.4 0l6 6 2 2a1 1 0 0 1-1.4 1.4l-.3-.3V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3c0 .6-.4 1-1 1H7a2 2 0 0 1-2-2v-6.6l-.3.3a1 1 0 0 1-1.4-1.4l2-2 6-6Z" clip-rule="evenodd" />
                                     </svg>
 
-                                    <span> Acceuil </span>
+                                    <span> Bourse du commerce </span>
                                 </a>
                             </li>
                             <li>
@@ -653,9 +653,43 @@ if ($client = $recupUser->fetch()) {
                                         <span class="ml-1"><?= $produit['villePro']; ?></span>
                                     </div>
                                 </div>
+                                <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">Produit</div>
                             </div>
                             <div class="sm:px-4 p-2.5 pt-0">
                                 <p class="font-normal"><?= $produit['desProd']; ?></p>
+                            </div>
+                            <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
+                                <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
+                                <div class="text-xs text-gray-500">2 hours ago</div>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                    ?>
+
+<?php
+                    $requete = $conn->prepare('SELECT * FROM servUser ORDER BY date_ajout DESC');
+                    $requete->execute();
+
+                    while ($service = $requete->fetch()) {
+                    ?>
+                        <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
+                            <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
+                                <div class="flex-1">
+                                    <a href="detailprod.php"> 
+                                        <h4 class="text-lg text-black dark:text-white"><?= $service['nomMet']; ?></h4>
+                                    </a>
+                                    <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
+                                        <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                            <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
+                                        </svg>
+                                        <span class="ml-1"><?= $service['villeServ']; ?></span>
+                                    </div>
+                                </div>
+                                <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">Service</div>
+                            </div>
+                            <div class="sm:px-4 p-2.5 pt-0">
+                                <p class="font-normal"><?= $service['desServ']; ?></p>
                             </div>
                             <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
                                 <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
