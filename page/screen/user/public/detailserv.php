@@ -108,7 +108,8 @@ if ($client = $recupUser->fetch()) {
                             <!-- create -->
                             <button type="button" class="sm:p-2 p-1 rounded-full relative sm:bg-secondery dark:text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 max-sm:hidden">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15">
+                                    </path>
                                 </svg>
                                 <ion-icon name="add-circle-outline" class="sm:hidden text-2xl "></ion-icon>
                             </button>
@@ -151,7 +152,8 @@ if ($client = $recupUser->fetch()) {
 
                                     <!-- slide nav -->
                                     <div class="justify-center mt-2 -mb-2 hidden dark:flex">
-                                        <ul class="inline-flex flex-wrap justify-center gap-1 uk-dotnav uk-slider-nav"> </ul>
+                                        <ul class="inline-flex flex-wrap justify-center gap-1 uk-dotnav uk-slider-nav">
+                                        </ul>
                                     </div>
 
                                 </div>
@@ -167,7 +169,8 @@ if ($client = $recupUser->fetch()) {
                                     <path d="M5.85 3.5a.75.75 0 00-1.117-1 9.719 9.719 0 00-2.348 4.876.75.75 0 001.479.248A8.219 8.219 0 015.85 3.5zM19.267 2.5a.75.75 0 10-1.118 1 8.22 8.22 0 011.987 4.124.75.75 0 001.48-.248A9.72 9.72 0 0019.266 2.5z" />
                                     <path fill-rule="evenodd" d="M12 2.25A6.75 6.75 0 005.25 9v.75a8.217 8.217 0 01-2.119 5.52.75.75 0 00.298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 107.48 0 24.583 24.583 0 004.83-1.244.75.75 0 00.298-1.205 8.217 8.217 0 01-2.118-5.52V9A6.75 6.75 0 0012 2.25zM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 004.496 0l.002.1a2.25 2.25 0 11-4.5 0z" clip-rule="evenodd" />
                                 </svg>
-                                <div class="absolute top-0 right-0 -m-1 bg-red-600 text-white text-xs px-1 rounded-full">6</div>
+                                <div class="absolute top-0 right-0 -m-1 bg-red-600 text-white text-xs px-1 rounded-full">
+                                    6</div>
                                 <ion-icon name="notifications-outline" class="sm:hidden text-2xl"></ion-icon>
                             </button>
                             <div class="hidden bg-white pr-1.5 rounded-lg drop-shadow-xl dark:bg-slate-700 md:w-[365px] w-screen border2" uk-drop="offset:6;pos: bottom-right; mode: click; animate-out: true; animation: uk-animation-scale-up uk-transform-origin-top-right ">
@@ -182,7 +185,8 @@ if ($client = $recupUser->fetch()) {
                                             <nav class="text-sm">
                                                 <a href="#"> <ion-icon class="text-xl shrink-0" name="checkmark-circle-outline"></ion-icon> Mark all as read</a>
                                                 <a href="#"> <ion-icon class="text-xl shrink-0" name="settings-outline"></ion-icon> Notification setting</a>
-                                                <a href="#"> <ion-icon class="text-xl shrink-0" name="notifications-off-outline"></ion-icon> Mute Notification </a>
+                                                <a href="#"> <ion-icon class="text-xl shrink-0" name="notifications-off-outline"></ion-icon> Mute Notification
+                                                </a>
                                             </nav>
                                         </div>
                                     </div>
@@ -196,60 +200,78 @@ if ($client = $recupUser->fetch()) {
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
                                             <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Alexa Gray</b> started following you. Welcome him to your profile. 👋 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 4 hours ago </div>
-                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5"></div>
+                                                <p> <b class="font-bold mr-1"> Alexa Gray</b> started following you.
+                                                    Welcome him to your profile. 👋 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 4 hours
+                                                    ago </div>
+                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5">
+                                                </div>
                                             </div>
                                         </a>
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
                                             <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-7.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1">Jesse Steeve</b> mentioned you in a story. Check it out and reply. 📣 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours ago </div>
+                                                <p> <b class="font-bold mr-1">Jesse Steeve</b> mentioned you in a story.
+                                                    Check it out and reply. 📣 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
                                             </div>
                                         </a>
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
                                             <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-6.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Alexa stella</b> commented on your photo “Wow, stunning shot!” 💬 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours ago </div>
+                                                <p> <b class="font-bold mr-1"> Alexa stella</b> commented on your photo
+                                                    “Wow, stunning shot!” 💬 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
                                             </div>
                                         </a>
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
                                             <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> John Michael</b> who you might know, is on socialite.</p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 2 hours ago </div>
+                                                <p> <b class="font-bold mr-1"> John Michael</b> who you might know, is
+                                                    on socialite.</p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 2 hours
+                                                    ago </div>
                                             </div>
                                             <button type="button" class="button text-white bg-primary">fallow</button>
                                         </a>
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
                                             <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Sarah Gray</b> sent you a message. He wants to chat with you. 💖 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 4 hours ago </div>
-                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5"></div>
+                                                <p> <b class="font-bold mr-1"> Sarah Gray</b> sent you a message. He
+                                                    wants to chat with you. 💖 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 4 hours
+                                                    ago </div>
+                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5">
+                                                </div>
                                             </div>
                                         </a>
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
                                             <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-4.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Jesse Steeve</b> sarah tagged you <br> in a photo of your birthday party. 📸 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours ago </div>
+                                                <p> <b class="font-bold mr-1"> Jesse Steeve</b> sarah tagged you <br> in
+                                                    a photo of your birthday party. 📸 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
                                             </div>
                                         </a>
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
                                             <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Lewis Lewis</b> mentioned you in a story. Check it out and reply. 📣 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours ago </div>
+                                                <p> <b class="font-bold mr-1"> Lewis Lewis</b> mentioned you in a story.
+                                                    Check it out and reply. 📣 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
                                             </div>
                                         </a>
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
                                             <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-7.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Martin Gray</b> liked your photo of the Eiffel Tower. 😍 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours ago </div>
+                                                <p> <b class="font-bold mr-1"> Martin Gray</b> liked your photo of the
+                                                    Eiffel Tower. 😍 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
                                             </div>
                                         </a>
 
@@ -260,10 +282,12 @@ if ($client = $recupUser->fetch()) {
 
                                 <!-- footer -->
                                 <a href="#">
-                                    <div class="text-center py-4 border-t border-slate-100 text-sm font-medium text-blue-600 dark:text-white dark:border-gray-600"> View Notifications </div>
+                                    <div class="text-center py-4 border-t border-slate-100 text-sm font-medium text-blue-600 dark:text-white dark:border-gray-600">
+                                        View Notifications </div>
                                 </a>
 
-                                <div class="w-3 h-3 absolute -top-1.5 right-3 bg-white border-l border-t rotate-45 max-md:hidden dark:bg-dark3 dark:border-transparent"></div>
+                                <div class="w-3 h-3 absolute -top-1.5 right-3 bg-white border-l border-t rotate-45 max-md:hidden dark:bg-dark3 dark:border-transparent">
+                                </div>
                             </div>
 
                             <!-- messages -->
@@ -279,8 +303,12 @@ if ($client = $recupUser->fetch()) {
                                     <div class="p-4 py-5 flex items-center gap-4">
                                         <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-10 h-10 rounded-full shadow">
                                         <div class="flex-1">
-                                            <h4 class="text-sm font-medium text-black"><?= $nom_client ?></h4>
-                                            <div class="text-sm mt-1 text-blue-600 font-light dark:text-white/70"><?= '@' . $username_client ?></div>
+                                            <h4 class="text-sm font-medium text-black">
+                                                <?= $nom_client ?>
+                                            </h4>
+                                            <div class="text-sm mt-1 text-blue-600 font-light dark:text-white/70">
+                                                <?= '@' . $username_client ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </a>
@@ -318,7 +346,8 @@ if ($client = $recupUser->fetch()) {
                                     <a href="../../../logout.php">
                                         <div class="flex items-center gap-2.5 hover:bg-secondery p-2 px-2.5 rounded-md dark:hover:bg-white/10">
                                             <svg class="w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                                </path>
                                             </svg>
                                             Se deconnecter
                                         </div>
@@ -361,19 +390,21 @@ if ($client = $recupUser->fetch()) {
                     <nav id="side">
 
                         <ul>
-                            <li class="active">
-                                <a href="#">
+                            <li>
+                                <a href="user_page.php">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                         <path fill-rule="evenodd" d="M11.3 3.3a1 1 0 0 1 1.4 0l6 6 2 2a1 1 0 0 1-1.4 1.4l-.3-.3V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3c0 .6-.4 1-1 1H7a2 2 0 0 1-2-2v-6.6l-.3.3a1 1 0 0 1-1.4-1.4l2-2 6-6Z" clip-rule="evenodd" />
                                     </svg>
 
-                                    <span> Bourse du commerce </span>
+                                    <span> Acceuil </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="notif.php">
-                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2Zm-13.2-.8a1 1 0 0 1-1-1c0-2.3.9-4.6 2.5-6.4a1 1 0 1 1 1.5 1.4 7.4 7.4 0 0 0-2 5 1 1 0 0 1-1 1Zm16.2 0a1 1 0 0 1-1-1c0-1.8-.7-3.6-2-5a1 1 0 0 1 1.5-1.4c1.6 1.8 2.5 4 2.5 6.4a1 1 0 0 1-1 1ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
+                                <a href="#">
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2Zm-13.2-.8a1 1 0 0 1-1-1c0-2.3.9-4.6 2.5-6.4a1 1 0 1 1 1.5 1.4 7.4 7.4 0 0 0-2 5 1 1 0 0 1-1 1Zm16.2 0a1 1 0 0 1-1-1c0-1.8-.7-3.6-2-5a1 1 0 0 1 1.5-1.4c1.6 1.8 2.5 4 2.5 6.4a1 1 0 0 1-1 1ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
                                     </svg>
 
                                     <span> Notifications </span>
@@ -505,204 +536,108 @@ if ($client = $recupUser->fetch()) {
 
         <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
-            <!-- timeline -->
+            <div class="mb-3">
+                <h1 class=" text-center font-bold text-2xl">DETAILS DU PRODUITS</h1>
+            </div>
+
             <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
 
                 <!-- search -->
-
-
                 <div class="flex-1 mx-auto  ">
 
-                    <!-- stories -->
-
-
-                    <!-- feed story -->
                     <div class="md:max-w-[650px] mx-auto flex-1 xl:space-y-6 space-y-3">
-
-                        <!-- add story -->
-
-
-                        <!--  post image-->
-
-
-                        <!--  post image with slider-->
 
                         <div class="flex items-center py-3 dark:border-gray-600">
 
-                            <!-- Champ de recherche -->
-                            <input type="text" placeholder="Rechercher un produit" class="flex-1 border-none bg-transparent focus:outline-none dark:text-white rounded-l-md" />
-                            <!-- Bouton de suffixe -->
-                            <button class="flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-md ml-2">
-                                <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                </svg>
-                            </button>
-                        </div>
+                            <!--  TITRE DU PRODUIT  -->
+                            <h1 class="text-xl">TITRE DU PRODUIT</h1>
 
-                        <div class="flex justify-between">
-                            <!-- Dropdown 1 -->
-                            <div class="dropdown" style="width: calc(25% - 10px);">
-                                <!-- Dropdown Trigger -->
-                                <select class="dropdown-trigger w-full">
-                                    <option value="" disabled selected>Achat</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                    <option value="option4">Option 4</option>
-                                    <option value="option5">Option 5</option>
-                                </select>
-                            </div>
-                            <!-- Dropdown 2 -->
-                            <div class="dropdown" style="width: calc(25% - 10px);">
-                                <!-- Dropdown Trigger -->
-                                <select class="dropdown-trigger w-full">
-                                    <option value="" disabled selected>Domaine</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                    <option value="option4">Option 4</option>
-                                    <option value="option5">Option 5</option>
-                                </select>
-                            </div>
-                            <!-- Dropdown 3 -->
-                            <div class="dropdown" style="width: calc(25% - 10px);">
-                                <!-- Dropdown Trigger -->
-                                <select class="dropdown-trigger w-full">
-                                    <option value="" disabled selected>Pays</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                    <option value="option4">Option 4</option>
-                                    <option value="option5">Option 5</option>
-                                </select>
-                            </div>
-                            <!-- Dropdown 4 -->
-                            <div class="dropdown" style="width: calc(25%);">
-                                <!-- Dropdown Trigger -->
-                                <select class="dropdown-trigger w-full">
-                                    <option value="" disabled selected>Detaillant</option>
-                                    <option value="option1">Option 1</option>
-                                    <option value="option2">Option 2</option>
-                                    <option value="option3">Option 3</option>
-                                    <option value="option4">Option 4</option>
-                                    <option value="option5">Option 5</option>
-                                </select>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" width="300" height="250" viewBox="0 0 709.53268 558.59384" xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <rect x="0.27492" y="0.36501" width="643.86162" height="412.35762" fill="#e6e6e6" />
-                            <rect x="18.68599" y="52.08494" width="607.03947" height="336.24257" fill="#fff" />
-                            <rect width="643.86163" height="27.3536" fill="#2f69f3" />
-                            <circle cx="20.327" cy="13.98461" r="5.06978" fill="#fff" />
-                            <circle cx="39.57061" cy="13.98461" r="5.06978" fill="#fff" />
-                            <circle cx="58.81422" cy="13.98461" r="5.06978" fill="#fff" />
-                            <rect x="73.84385" y="86.97284" width="155.98055" height="266.46677" fill="#e6e6e6" />
-                            <rect x="256.7496" y="86.97284" width="129.9838" height="73.34799" fill="#2f69f3" />
-                            <rect x="256.7496" y="180.74686" width="129.9838" height="78.91873" fill="#e6e6e6" />
-                            <rect x="256.7496" y="280.09161" width="129.9838" height="73.34799" fill="#e6e6e6" />
-                            <rect x="414.58707" y="86.97284" width="155.98056" height="116.12476" fill="#e6e6e6" />
-                            <rect x="414.58707" y="237.31485" width="155.98056" height="116.12476" fill="#e6e6e6" />
-                            <path d="M755.71223,382.14309v-25a33.5,33.5,0,1,1,67,0v25a4.50508,4.50508,0,0,1-4.5,4.5h-58A4.50508,4.50508,0,0,1,755.71223,382.14309Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
-                            <polygon points="593.514 536.786 581.698 540.056 563.462 496.038 580.901 491.212 593.514 536.786" fill="#ffb8b8" />
-                            <path d="M819.38459,708.28158h23.64387a0,0,0,0,1,0,0v14.88687a0,0,0,0,1,0,0H804.49773a0,0,0,0,1,0,0v0A14.88686,14.88686,0,0,1,819.38459,708.28158Z" transform="translate(-406.29299 74.94457) rotate(-15.46951)" fill="#2f2e41" />
-                            <polygon points="470.328 545.875 458.068 545.875 452.235 498.587 470.33 498.587 470.328 545.875" fill="#ffb8b8" />
-                            <path d="M449.31065,542.37161h23.64387a0,0,0,0,1,0,0v14.88687a0,0,0,0,1,0,0H434.42379a0,0,0,0,1,0,0v0A14.88686,14.88686,0,0,1,449.31065,542.37161Z" fill="#2f2e41" />
-                            <path d="M700.77825,452.301a10.0558,10.0558,0,0,0,15.392.91737l32.59018,14.65807L745.796,449.54488l-30.4937-11.10914a10.11028,10.11028,0,0,0-14.524,13.86524Z" transform="translate(-245.23366 -170.70308)" fill="#ffb8b8" />
-                            <path d="M768.49246,562.53911c-10.23925,0-20.83911-1.52539-29.74878-6.06152a38.41551,38.41551,0,0,1-19.70874-23.56543c-4.64233-14.69922,1.21094-29.14014,6.87134-43.105,3.50757-8.65381,6.82056-16.82715,7.68018-24.88379l.30029-2.86036c1.33887-12.84765,2.49512-23.94335,8.897-28.105,3.31836-2.15722,7.77979-2.28027,13.64063-.377l55.04492,17.88135-2.02393,104.49023-.33447.11182C808.82279,556.16118,789.41824,562.53911,768.49246,562.53911Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
-                            <path d="M755.46218,401.05127s27-8,48-5c0,0-12,66-8,88s-69.5,8.5-54.5-12.5l5-25s-10-10-1-22Z" transform="translate(-245.23366 -170.70308)" fill="#2f69f3" />
-                            <path d="M742.18192,560.55815l-33.27637-6.23926,11.61768-89.40673c.78125-2.4961,18.77807-59.14307,26.95166-62.208a139.51716,139.51716,0,0,1,18.16626-5.04688l1.18383-.23681-6.67236,10.00879-26.56445,63.65429Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
-                            <path d="M724.84329,705.62163l-42.99487-7.16553,24.12817-98.52392,35.90332-134.73731.35425,2.39258c.02808.17822,3.38208,17.77978,53.15064,9.96973l.43774-.06836.12085.42627,60.1521,212.53759-48.99048,8.165L762.42215,543.55083Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
-                            <path d="M784.43558,577.2896l.02685-.75635c.03-.83984,2.988-84.37256,2-117.96729-.99145-33.709,9.92188-62.90087,10.03223-63.19189l.08887-.23438.24121-.06933c14.11963-4.03369,26.3689,8.00537,26.491,8.12744l.17211.17188-4.02124,33.17626,17.21607,120.64161Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
-                            <circle cx="537.09466" cy="190.79701" r="24.56103" fill="#ffb8b8" />
-                            <path d="M747.78694,359.14309a26.53,26.53,0,0,1,26.5-26.5h5.00024a26.52977,26.52977,0,0,1,26.49976,26.5v.5H795.22029l-3.604-10.09179-.7207,10.09179h-5.46094l-1.81836-5.09179-.36377,5.09179H747.78694Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
-                            <path d="M779.91118,389.45438a4.43341,4.43341,0,0,1-.3523-4.707c5.29859-10.07813,12.71729-28.7002,2.87012-40.18457l-.70776-.8252h28.5874V386.6575l-25.96948,4.582a4.59632,4.59632,0,0,1-.79639.07032A4.48193,4.48193,0,0,1,779.91118,389.45438Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
-                            <path d="M664.81368,212.24945a135.01972,135.01972,0,1,0,7.65509,199.4028L838.08687,551.4a12.44209,12.44209,0,0,0,16.06592-19.00287l-.01831-.01544L688.51631,392.63391A135.02729,135.02729,0,0,0,664.81368,212.24945ZM654.13692,379.17712a101.15765,101.15765,0,1,1-12.0766-142.54788l.00006,0A101.15764,101.15764,0,0,1,654.13692,379.17712Z" transform="translate(-245.23366 -170.70308)" fill="#3f3d56" />
-                            <path d="M511.589,391.25375a101.16315,101.16315,0,0,1-17.16559-135.989q-2.90121,2.92177-5.60938,6.1199A101.15767,101.15767,0,1,0,643.43849,391.85605q2.702-3.20224,5.089-6.559A101.163,101.163,0,0,1,511.589,391.25375Z" transform="translate(-245.23366 -170.70308)" opacity="0.3" style="isolation:isolate" />
-                            <path d="M790.214,495.239a10.05578,10.05578,0,0,0,12.42386-9.13254l34.433-9.55748L823.074,464.34553l-30.55233,10.94686A10.11027,10.11027,0,0,0,790.214,495.239Z" transform="translate(-245.23366 -170.70308)" fill="#ffb8b8" />
-                            <path d="M804.52567,490.18022,802.43021,470.274l28.76245-15.86914-18.75244-22.70019L815.5,406.20512l7.61987-3.26562.23707.30469c3.593,4.62011,35.10522,45.28076,35.10522,50.30713,0,5.16259-6.02856,20.32324-14.27637,24.44726-7.95581,3.978-37.83081,11.70947-39.09863,12.03711Z" transform="translate(-245.23366 -170.70308)" fill="#2f2e41" />
-                            <path d="M953.76634,729.29692h-381a1,1,0,1,1,0-2h381a1,1,0,0,1,0,2Z" transform="translate(-245.23366 -170.70308)" fill="#ccc" />
-                        </svg>
-                    
+                    <div class="grid sm:grid-cols-2 gap-3" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
 
-
-                        <div class="text-sm text-gray-500 mt-6 text-center">Tapez dans la barre de recherche le produit ou le service dont vous avez besoin</div>
-                    </div> -->
-
-
-
-
-                    <?php
-                    $requete = $conn->prepare('SELECT * FROM prodUser ORDER BY date_ajout DESC');
-                    $requete->execute();
-
-                    while ($produit = $requete->fetch()) {
-                    ?>
-                        <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
-                            <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                                <div class="flex-1">
-                                    <a href="detailprod.php?id=<?= $produit['id_prod'] ?>"> 
-                                        <h4 class="text-lg text-black dark:text-white"><?= $produit['nomArt']; ?></h4>
-                                    </a>
-                                    <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
-                                        <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span class="ml-1"><?= $produit['villePro']; ?>, <?= $produit['comnProd'] ?></span>
-                                    </div>
-                                </div>
-                                <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">Produit</div>
-                            </div>
-                            <div class="sm:px-4 p-2.5 pt-0">
-                                <p class="font-normal"><?= $produit['desProd']; ?></p>
-                            </div>
-                            <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                                <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
-                                <div class="text-xs text-gray-500">2 hours ago</div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title "> Type du produit </h4>
+                                </a>  
+                                <p>Lorem upsum</p>                              
                             </div>
                         </div>
-                    <?php
-                    }
-                    ?>
-
-<?php
-                    $requete = $conn->prepare('SELECT * FROM servUser ORDER BY date_ajout DESC');
-                    $requete->execute();
-
-                    while ($service = $requete->fetch()) {
-                    ?>
-                        <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
-                            <div class="flex gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                                <div class="flex-1">
-                                    <a href="detailprod.php?id=<?= $service['id_serv'] ?>"> 
-                                        <h4 class="text-lg text-black dark:text-white"><?= $service['nomMet']; ?></h4>
-                                    </a>
-                                    <div class="flex items-center text-xs text-gray-500 dark:text-white/80">
-                                        <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                            <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span class="ml-1"><?= $service['villeServ']; ?>, <?= $service['comnServ']?></span>
-                                    </div>
-                                </div>
-                                <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">Service</div>
-                            </div>
-                            <div class="sm:px-4 p-2.5 pt-0">
-                                <p class="font-normal"><?= $service['desServ']; ?></p>
-                            </div>
-                            <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                                <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
-                                <div class="text-xs text-gray-500">2 hours ago</div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> conditionnalité </h4>
+                                </a>    
+                                <p>Lorem upsum</p>                              
                             </div>
                         </div>
-                    <?php
-                    }
-                    ?>
-
-
-
-
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> Titre du produit </h4>
+                                </a>  
+                                <p>Lorem upsum</p>                                
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> format </h4>
+                                </a>  
+                                <p>Lorem upsum</p>                                
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> Quantité </h4>
+                                </a>     
+                                <p>Lorem upsum</p>                             
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> Quantité </h4>
+                                </a>    
+                                <p>Lorem upsum</p>                              
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> prix par unité </h4>
+                                </a>   
+                                <p>Lorem upsum</p>                               
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> mode de paiement </h4>
+                                </a>  
+                                <p>Lorem upsum</p>                                
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> capacité de livrer </h4>
+                                </a>   
+                                <p>Lorem upsum</p>                               
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <a href="timeline-page.html">
+                                    <h4 class="card-title"> zone econo </h4>
+                                </a>  
+                                <p>Lorem upsum</p>                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -710,88 +645,25 @@ if ($client = $recupUser->fetch()) {
 
                 <!-- sidebar -->
 
-                <div class="flex-2" style="width: 350px; ">
+                <div class="flex-2 items-center justify-center" style="width: 350px; ">
 
-                    <div class="lg:space-y-4 lg:pb-8 max-lg:hidden sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+    <div class="lg:space-y-4 lg:pb-8 max-lg:hidden sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
+        <div class=" p-5 px-6 border1 dark:bg-dark2">
+            <img src="assets/images/avatars/informatique_0.jpg" alt="">
+        </div>
 
+        <div class="flex flex-col justify-center mt-4"> <!-- Utilisation de flexbox pour centrer verticalement -->
+            <a href="#" class="p-2 text-center text-white text-sm bg-green-500 rounded">Commander</a>
+        </div>
 
-                        <div class="box p-5 px-6 border1 dark:bg-dark2">
+    </div>
+</div>
 
-                            <div class="flex justify-between text-black dark:text-white">
-                                <h3 class="font-bold text-base">Thème les plus recherché</h3>
-                                <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
-                            </div>
-
-                            <div class="space-y-3.5 capitalize text-xs font-normal mt-5 mb-2 text-gray-600 dark:text-white/80">
-                                <a href="#">
-                                    <div class="flex items-center gap-3 p">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> artificial intelligence </h4>
-                                            <div class="mt-0.5"> 1,245,62 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> Web developers</h4>
-                                            <div class="mt-0.5"> 1,624 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> Ui Designers</h4>
-                                            <div class="mt-0.5"> 820 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-
-
-                            </div>
-
-
-                        </div>
-
-                    </div>
-                </div>
 
 
             </div>
+
 
         </main>
 
