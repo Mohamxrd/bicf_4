@@ -51,7 +51,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $type_prod = $prods['typeProd'];
         $conditionnement_prod = $prods['condProd'];
         $format_prod = $prods['formatProd'];
-        $quantite_prod = $prods['qteProd']; // Modifier en fonction du nom de la colonne
+        $quantite_prodmin = $prods['qteProd_min'];
+        $quatite_promax = $prods['qteProd_max'];
         $livraison_prod = $prods['LivreCapProd']; // Modifier en fonction du nom de la colonne
         $zone_economique_prod = $prods['zonecoProd']; // Modifier en fonction du nom de la colonne
         $ville_prod = $prods['villePro']; // Modifier en fonction du nom de la colonne
@@ -565,7 +566,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
             <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
 
                 <!-- search -->
-                <div class="flex-1 mx-auto  ">
+                <div class="mb-4 flex-1 mx-auto  ">
 
                     <div class="md:max-w-[650px] mx-auto flex-1 xl:space-y-6 space-y-3">
 
@@ -577,58 +578,64 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                         </div>
                     </div>
 
-                    <div class="grid sm:grid-cols-2 gap-3" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
+                    <div class="mb-4 grid sm:grid-cols-2 gap-3" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
 
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                    <h4 class="card-title "> Type du produit </h4>
+                                <h4 class="card-title "> Type du produit </h4>
                                 <p><?= $type_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                    <h4 class="card-title"> conditionnement </h4>
+                                <h4 class="card-title"> conditionnement </h4>
                                 <p><?= $conditionnement_prod ?></p>
                             </div>
                         </div>
 
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                    <h4 class="card-title"> format </h4>
+                                <h4 class="card-title"> format </h4>
                                 <p><?= $format_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                    <h4 class="card-title"> Quantité </h4>
-                                <p><?= $quantite_prod ?></p>
+                                <h4 class="card-title"> Quantité traité</h4>
+                                <p>[<?= $quantite_prodmin ?> - <?= $quatite_promax ?>]</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                    <h4 class="card-title"> Prix par unité </h4>
+                                <h4 class="card-title"> Prix par unité </h4>
                                 <p><?= $prix_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                    <h4 class="card-title">Capacité de livré</h4>
+                                <h4 class="card-title">Capacité de livré</h4>
                                 <p><?= $livraison_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                    <h4 class="card-title"> Zone economique </h4>
+                                <h4 class="card-title"> Zone economique </h4>
                                 <p><?= $zone_economique_prod ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
-                                    <h4 class="card-title"> Ville, Commune</h4>
+                                <h4 class="card-title"> Ville, Commune</h4>
                                 <p><?= $ville_prod ?>, <?= $comn ?></p>
                             </div>
                         </div>
 
+                    </div>
+                    <div class=" card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Description</h4>
+                                <p><?= $description_prod?></p>
+                            </div>
                     </div>
                 </div>
 
@@ -636,18 +643,115 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                 <div class="flex-1 items-center justify-center">
 
-                    <div class="lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+                    <div class="flex items-center flex-col lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
                         <div class=" p-5 m-5  px-6 border1 dark:bg-dark2">
                             <?php if (!empty($prods['imgProd'])) : ?>
-                                <img src="<?= $prods['imgProd'] ?>" alt="Image du produit" >
+                                <img src="<?= $prods['imgProd'] ?>" alt="Image du produit">
                             <?php endif; ?>
                         </div>
 
-                        <div class="flex flex-col justify-center mt-4 "> <!-- Utilisation de flexbox pour centrer verticalement -->
-                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
-                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Négocier</a>
-                            <a href="#" class="p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Grouper</a>
+                        <div class="flex  flex-col justify-center items-center mt-4 w-[300px]"> <!-- Utilisation de flexbox pour centrer verticalement -->
+                            <a href="#" uk-toggle="target: #achatd" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
+                            <a href="#" uk-toggle="target: #achatn" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Négocier</a>
+                            <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Grouper</a>
+                        </div>
+
+                        <div class="lg:p-20 p-10" id="achatd" uk-modal>
+
+                            <div class="relative mx-auto bg-white  rounded-lg shadow-xl uk-modal-dialog w-[400px]">
+
+                                <form method="post">
+
+                                    <div class="px-6 py-4 border-b">
+                                        <h2 class="text-xl font-semibold">Achat direct</h2>
+                                    </div>
+
+
+                                    <div class="p-6 overflow-y-auto " uk-overflow-auto>
+                                        <input type="number" class="w-full mb-3" placeholder="Quantité" name="Quantité">
+                                        <input type="text" class="w-full mb-3" placeholder="Localité" name="comn">
+                                        <textarea class="w-full h-20" name="desProd" id="" cols="30" rows="10" placeholder="Description"></textarea>
+
+
+                                    </div>
+
+
+                                    <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
+                                        <button class="px-4 py-1.5 rounded-md uk-modal-close" type="reset">Annuler</button>
+                                        <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Envoyé</button>
+                                    </div>
+                                </form>
+
+
+
+                                <!-- close button -->
+                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="lg:p-20 p-10" id="achatn" uk-modal>
+
+                            <div class="relative mx-auto bg-white  rounded-lg shadow-xl uk-modal-dialog w-[400px]">
+
+                                <div class="px-6 py-4 border-b">
+                                    <h2 class="text-xl font-semibold">Achat negocier</h2>
+                                </div>
+
+                                <div class="p-6 overflow-y-auto h-96" uk-overflow-auto>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                                </div>
+
+                                <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
+                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Cancel</button>
+                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Save</button>
+                                </div>
+
+                                <!-- close button -->
+                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="lg:p-20 p-10" id="achatg" uk-modal>
+
+                            <div class="relative mx-auto bg-white  rounded-lg shadow-xl uk-modal-dialog w-[400px]">
+
+                                <div class="px-6 py-4 border-b">
+                                    <h2 class="text-xl font-semibold">Achat direct</h2>
+                                </div>
+
+                                <div class="p-6 overflow-y-auto h-96" uk-overflow-auto>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+                                </div>
+
+                                <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
+                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Cancel</button>
+                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Save</button>
+                                </div>
+
+                                <!-- close button -->
+                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+
+                            </div>
+
                         </div>
 
                     </div>
