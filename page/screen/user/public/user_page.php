@@ -658,8 +658,12 @@ if ($client = $recupUser->fetch()) {
                             <div class="sm:px-4 p-2.5 pt-0">
                                 <p class="font-normal"><?= $produit['desProd']; ?></p>
                             </div>
+                            <div class="sm:px-4 p-2.5 pt-0">
+                                <h3 class=""><?= $produit['PrixProd'] ?> CFA</h3>
+                            </div>
+
                             <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                                <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
+                                <button class="text-white p-2 bg-green-500 rounded-md">Faire une demande</button>
                                 <div class="text-xs text-gray-500">2 hours ago</div>
                             </div>
                         </div>
@@ -691,8 +695,11 @@ if ($client = $recupUser->fetch()) {
                             <div class="sm:px-4 p-2.5 pt-0">
                                 <p class="font-normal"><?= $service['desServ']; ?></p>
                             </div>
+                            <div class="sm:px-4 p-2.5 pt-0">
+                                <h3 class=""><?= $service['PrixServ'] ?> CFA</h3>
+                            </div>
                             <div class="flex justify-between items-center  dark:text-white/80 p-4 w-full">
-                                <button class="text-white p-2 bg-green-500 rounded-md">Commander directement</button>
+                                <button class="text-white p-2 bg-green-500 rounded-md">Faire une demande</button>
                                 <div class="text-xs text-gray-500">2 hours ago</div>
                             </div>
                         </div>

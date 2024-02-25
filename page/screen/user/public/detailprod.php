@@ -56,8 +56,36 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $livraison_prod = $prods['LivreCapProd']; // Modifier en fonction du nom de la colonne
         $zone_economique_prod = $prods['zonecoProd']; // Modifier en fonction du nom de la colonne
         $ville_prod = $prods['villePro']; // Modifier en fonction du nom de la colonne
-        $comn = $prods['comnProd']; // Modifier en fonction du nom de la colonne
+        $comn = $prods['comnProd'];
+        $id_vendeur = $prods['id_user']; 
+        
+        // Modifier en fonction du nom de la colonne
         // Ajoutez d'autres attributs au besoin
+    }
+}
+if (isset($_POST['submit'])) {
+    // Vérifier si les champs requis sont vides
+    if (empty($_POST['Quantité']) || empty($_POST['local']) || empty($_POST['desProd'])) {
+        $errorMsg = 'Veuillez remplir tous les champs.';
+    } else {
+        // Récupérer les valeurs des champs du formulaire
+        $quantite = htmlspecialchars($_POST['Quantité']);
+        $local = htmlspecialchars($_POST['local']);
+        $descrip = htmlspecialchars($_POST['desProd']);
+
+        // Récupérer l'ID de l'acheteur depuis la session
+        $id_acheteur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+
+        // Préparer la requête d'insertion
+        $inserAchat = $conn->prepare("INSERT INTO achatProd(quantiteProd, descrip, localite, id_user1, id_user2, id_prod) VALUES(?,?,?,?,?,?)");
+
+        // Associer les valeurs aux paramètres et exécuter la requête
+        if ($inserAchat->execute([$quantite, $descrip, $local, $id_acheteur, $id_vendeur, $id_prod])) {
+            $successMsg = "Votre demande a été envoyée avec succès";
+        } else {
+            // Afficher une erreur si la requête échoue
+            $errorMsg = "Une erreur est survenue lors de l'envoi de votre demande : " . implode(" ", $conn->errorInfo());
+        }
     }
 }
 
@@ -425,7 +453,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                                 </a>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="notif.php">
                                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M17.1 12.6v-1.8A5.4 5.4 0 0 0 13 5.6V3a1 1 0 0 0-2 0v2.4a5.4 5.4 0 0 0-4 5.5v1.8c0 2.4-1.9 3-1.9 4.2 0 .6 0 1.2.5 1.2h13c.5 0 .5-.6.5-1.2 0-1.2-1.9-1.8-1.9-4.2Zm-13.2-.8a1 1 0 0 1-1-1c0-2.3.9-4.6 2.5-6.4a1 1 0 1 1 1.5 1.4 7.4 7.4 0 0 0-2 5 1 1 0 0 1-1 1Zm16.2 0a1 1 0 0 1-1-1c0-1.8-.7-3.6-2-5a1 1 0 0 1 1.5-1.4c1.6 1.8 2.5 4 2.5 6.4a1 1 0 0 1-1 1ZM8.8 19a3.5 3.5 0 0 0 6.4 0H8.8Z" />
                                     </svg>
@@ -653,8 +681,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                         <div class="flex  flex-col justify-center items-center mt-4 w-[300px]"> <!-- Utilisation de flexbox pour centrer verticalement -->
                             <a href="#" uk-toggle="target: #achatd" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
-                            <a href="#" uk-toggle="target: #achatn" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Négocier</a>
-                            <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Grouper</a>
+                            
+                            <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Achat Grouper</a>
                         </div>
 
                         <div class="lg:p-20 p-10" id="achatd" uk-modal>
@@ -670,16 +698,14 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
                                     <div class="p-6 overflow-y-auto " uk-overflow-auto>
                                         <input type="number" class="w-full mb-3" placeholder="Quantité" name="Quantité">
-                                        <input type="text" class="w-full mb-3" placeholder="Localité" name="comn">
+                                        <input type="text" class="w-full mb-3" placeholder="Localité" name="local">
                                         <textarea class="w-full h-20" name="desProd" id="" cols="30" rows="10" placeholder="Description"></textarea>
-
-
                                     </div>
 
 
                                     <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
                                         <button class="px-4 py-1.5 rounded-md uk-modal-close" type="reset">Annuler</button>
-                                        <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Envoyé</button>
+                                        <button class="px-5 py-1.5 bg-gray-100 rounded-md " type="submit" name="submit">Envoyé</button>
                                     </div>
                                 </form>
 
@@ -776,6 +802,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <!-- Ion icon -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
+
 
 
 </body>

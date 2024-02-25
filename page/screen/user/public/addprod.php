@@ -47,52 +47,60 @@ if (isset($_POST['submit'])) {
     // Assurez-vous que le formulaire est soumis
 
     // Assurez-vous que les données sont présentes et validez-les si nécessaire
-    $Nom_du_produit = htmlspecialchars($_POST['titre_prod']);
-    $Type_de_produit = htmlspecialchars($_POST['type_prod']);
-    $Conditionnement = htmlspecialchars($_POST['condprod']);
-    $format = htmlspecialchars($_POST['formatprod']);
+    $Nom_du_produit = isset($_POST['titre_prod']) ? htmlspecialchars($_POST['titre_prod']) : '';
+    $Type_de_produit = isset($_POST['type_prod']) ? htmlspecialchars($_POST['type_prod']) : '';
+    $Conditionnement = isset($_POST['condprod']) ? htmlspecialchars($_POST['condprod']) : '';
+    $format = isset($_POST['formatprod']) ? htmlspecialchars($_POST['formatprod']) : '';
     $quantité_min = isset($_POST['Quantité-min']) ? intval($_POST['Quantité-min']) : 0;
     $quantité_max = isset($_POST['Quantité-max']) ? intval($_POST['Quantité-max']) : 0;
     $Prix_par_unité = isset($_POST['prixprod']) ? intval($_POST['prixprod']) : 0;
-    $livraison = htmlspecialchars($_POST['livraisonProd']);
-    $Zone_economique = htmlspecialchars($_POST['zoneeco']);
-    $ville = htmlspecialchars($_POST['ville']);
-    $comn = htmlspecialchars($_POST['comnprod']);
-    $descrip = htmlspecialchars($_POST['desProd']);
+    $livraison = isset($_POST['livraisonProd']) ? htmlspecialchars($_POST['livraisonProd']) : '';
+    $Zone_economique = isset($_POST['zoneeco']) ? htmlspecialchars($_POST['zoneeco']) : '';
+    $ville = isset($_POST['ville']) ? htmlspecialchars($_POST['ville']) : '';
+    $comn = isset($_POST['comnprod']) ? htmlspecialchars($_POST['comnprod']) : '';
+    $descrip = isset($_POST['desProd']) ? htmlspecialchars($_POST['desProd']) : '';
 
-    // Assurez-vous que le fichier image est téléchargé avec succès
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $image_name = $_FILES['image']['name']; // Nom de l'image
-        $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
-        $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
-        $target_file = $target_dir . basename($image_name);
+    // Vérifiez si tous les champs obligatoires sont remplis
+    if (empty($Nom_du_produit) || empty($Type_de_produit) || empty($Conditionnement) || empty($format) || empty($livraison) || empty($Zone_economique) || empty($ville) || empty($comn) || empty($descrip)) {
+        // Afficher un message d'erreur si un champ obligatoire est vide
+        $errorMsg = 'Veuillez remplir tous les champs.';
+    } else {
+        // Assurez-vous que le fichier image est téléchargé avec succès
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $image_name = $_FILES['image']['name']; // Nom de l'image
+            $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
+            $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
+            $target_file = $target_dir . basename($image_name);
 
-        // Déplacer l'image téléchargée vers le dossier de destination
-        if (move_uploaded_file($image_tmp_name, $target_file)) {
-            // L'image a été téléchargée avec succès
+            // Déplacer l'image téléchargée vers le dossier de destination
+            if (move_uploaded_file($image_tmp_name, $target_file)) {
+                // L'image a été téléchargée avec succès
 
-            // Récupération de l'ID de l'utilisateur à partir de la session
-            $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+                // Récupération de l'ID de l'utilisateur à partir de la session
+                $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
-            // Insertion des données dans la base de données
-            $insertProd = $conn->prepare('INSERT INTO prodUser(id_user, nomArt, typeProd, condProd, formatProd, qteProd_min, qteProd_max, PrixProd, LivreCapProd, zonecoProd, villePro, comnProd, imgProd, desProd) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                // Insertion des données dans la base de données
+                $insertProd = $conn->prepare('INSERT INTO prodUser(id_user, nomArt, typeProd, condProd, formatProd, qteProd_min, qteProd_max, PrixProd, LivreCapProd, zonecoProd, villePro, comnProd, imgProd, desProd) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
 
-            if ($insertProd->execute([$id_utilisateur, $Nom_du_produit, $Type_de_produit, $Conditionnement, $format, $quantité_min, $quantité_max, $Prix_par_unité, $livraison, $Zone_economique, $ville, $comn, $target_file, $descrip])) {
-                // Succès de l'insertion
-                echo "Le produit a été ajouté avec succès.";
+                if ($insertProd->execute([$id_utilisateur, $Nom_du_produit, $Type_de_produit, $Conditionnement, $format, $quantité_min, $quantité_max, $Prix_par_unité, $livraison, $Zone_economique, $ville, $comn, $target_file, $descrip])) {
+                    // Succès de l'insertion
+                    $successMsg = "Le produit a été ajouté avec succès.";
+                } else {
+                    // Erreur lors de l'insertion
+                    $errorMsg = "Une erreur s'est produite lors de l'insertion des données dans la base de données.";
+                }
             } else {
-                // Erreur lors de l'insertion
-                echo "Une erreur s'est produite lors de l'insertion des données dans la base de données.";
+                // Erreur lors du téléchargement de l'image
+                $errorMsg = "Une erreur s'est produite lors du téléchargement de l'image.";
             }
         } else {
-            // Erreur lors du téléchargement de l'image
-            echo "Une erreur s'est produite lors du téléchargement de l'image.";
+            // Erreur lors du téléchargement du fichier image
+            $errorMsg = "Veuillez sélectionner une image.";
         }
-    } else {
-        // Erreur lors du téléchargement du fichier image
-        echo "Une erreur s'est produite lors du téléchargement du fichier image.";
     }
 }
+
+
 
 
 
@@ -101,6 +109,7 @@ if (isset($_POST['submit'])) {
 if (isset($_POST['submit2'])) {
     // Assurez-vous que le formulaire est soumis
 
+    // Assurez-vous que les données sont présentes et validez-les si nécessaire
     $Nom_du_service = isset($_POST['nomserv']) ? htmlspecialchars($_POST['nomserv']) : '';
     $Experience = isset($_POST['experience']) ? htmlspecialchars($_POST['experience']) : '';
     $specialite = isset($_POST['specia']) ? htmlspecialchars($_POST['specia']) : '';
@@ -111,41 +120,45 @@ if (isset($_POST['submit2'])) {
     $comn = isset($_POST['comn']) ? htmlspecialchars($_POST['comn']) : '';
     $descrip = isset($_POST['descrip']) ? htmlspecialchars($_POST['descrip']) : '';
 
+    // Vérifiez si tous les champs obligatoires sont remplis
+    if (empty($Nom_du_service) || empty($Experience) || empty($specialite) || empty($nombre_Personnel) || empty($prix_Service) || empty($Zone_economique) || empty($ville) || empty($comn) || empty($descrip)) {
+        // Afficher un message d'erreur si un champ obligatoire est vide
+        $errorMsg2 = 'Veuillez remplir tous les champs.';
+    } else {
+        // Assurez-vous que le fichier image est téléchargé avec succès
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $image_name = $_FILES['image']['name']; // Nom de l'image
+            $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
+            $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
+            $target_file = $target_dir . basename($image_name);
 
+            // Déplacer l'image téléchargée vers le dossier de destination
+            if (move_uploaded_file($image_tmp_name, $target_file)) {
+                // L'image a été téléchargée avec succès
 
+                // Récupération de l'ID de l'utilisateur à partir de la session
+                $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
-    // Assurez-vous que le fichier image est téléchargé avec succès
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $image_name = $_FILES['image']['name']; // Nom de l'image
-        $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
-        $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
-        $target_file = $target_dir . basename($image_name);
-
-        // Déplacer l'image téléchargée vers le dossier de destination
-        if (move_uploaded_file($image_tmp_name, $target_file)) {
-            // L'image a été téléchargée avec succès
-
-            // Récupération de l'ID de l'utilisateur à partir de la session
-            $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
-
-            // Insertion des données dans la base de données
-            $insertProd = $conn->prepare('INSERT INTO servUser(id_user, nomMet, qalifServ, sepServ, qteServ, PrixServ, zonecoServ, villeServ, comnServ, imgServ, desServ) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
-            if ($insertProd->execute(array($id_utilisateur, $Nom_du_service, $Experience, $specialite, $nombre_Personnel, $prix_Service, $Zone_economique, $ville, $comn, $target_file, $descrip))) {
-                // Succès de l'insertion
-
+                // Insertion des données dans la base de données
+                $insertServ = $conn->prepare('INSERT INTO servUser(id_user, nomMet, qalifServ, sepServ, qteServ, PrixServ, zonecoServ, villeServ, comnServ, imgServ, desServ) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
+                if ($insertServ->execute(array($id_utilisateur, $Nom_du_service, $Experience, $specialite, $nombre_Personnel, $prix_Service, $Zone_economique, $ville, $comn, $target_file, $descrip))) {
+                    // Succès de l'insertion
+                    $successMsg2 = "Le service a été ajouté avec succès.";
+                } else {
+                    // Erreur lors de l'insertion
+                    $errorMsg2 = "Une erreur s'est produite lors de l'insertion des données dans la base de données.";
+                }
             } else {
-                // Erreur lors de l'insertion
-                echo "Une erreur s'est produite lors de l'insertion des données dans la base de données.";
+                // Erreur lors du téléchargement de l'image
+                $errorMsg2 = "Une erreur s'est produite lors du téléchargement de l'image.";
             }
         } else {
-            // Erreur lors du téléchargement de l'image
-            echo "Une erreur s'est produite lors du téléchargement de l'image.";
+            // Erreur lors du téléchargement du fichier image
+            $errorMsg2 = "Veuillez sélectionner une image.";
         }
-    } else {
-        // Erreur lors du téléchargement du fichier image
-        echo "Une erreur s'est produite lors du téléchargement du fichier image.";
     }
 }
+
 
 ?>
 
@@ -592,6 +605,49 @@ if (isset($_POST['submit2'])) {
                         <div>
 
                             <div class="p-4 space-y-2">
+
+
+                                <?php if (isset($errorMsg)) : ?>
+                                    <div uk-alert>
+                                        <div class="p-2 border bg-red-50 border-red-500/30 rounded-xl dark:bg-slate-700">
+                                            <div class="inline-flex items-center justify-between gap-6">
+                                                <!-- Icon -->
+                                                <div class="p-1 text-white shadow rounded-xl shadow-red-300" style="background-color: red">
+                                                    <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path fill-rule="evenodd" d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm9.4-5.5a1 1 0 1 0 0 2 1 1 0 1 0 0-2ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4c0-.6-.4-1-1-1h-2Z" clip-rule="evenodd" />
+                                                    </svg>
+
+                                                </div>
+                                                <!-- Text -->
+                                                <div class="text-base font-semibold text-red"><?= $errorMsg ?></div>
+                                                <!-- Icon close -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (isset($successMsg)) : ?>
+                                    <div uk-alert>
+                                        <div class="p-2 border bg-green-50 border-green-500/30 rounded-xl dark:bg-slate-700">
+                                            <div class="inline-flex items-center justify-between gap-6">
+                                                <!-- Icon -->
+                                                <div class="p-1 text-white bg-green-500 shadow rounded-xl shadow-green-300">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                                                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                                <!-- Text -->
+                                                <div class="text-base font-semibold text-green-700"><?= $successMsg ?></div>
+                                                <!-- Icon close -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <?php endif; ?>
+
+
                                 <form action="" method="post" enctype="multipart/form-data">
                                     <input type="text" class="w-full mb-3" placeholder="Titre du produit" name="titre_prod">
                                     <select class="w-full mb-3" name="type_prod">
@@ -692,9 +748,6 @@ if (isset($_POST['submit2'])) {
                                         <option value="Continentale">Continentale</option>
                                         <option value="Internationale">Internationale</option>
                                     </select>
-
-
-
                                     <select class="w-full mb-3" name="ville" id="ville">
                                         <option value="" disabled selected>Ville</option>
                                         <option value="Abidjan">Abidjan</option>
@@ -718,12 +771,7 @@ if (isset($_POST['submit2'])) {
                                         <option value="Séguéla">Séguéla</option>
                                         <option value="Bouna">Bouna</option>
                                     </select>
-
                                     <input type="text" class="w-full mb-3" placeholder="Commune ou quartier" name="comnprod">
-
-
-
-
                                     <div class="flex justify-between p-3 items-center">
                                         <h3 class="text-black dark:text-white text-xl">Ajouter une photo</h3>
                                         <div class="p-4 border-dotted border-2 border-gray-400 rounded-md relative">
@@ -738,8 +786,6 @@ if (isset($_POST['submit2'])) {
                                         </div>
                                     </div>
                                     <textarea class="w-full h-20" name="desProd" id="" cols="30" rows="10" placeholder="Description"></textarea>
-
-
                                     <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                         <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
                                             Annuler</button>
@@ -754,6 +800,47 @@ if (isset($_POST['submit2'])) {
                         <div>
 
                             <div class="p-4 space-y-2">
+
+                            <?php if (isset($errorMsg2)) : ?>
+                                    <div uk-alert>
+                                        <div class="p-2 border bg-red-50 border-red-500/30 rounded-xl dark:bg-slate-700">
+                                            <div class="inline-flex items-center justify-between gap-6">
+                                                <!-- Icon -->
+                                                <div class="p-1 text-white shadow rounded-xl shadow-red-300" style="background-color: red">
+                                                    <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path fill-rule="evenodd" d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm9.4-5.5a1 1 0 1 0 0 2 1 1 0 1 0 0-2ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4c0-.6-.4-1-1-1h-2Z" clip-rule="evenodd" />
+                                                    </svg>
+
+                                                </div>
+                                                <!-- Text -->
+                                                <div class="text-base font-semibold text-red"><?= $errorMsg2 ?></div>
+                                                <!-- Icon close -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+
+                                <?php if (isset($successMsg2)) : ?>
+                                    <div uk-alert>
+                                        <div class="p-2 border bg-green-50 border-green-500/30 rounded-xl dark:bg-slate-700">
+                                            <div class="inline-flex items-center justify-between gap-6">
+                                                <!-- Icon -->
+                                                <div class="p-1 text-white bg-green-500 shadow rounded-xl shadow-green-300">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                                                        <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </div>
+                                                <!-- Text -->
+                                                <div class="text-base font-semibold text-green-700"><?= $successMsg2 ?></div>
+                                                <!-- Icon close -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <?php endif; ?>
+
                                 <form action="" method="post" enctype="multipart/form-data">
                                     <input type="text" class="w-full mb-3" placeholder="Nom du service" name="nomserv">
                                     <select class="w-full mb-3" name="experience" id="">

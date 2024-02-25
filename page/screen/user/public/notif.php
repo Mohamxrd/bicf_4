@@ -37,6 +37,11 @@ if ($client = $recupUser->fetch()) {
     echo "Erreur: Utilisateur non trouvé dans la base de données.";
     exit();
 }
+$recupAchat = $conn->prepare("SELECT * FROM achatProd WHERE id_user2 = :id_user");
+$recupAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+$recupAchat->execute();
+
+
 ?>
 
 
@@ -665,71 +670,14 @@ if ($client = $recupUser->fetch()) {
                                 Quantité: 28
                             </span>
                             <span class="block text-xs font-medium  dark:text-white/70">
-                                Mode de livrason: Wave
+                                <p>skjhfhjkfhfhdjfkdhdjkhfdgjdfljkgdfhgdjfg</p>
                             </span>
 
                         </div>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
-                            Refuser</a>
+                        <button href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Accepter</button>
+                        <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
+                            Refuser</button>
                     </div>
-
-                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
-                        <div class="flex-1"> Banane
-                            <span class="block text-xs font-medium  dark:text-white/70">
-                                Quantité: 28
-                            </span>
-                            <span class="block text-xs font-medium  dark:text-white/70">
-                                Mode de livrason: Wave
-                            </span>
-                        </div>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
-                            Refuser</a>
-                    </div>
-
-                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
-                        <div class="flex-1"> Johm smith
-                            <span class="block text-xs font-medium  dark:text-white/70">
-                                Quantité: 28
-                            </span>
-                            <span class="block text-xs font-medium  dark:text-white/70">
-                                Mode de livrason: Wave
-                            </span>
-                        </div>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
-                            Refuser</a>
-                    </div>
-
-                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
-                        <div class="flex-1"> Sac a main
-                            <span class="block text-xs font-medium  dark:text-white/70">
-                                Quantité: 28
-                            </span>
-                            <span class="block text-xs font-medium  dark:text-white/70">
-                                Mode de livrason: Wave
-                            </span>
-                        </div>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
-                            Refuser</a>
-                    </div>
-
-                    <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
-                        <div class="flex-1"> Voiture
-                            <span class="block text-xs font-medium  dark:text-white/70">
-                                Quantité: 28
-                            </span>
-                            <span class="block text-xs font-medium  dark:text-white/70">
-                                Mode de livrason: Wave
-                            </span>
-                        </div>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded "> Confirmer</a>
-                        <a href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded " style="background: red">
-                            Refuser</a>
-                    </div>
-
 
 
                 </div>
