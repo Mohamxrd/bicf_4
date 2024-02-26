@@ -57,8 +57,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $zone_economique_prod = $prods['zonecoProd']; // Modifier en fonction du nom de la colonne
         $ville_prod = $prods['villePro']; // Modifier en fonction du nom de la colonne
         $comn = $prods['comnProd'];
-        $id_vendeur = $prods['id_user']; 
-        
+        $id_vendeur = $prods['id_user'];
+
         // Modifier en fonction du nom de la colonne
         // Ajoutez d'autres attributs au besoin
     }
@@ -660,10 +660,10 @@ if (isset($_POST['submit'])) {
 
                     </div>
                     <div class=" card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title"> Description</h4>
-                                <p><?= $description_prod?></p>
-                            </div>
+                        <div class="card-body flex-1 p-0">
+                            <h4 class="card-title"> Description</h4>
+                            <p><?= $description_prod ?></p>
+                        </div>
                     </div>
                 </div>
 
@@ -679,11 +679,22 @@ if (isset($_POST['submit'])) {
                             <?php endif; ?>
                         </div>
 
-                        <div class="flex  flex-col justify-center items-center mt-4 w-[300px]"> <!-- Utilisation de flexbox pour centrer verticalement -->
-                            <a href="#" uk-toggle="target: #achatd" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
-                            
-                            <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Achat Grouper</a>
-                        </div>
+                        <?php if (isset($id_user) && isset($id_vendeur) && $id_user != $id_vendeur) : ?>
+
+                            <div class="flex flex-col justify-center items-center mt-4 w-[300px]">
+                                <!-- Utilisation de flexbox pour centrer verticalement -->
+                                <a href="#" uk-toggle="target: #achatd" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
+                                <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Achat Grouper</a>
+                            </div>
+
+                        <?php else : ?>
+
+                            <p class="text-center mt-4 text-gray-500">Ce produit vous appartient</p>
+
+                        <?php endif; ?>
+
+
+
 
                         <div class="lg:p-20 p-10" id="achatd" uk-modal>
 

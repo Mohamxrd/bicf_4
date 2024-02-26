@@ -40,7 +40,7 @@ if ($client = $recupUser->fetch()) {
 
 $recupAchat = $conn->prepare("SELECT achatProd.*, prodUser.* FROM achatProd 
 LEFT JOIN prodUser ON achatProd.id_prod = prodUser.id_prod 
-WHERE achatProd.id_user2 = :id_user ORDER BY achatProd.date_ajout DESC" );
+WHERE achatProd.id_user2 = :id_user ORDER BY achatProd.date_ajout DESC");
 
 // Liez la valeur de $id_user à la variable de paramètre :id_user dans la requête
 $recupAchat->bindParam(':id_user', $_SESSION['id_user'], PDO::PARAM_INT);
@@ -565,11 +565,9 @@ $nombreNotif = $recupAchat->rowCount();
 
 
                 <?php
-                // Préparez la requête SQL pour récupérer les éléments de la table achatProd avec les informations du produit de la table prodUser
 
-
-                // Afficher les éléments dans une boucle while
                 while ($achat = $recupAchat->fetch()) {
+                    $id_achat = $achat['id'];
                     $quantite = $achat['quantiteProd'];
                     $descrip = $achat['descrip'];
                     $local = $achat['localite'];
@@ -577,7 +575,9 @@ $nombreNotif = $recupAchat->rowCount();
                     // Informations du produit de la table prodUser
                     $nom_produit = $achat['nomArt'];
                     $prix_produit = $achat['PrixProd'];
-                    // Ajoutez d'autres attributs du produit si nécessaire
+
+                    // Récupérer l'ID de l'achat
+
                 ?>
                     <div class="mb-3 space-y-3 text-sm font-semibold dark:text-white" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
                         <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
@@ -590,15 +590,35 @@ $nombreNotif = $recupAchat->rowCount();
                                 </span>
 
                             </div>
-                            <button href="#" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
-                            <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Refuser</button>
+                            <form method="post">
+                                <input type="hidden" name="id_achat" value="<?= $id_achat ?>">
+                                <button type="submit" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
+                                <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Refuser</button>
+                            </form>
+
                         </div>
                     </div>
                 <?php
                 }
                 ?>
 
+                <?php
 
+                if (isset($_POST['accepter'])) {
+
+                    $id_user = $_SESSION['id_user']; // Assurez-vous que $id_user est correctement défini
+
+                    // Exécutez une requête SQL pour mettre à jour les valeurs dans la table achatProd
+                    // Pour la mise à jour d'un enregistrement existant
+                    $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = id_user1, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'accepte' WHERE id = :id_achat AND id_user2 = :id_user");
+
+                    
+                    $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
+                    $updateAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                    $updateAchat->execute();
+                }
+
+                ?>
 
             </div>
 
