@@ -565,40 +565,37 @@ $nombreNotif = $recupAchat->rowCount();
 
 
                 <?php
+
                 while ($achat = $recupAchat->fetch()) {
                     $id_achat = $achat['id'];
                     $quantite = $achat['quantiteProd'];
                     $descrip = $achat['descrip'];
                     $local = $achat['localite'];
+
+                    // Informations du produit de la table prodUser
                     $nom_produit = $achat['nomArt'];
                     $prix_produit = $achat['PrixProd'];
+
+                    // Récupérer l'ID de l'achat
+
                 ?>
                     <div class="mb-3 space-y-3 text-sm font-semibold dark:text-white" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
                         <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
                             <div class="flex-1"><?= $nom_produit ?> <!-- Titre du produit -->
-                                <span class="block text-xs font-medium dark:text-white/70">
-                                    Quantité: <?= $quantite ?>
+                                <span class="block text-xs font-medium  dark:text-white/70">
+                                    Quantité: <?= $quantite ? isset($_POST['accepter']) : 'veullez confirmez le paiement?' ?>
                                 </span>
-                                <span class="block text-xs font-medium dark:text-white/70">
+                                <span class="block text-xs font-medium  dark:text-white/70">
                                     <p><?= $descrip ?></p>
                                 </span>
-                                <?php if (isset($_POST['accepter'])) : ?>
-                                    <!-- Message to show when the "Accepter" button is submitted -->
-                                    <span class="block text-xs font-medium dark:text-white/70">
-                                        Merci pour la confirmation de paiement!
-                                    </span>
-                                <?php else : ?>
-                                    <!-- Message to show when the "Accepter" button is not submitted -->
-                                    <span class="block text-xs font-medium dark:text-white/70">
-                                        Veuillez confirmer le paiement.
-                                    </span>
-                                <?php endif; ?>
+
                             </div>
                             <form method="post">
                                 <input type="hidden" name="id_achat" value="<?= $id_achat ?>">
                                 <button type="submit" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
                                 <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Refuser</button>
                             </form>
+
                         </div>
                     </div>
                 <?php
@@ -606,10 +603,6 @@ $nombreNotif = $recupAchat->rowCount();
                 ?>
 
                 <?php
-                if (isset($_POST['accepter'])) {
-                    $id_user = $_SESSION['id_user'];
-                    // Rest of your code for updating the database
-                }
 
                 if (isset($_POST['accepter'])) {
 
@@ -619,21 +612,18 @@ $nombreNotif = $recupAchat->rowCount();
                     // Pour la mise à jour d'un enregistrement existant
                     $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = id_user1, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'accepte' WHERE id = :id_achat AND id_user2 = :id_user");
 
-
+                    
                     $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
                     $updateAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
                     $updateAchat->execute();
                 }
 
                 ?>
+                
+
             </div>
 
-
-
-
-    </div>
-
-    </main>
+        </main>
 
     </div>
 
