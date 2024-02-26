@@ -571,6 +571,7 @@ $nombreNotif = $recupAchat->rowCount();
                     $quantite = $achat['quantiteProd'];
                     $descrip = $achat['descrip'];
                     $local = $achat['localite'];
+                    $confirm = $achat['confirm'];
 
                     // Informations du produit de la table prodUser
                     $nom_produit = $achat['nomArt'];
@@ -582,18 +583,38 @@ $nombreNotif = $recupAchat->rowCount();
                     <div class="mb-3 space-y-3 text-sm font-semibold dark:text-white" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
                         <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
                             <div class="flex-1"><?= $nom_produit ?> <!-- Titre du produit -->
-                                <span class="block text-xs font-medium  dark:text-white/70">
-                                    Quantité: <?= $quantite ? isset($_POST['accepter']) : 'veullez confirmez le paiement?' ?>
+
+                                <?php if ($confirm == '') : ?>
+                                    <span class="block text-xs font-medium dark:text-white/70">
+                                        Quantité: <?= $quantite ?>
+                                    </span>
+                                <?php endif; ?>
+
+                                <?php if($confirm == 'accepte') :  ?>
+
+                                    <span class="block text-xs font-medium  dark:text-white/70">
+                                    <p>Votre demande à été acepter par le fournieur</p>
                                 </span>
+                                    
+
+                                <?php endif; ?>
                                 <span class="block text-xs font-medium  dark:text-white/70">
                                     <p><?= $descrip ?></p>
                                 </span>
 
                             </div>
                             <form method="post">
+                            <?php if ($confirm == '') : ?>
+
                                 <input type="hidden" name="id_achat" value="<?= $id_achat ?>">
                                 <button type="submit" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
+                                
                                 <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Refuser</button>
+                                <?php endif; ?>
+                                <?php if($confirm == 'accepte') :  ?>
+                                <button href="#" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
+                                <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Annuler</button>
+                                <?php endif; ?>
                             </form>
 
                         </div>
@@ -612,14 +633,14 @@ $nombreNotif = $recupAchat->rowCount();
                     // Pour la mise à jour d'un enregistrement existant
                     $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = id_user1, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'accepte' WHERE id = :id_achat AND id_user2 = :id_user");
 
-                    
+
                     $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
                     $updateAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
                     $updateAchat->execute();
                 }
 
                 ?>
-                
+
 
             </div>
 
