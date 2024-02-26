@@ -590,12 +590,18 @@ $nombreNotif = $recupAchat->rowCount();
                                     </span>
                                 <?php endif; ?>
 
-                                <?php if($confirm == 'accepte') :  ?>
+                                <?php if ($confirm == 'accepte') :  ?>
 
                                     <span class="block text-xs font-medium  dark:text-white/70">
-                                    <p>Votre demande à été acepter par le fournieur</p>
-                                </span>
-                                    
+                                        <p>Votre demande à été acepter par le fournieur</p>
+                                    </span>
+
+                                <?php endif; ?>
+                                <?php if ($confirm == 'refus') :  ?>
+
+                                    <span class="block text-xs font-medium  dark:text-white/70">
+                                        <p>Le fourniseur à refuser votre demande</p>
+                                    </span>
 
                                 <?php endif; ?>
                                 <span class="block text-xs font-medium  dark:text-white/70">
@@ -604,16 +610,16 @@ $nombreNotif = $recupAchat->rowCount();
 
                             </div>
                             <form method="post">
-                            <?php if ($confirm == '') : ?>
+                                <?php if ($confirm == '') : ?>
 
-                                <input type="hidden" name="id_achat" value="<?= $id_achat ?>">
-                                <button type="submit" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
-                                
-                                <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Refuser</button>
+                                    <input type="hidden" name="id_achat" value="<?= $id_achat ?>">
+                                    <button type="submit" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
+
+                                    <button type="submit" name="refus" href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Refuser</button>
                                 <?php endif; ?>
-                                <?php if($confirm == 'accepte') :  ?>
-                                <button href="#" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
-                                <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Annuler</button>
+                                <?php if ($confirm == 'accepte') :  ?>
+                                    <button href="#" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
+                                    <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Annuler</button>
                                 <?php endif; ?>
                             </form>
 
@@ -632,6 +638,18 @@ $nombreNotif = $recupAchat->rowCount();
                     // Exécutez une requête SQL pour mettre à jour les valeurs dans la table achatProd
                     // Pour la mise à jour d'un enregistrement existant
                     $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = id_user1, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'accepte' WHERE id = :id_achat AND id_user2 = :id_user");
+
+
+                    $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
+                    $updateAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                    $updateAchat->execute();
+                }
+
+                if(isset($_POST['refus'])){
+
+                    $id_user = $_SESSION['id_user']; // Assurez-vous que $id_user est correctement défini
+
+                    $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = id_user1, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'refus' WHERE id = :id_achat AND id_user2 = :id_user");
 
 
                     $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
