@@ -618,8 +618,8 @@ $nombreNotif = $recupAchat->rowCount();
                                     <button type="submit" name="refus" href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Refuser</button>
                                 <?php endif; ?>
                                 <?php if ($confirm == 'accepte') :  ?>
-                                    <button href="#" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
-                                    <button href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Annuler</button>
+                                    <button href="#"  class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
+                                    <button type="submit" href="#" name="annuler" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Annuler</button>
                                 <?php endif; ?>
                             </form>
 
@@ -645,7 +645,7 @@ $nombreNotif = $recupAchat->rowCount();
                     $updateAchat->execute();
                 }
 
-                if(isset($_POST['refus'])){
+                if (isset($_POST['refus'])) {
 
                     $id_user = $_SESSION['id_user']; // Assurez-vous que $id_user est correctement défini
 
@@ -657,7 +657,19 @@ $nombreNotif = $recupAchat->rowCount();
                     $updateAchat->execute();
                 }
 
+
+                if (isset($_POST['annuler'])) {
+                    $id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+
+                    $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = null, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'annuler' WHERE id = :id_achat AND id_user2 = :id_user");
+
+                    $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
+                    $updateAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                    $updateAchat->execute();
+                }
                 ?>
+
+
 
 
             </div>
