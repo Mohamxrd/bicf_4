@@ -22,6 +22,9 @@ if ($client = $recupUser->fetch()) {
     $activSector_user = $client['activSector_user'];
     $adress_user = $client['adress_user'];
     $email_user = $client['email_user'];
+    $pays_user = $client['pays_user'];
+    $local_user = $client['local_user'];
+    $adress_user = $client['adress_user'];
 
     // Maintenant, récupérez les informations de l'agent
     $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
@@ -632,7 +635,7 @@ if ($client = $recupUser->fetch()) {
                                             <svg class="w-4 h-4  text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                                 <path fill-rule="evenodd" d="M12 2a8 8 0 0 1 6.6 12.6l-.1.1-.6.7-5.1 6.2a1 1 0 0 1-1.6 0L6 15.3l-.3-.4-.2-.2v-.2A8 8 0 0 1 11.8 2Zm3 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
                                             </svg>
-                                            <span class="ml-1"><?= $produit['villePro']; ?>, <?= $produit['comnProd'] ?></span>
+                                            <span class="ml-1"><?= $local_user ?>, <?= $adress_user  ?>></span>
                                         </div>
                                     </div>
                                     <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">Produit</div>
