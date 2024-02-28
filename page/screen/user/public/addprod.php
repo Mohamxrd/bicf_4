@@ -26,6 +26,7 @@ if ($client = $recupUser->fetch()) {
     $activSector_user = $client['activSector_user'];
     $adress_user = $client['adress_user'];
     $email_user = $client['email_user'];
+    
 
     // Maintenant, récupérez les informations de l'agent
     $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
@@ -55,13 +56,10 @@ if (isset($_POST['submit'])) {
     $quantité_max = isset($_POST['Quantité-max']) ? intval($_POST['Quantité-max']) : 0;
     $Prix_par_unité = isset($_POST['prixprod']) ? intval($_POST['prixprod']) : 0;
     $livraison = isset($_POST['livraisonProd']) ? htmlspecialchars($_POST['livraisonProd']) : '';
-    $Zone_economique = isset($_POST['zoneeco']) ? htmlspecialchars($_POST['zoneeco']) : '';
-    $ville = isset($_POST['ville']) ? htmlspecialchars($_POST['ville']) : '';
-    $comn = isset($_POST['comnprod']) ? htmlspecialchars($_POST['comnprod']) : '';
     $descrip = isset($_POST['desProd']) ? htmlspecialchars($_POST['desProd']) : '';
 
     // Vérifiez si tous les champs obligatoires sont remplis
-    if (empty($Nom_du_produit) || empty($Type_de_produit) || empty($Conditionnement) || empty($format) || empty($livraison) || empty($Zone_economique) || empty($ville) || empty($comn) || empty($descrip)) {
+    if (empty($Nom_du_produit) || empty($Type_de_produit) || empty($Conditionnement) || empty($format) || empty($livraison)  || empty($descrip)) {
         // Afficher un message d'erreur si un champ obligatoire est vide
         $errorMsg = 'Veuillez remplir tous les champs.';
     } else {
@@ -80,9 +78,9 @@ if (isset($_POST['submit'])) {
                 $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
                 // Insertion des données dans la base de données
-                $insertProd = $conn->prepare('INSERT INTO prodUser(id_user, nomArt, typeProd, condProd, formatProd, qteProd_min, qteProd_max, PrixProd, LivreCapProd, zonecoProd, villePro, comnProd, imgProd, desProd) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
+                $insertProd = $conn->prepare('INSERT INTO prodUser(id_user, nomArt, typeProd, condProd, formatProd, qteProd_min, qteProd_max, PrixProd, LivreCapProd, imgProd, desProd) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
 
-                if ($insertProd->execute([$id_utilisateur, $Nom_du_produit, $Type_de_produit, $Conditionnement, $format, $quantité_min, $quantité_max, $Prix_par_unité, $livraison, $Zone_economique, $ville, $comn, $target_file, $descrip])) {
+                if ($insertProd->execute([$id_utilisateur, $Nom_du_produit, $Type_de_produit, $Conditionnement, $format, $quantité_min, $quantité_max, $Prix_par_unité, $livraison, $target_file, $descrip])) {
                     // Succès de l'insertion
                     $successMsg = "Le produit a été ajouté avec succès.";
                 } else {
@@ -115,13 +113,10 @@ if (isset($_POST['submit2'])) {
     $specialite = isset($_POST['specia']) ? htmlspecialchars($_POST['specia']) : '';
     $nombre_Personnel = isset($_POST['nombre']) ? htmlspecialchars($_POST['nombre']) : '';
     $prix_Service = isset($_POST['prix']) ? htmlspecialchars($_POST['prix']) : '';
-    $Zone_economique = isset($_POST['zoneeco']) ? htmlspecialchars($_POST['zoneeco']) : '';
-    $ville = isset($_POST['ville']) ? htmlspecialchars($_POST['ville']) : '';
-    $comn = isset($_POST['comn']) ? htmlspecialchars($_POST['comn']) : '';
     $descrip = isset($_POST['descrip']) ? htmlspecialchars($_POST['descrip']) : '';
 
     // Vérifiez si tous les champs obligatoires sont remplis
-    if (empty($Nom_du_service) || empty($Experience) || empty($specialite) || empty($nombre_Personnel) || empty($prix_Service) || empty($Zone_economique) || empty($ville) || empty($comn) || empty($descrip)) {
+    if (empty($Nom_du_service) || empty($Experience) || empty($specialite) || empty($nombre_Personnel) || empty($prix_Service)  || empty($descrip)) {
         // Afficher un message d'erreur si un champ obligatoire est vide
         $errorMsg2 = 'Veuillez remplir tous les champs.';
     } else {
@@ -140,8 +135,8 @@ if (isset($_POST['submit2'])) {
                 $id_utilisateur = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
                 // Insertion des données dans la base de données
-                $insertServ = $conn->prepare('INSERT INTO servUser(id_user, nomMet, qalifServ, sepServ, qteServ, PrixServ, zonecoServ, villeServ, comnServ, imgServ, desServ) VALUES(?,?,?,?,?,?,?,?,?,?,?)');
-                if ($insertServ->execute(array($id_utilisateur, $Nom_du_service, $Experience, $specialite, $nombre_Personnel, $prix_Service, $Zone_economique, $ville, $comn, $target_file, $descrip))) {
+                $insertServ = $conn->prepare('INSERT INTO servUser(id_user, nomMet, qalifServ, sepServ, qteServ, PrixServ, imgServ, desServ) VALUES(?,?,?,?,?,?,?,?)');
+                if ($insertServ->execute(array($id_utilisateur, $Nom_du_service, $Experience, $specialite, $nombre_Personnel, $prix_Service, $target_file, $descrip))) {
                     // Succès de l'insertion
                     $successMsg2 = "Le service a été ajouté avec succès.";
                 } else {
@@ -662,63 +657,8 @@ if (isset($_POST['submit2'])) {
                                     <input type="text" class="w-full mb-3" placeholder="Titre du produit" name="titre_prod">
                                     <select class="w-full mb-3" name="type_prod">
                                         <option value="" disabled selected>Type de produit</option>
-                                        <option value="Alimentaires">Alimentaires</option>
-                                        <option value="Boissons">Boissons</option>
-                                        <option value="Tabac">Tabac</option>
-                                        <option value="Bois">Bois</option>
-                                        <option value="Papier">Papier</option>
-                                        <option value="Imprimerie">Imprimerie</option>
-                                        <option value="Chimique">Chimique</option>
-                                        <option value="Pharmaceutique">Pharmaceutique</option>
-                                        <option value="Caoutchouc et plastique">Caoutchouc et plastique</option>
-                                        <option value="Produits non métalliques">Produits non métalliques</option>
-                                        <option value="Métallurgie et produits métalliques">
-                                            Métallurgie et produits métalliques
-                                        </option>
-                                        <option value="Machines et équipements">Machines et équipements</option>
-                                        <option value="Matériels de transport">Matériels de transport</option>
-                                        <option value="Réparation et installation de machines et d'équipements">
-                                            Réparation et installation de machines et d'équipements
-                                        </option>
-                                        <option value="Distribution d'électricité">Distribution d'électricité</option>
-                                        <option value="istribution de gaz">Distribution de gaz</option>
-                                        <option value="Habitation">Habitation</option>
-                                        <option value="Usine">Usine</option>
-                                        <option value="Pont & Chaussée">Pont & Chaussée</option>
-                                        <option value="Commerce">Commerce</option>
-                                        <option value="Réparation d'automobiles et de motocycles">
-                                            Réparation d'automobiles et de motocycles
-                                        </option>
-                                        <option value="Transports et entreposage">
-                                            Transports et entreposage
-                                        </option>
-                                        <option value="Hébergement et restauration">Hébergement et restauration</option>
-                                        <option value="Activités financières et d'assurance">
-                                            Activités financières et d'assurance
-                                        </option>
-                                        <option value="Activités immobilières">Activités immobilières</option>
-                                        <option value="Service juridiques">Service juridiques</option>
-                                        <option value="Service comptables">Service comptables</option>
-                                        <option value="Service de gestion">Service de gestion</option>
-                                        <option value="Service d'architecture">Service d'architecture</option>
-                                        <option value="Service d'ingénierie">Service d'ingénierie</option>
-                                        <option value="Service de contrôle et d'analyses techniques">
-                                            Service de contrôle et d'analyses techniques
-                                        </option>
-                                        <option value="Autres activités spécialisées, scientifiques et techniques">
-                                            Autres activités spécialisées, scientifiques et techniques
-                                        </option>
-                                        <option value="Services administratifs">Services administratifs</option>
-                                        <option value="Service de soutien">Service de soutien</option>
-                                        <option value="Administration publique">Administration publique</option>
-                                        <option value="Enseignement">Enseignement</option>
-                                        <option value="Service santé humaine">Service santé humaine</option>
-                                        <option value="Arts, spectacles et activités récréatives">
-                                            Arts, spectacles et activités récréatives
-                                        </option>
-                                        <option value="Autres activités de services">Autres activités de services
-                                        </option>
-
+                                        <option value="Local">Local</option>
+                                        <option value="Importé">Importé</option>
                                     </select>
 
                                     <select class="w-full mb-3" name="condprod">
@@ -749,39 +689,7 @@ if (isset($_POST['submit2'])) {
                                         <option value="Non">Non</option>
                                     </select>
 
-                                    <select class="w-full mb-3" name="zoneeco" id="">
-                                        <option value="" disabled selected>Zone economique</option>
-                                        <option value="Proximité">Proximité</option>
-                                        <option value="Locale">Locale</option>
-                                        <option value="Nationale">Nationale</option>
-                                        <option value="Sous Régionale">Sous Régionale</option>
-                                        <option value="Continentale">Continentale</option>
-                                        <option value="Internationale">Internationale</option>
-                                    </select>
-                                    <select class="w-full mb-3" name="ville" id="ville">
-                                        <option value="" disabled selected>Ville</option>
-                                        <option value="Abidjan">Abidjan</option>
-                                        <option value="Yamoussoukro">Yamoussoukro</option>
-                                        <option value="Bouaké">Bouaké</option>
-                                        <option value="Daloa">Daloa</option>
-                                        <option value="Korhogo">Korhogo</option>
-                                        <option value="San Pedro">San Pedro</option>
-                                        <option value="Man">Man</option>
-                                        <option value="Divo">Divo</option>
-                                        <option value="Gagnoa">Gagnoa</option>
-                                        <option value="Sassandra">Sassandra</option>
-                                        <option value="Agboville">Agboville</option>
-                                        <option value="Bondoukou">Bondoukou</option>
-                                        <option value="Grand-Bassam">Grand-Bassam</option>
-                                        <option value="Dimbokro">Dimbokro</option>
-                                        <option value="Odienné">Odienné</option>
-                                        <option value="Aboisso">Aboisso</option>
-                                        <option value="Tiassalé">Tiassalé</option>
-                                        <option value="Toumodi">Toumodi</option>
-                                        <option value="Séguéla">Séguéla</option>
-                                        <option value="Bouna">Bouna</option>
-                                    </select>
-                                    <input type="text" class="w-full mb-3" placeholder="Commune ou quartier" name="comnprod">
+                                    
                                     <div class="flex justify-between p-3 items-center">
                                         <h3 class="text-black dark:text-white text-xl">Ajouter une photo</h3>
                                         <div class="p-4 border-dotted border-2 border-gray-400 rounded-md relative">
@@ -867,43 +775,7 @@ if (isset($_POST['submit2'])) {
                                     <input type="number" class="w-full mb-3" placeholder="Prix du service" name="prix">
 
 
-                                    <select class="w-full mb-3" name="zoneeco" id="">
-                                        <option value="" disabled selected>Zone economique</option>
-                                        <option value="Proximité">Proximité</option>
-                                        <option value="Locale">Locale</option>
-                                        <option value="Nationale">Nationale</option>
-                                        <option value="Sous Régionale">Sous Régionale</option>
-                                        <option value="Continentale">Continentale</option>
-                                        <option value="Internationale">Internationale</option>
-
-                                    </select>
-                                    <select class="w-full mb-3" name="ville" id="ville">
-                                        <option value="" disabled selected>Ville</option>
-                                        <option value="Abidjan">Abidjan</option>
-                                        <option value="Yamoussoukro">Yamoussoukro</option>
-                                        <option value="Bouaké">Bouaké</option>
-                                        <option value="Daloa">Daloa</option>
-                                        <option value="Korhogo">Korhogo</option>
-                                        <option value="San Pedro">San Pedro</option>
-                                        <option value="Man">Man</option>
-                                        <option value="Divo">Divo</option>
-                                        <option value="Gagnoa">Gagnoa</option>
-                                        <option value="Sassandra">Sassandra</option>
-                                        <option value="Agboville">Agboville</option>
-                                        <option value="Bondoukou">Bondoukou</option>
-                                        <option value="Grand-Bassam">Grand-Bassam</option>
-                                        <option value="Dimbokro">Dimbokro</option>
-                                        <option value="Odienné">Odienné</option>
-                                        <option value="Aboisso">Aboisso</option>
-                                        <option value="Tiassalé">Tiassalé</option>
-                                        <option value="Toumodi">Toumodi</option>
-                                        <option value="Séguéla">Séguéla</option>
-                                        <option value="Bouna">Bouna</option>
-                                    </select>
-
-                                    <input type="text" class="w-full mb-3" placeholder="Commune ou quartier" name="comn">
-
-
+                                   
                                     <div class="flex justify-between p-3 items-center">
                                         <h3 class="text-black dark:text-white text-xl">Ajouter une photo</h3>
                                         <div class="p-4 border-dotted border-2 border-gray-400 rounded-md relative">

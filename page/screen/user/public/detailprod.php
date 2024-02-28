@@ -22,6 +22,14 @@ if ($client = $recupUser->fetch()) {
     $activSector_user = $client['activSector_user'];
     $adress_user = $client['adress_user'];
     $email_user = $client['email_user'];
+    $pays_user = $client['pays_user'];
+    $local_user = $client['local_user'];
+    $adress_user = $client['adress_user'];
+    $ActivZone_user = $client['ActivZone_user'];
+    $pays_user = $client['pays_user'];
+    $local_user = $client['local_user'];
+    $adress_user = $client['adress_user'];
+
 
     // Maintenant, récupérez les informations de l'agent
     $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
@@ -54,10 +62,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $quantite_prodmin = $prods['qteProd_min'];
         $quatite_promax = $prods['qteProd_max'];
         $livraison_prod = $prods['LivreCapProd']; // Modifier en fonction du nom de la colonne
-        $zone_economique_prod = $prods['zonecoProd']; // Modifier en fonction du nom de la colonne
-        $ville_prod = $prods['villePro']; // Modifier en fonction du nom de la colonne
-        $comn = $prods['comnProd'];
-        $id_vendeur = $prods['id_user'];
+        
 
         // Modifier en fonction du nom de la colonne
         // Ajoutez d'autres attributs au besoin
@@ -174,9 +179,9 @@ if (isset($_POST['submit'])) {
                                 <div class="mt-4" tabindex="-1" uk-slider="finite:true;sets: true">
 
                                     <div class="uk-slider-container pb-1">
-                                        <ul class="uk-slider-items grid grid-cols-2 gap-4" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
+                                    <ul class="uk-slider-items grid-small" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
                                             <a href="addprod.php">
-                                                <li class="w-full" uk-scrollspy-class="uk-animation-fade">
+                                                <li class="w-40" uk-scrollspy-class="uk-animation-fade">
                                                     <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">
                                                         <ion-icon name="cart" class="text-2xl drop-shadow-md"></ion-icon>
                                                         <div class="mt-1.5 text-sm font-medium"> Produit </div>
@@ -184,11 +189,20 @@ if (isset($_POST['submit'])) {
                                                 </li>
                                             </a>
                                             <a href="addcons.php">
-                                                <li class="w-full">
+                                                <li class="w-40">
                                                     <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">
                                                         <ion-icon name="pricetags" class="text-2xl drop-shadow-md"></ion-icon>
 
                                                         <div class="mt-1.5 text-sm font-medium"> Consommation </div>
+                                                    </div>
+                                                </li>
+                                            </a>
+                                            <a href="appelof.php">
+                                                <li class="w-40">
+                                                    <div class="p-3 px-4 rounded-lg bg-purple-100/60 text-purple-600 dark:text-white dark:bg-dark4">
+
+                                                        <ion-icon name="logo-capacitor" class="text-2xl drop-shadow-md"></ion-icon>
+                                                        <div class="mt-1.5 text-sm font-medium"> Appel d'offre </div>
                                                     </div>
                                                 </li>
                                             </a>
@@ -648,13 +662,13 @@ if (isset($_POST['submit'])) {
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title"> Zone economique </h4>
-                                <p><?= $zone_economique_prod ?></p>
+                                <p><?= $ActivZone_user ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title"> Ville, Commune</h4>
-                                <p><?= $ville_prod ?>, <?= $comn ?></p>
+                                <p><?= $local_user ?>, <?= $adress_user  ?></p>
                             </div>
                         </div>
 

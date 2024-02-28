@@ -157,7 +157,7 @@ if ($client = $recupUser->fetch()) {
                                 <!-- slider -->
                                 <div class="mt-4" tabindex="-1" uk-slider="finite:true;sets: true">
 
-                                <div class="uk-slider-container pb-1">
+                                    <div class="uk-slider-container pb-1">
                                         <ul class="uk-slider-items grid-small" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
                                             <a href="addprod.php">
                                                 <li class="w-40" uk-scrollspy-class="uk-animation-fade">
@@ -179,7 +179,7 @@ if ($client = $recupUser->fetch()) {
                                             <a href="appelof.php">
                                                 <li class="w-40">
                                                     <div class="p-3 px-4 rounded-lg bg-purple-100/60 text-purple-600 dark:text-white dark:bg-dark4">
-                                                        
+
                                                         <ion-icon name="logo-capacitor" class="text-2xl drop-shadow-md"></ion-icon>
                                                         <div class="mt-1.5 text-sm font-medium"> Appel d'offre </div>
                                                     </div>
@@ -1038,6 +1038,14 @@ if ($client = $recupUser->fetch()) {
     <!-- Ion icon -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+        window.onload = function() {
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+        }
+    </script>
 
 
 </body>

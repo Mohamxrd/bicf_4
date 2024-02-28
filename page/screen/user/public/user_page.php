@@ -141,7 +141,7 @@ if ($client = $recupUser->fetch()) {
                                             <a href="appelof.php">
                                                 <li class="w-40">
                                                     <div class="p-3 px-4 rounded-lg bg-purple-100/60 text-purple-600 dark:text-white dark:bg-dark4">
-                                                        
+
                                                         <ion-icon name="logo-capacitor" class="text-2xl drop-shadow-md"></ion-icon>
                                                         <div class="mt-1.5 text-sm font-medium"> Appel d'offre </div>
                                                     </div>
@@ -528,7 +528,7 @@ if ($client = $recupUser->fetch()) {
                     <!-- feed story -->
                     <div class="md:max-w-[650px] mx-auto flex-1 xl:space-y-6 space-y-3">
                         <!-- Formulaire de recherche -->
-                        <form id="searchForm" method="post" class="w-full">
+                        <form id="searchForm" method="post" class="w-full" autocomplete="off">
                             <div class="flex items-center py-3 dark:border-gray-600">
                                 <!-- Champ de recherche -->
                                 <input type="text" name="recherche" placeholder="Rechercher un produit ou service" class="flex-1 border-none bg-transparent focus:outline-none dark:text-white rounded-l-md" />
@@ -830,6 +830,16 @@ if ($client = $recupUser->fetch()) {
     <!-- Ion icon -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+    window.onload = function() {
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    }
+</script>
+
+
 
 
 </body>
