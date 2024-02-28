@@ -828,16 +828,15 @@ if ($client = $recupUser->fetch()) {
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script>
-    window.onload = function() {
-        if (window.history.replaceState) {
-            // Récupérer les valeurs de recherche depuis les champs de formulaire
+        window.addEventListener('DOMContentLoaded', function() {
+            // Récupérer les valeurs des champs de recherche
             var zoneEconomique = document.querySelector('select[name="zone_economique"]').value;
             var typeProduit = document.querySelector('select[name="type_produit"]').value;
             var quantite = document.querySelector('input[name="quantite"]').value;
             var recherche = document.querySelector('input[name="recherche"]').value;
 
             // Construire l'URL avec les paramètres de recherche
-            var newURL = window.location.pathname + '?'; // Récupérer le chemin d'accès de l'URL actuelle
+            var newURL = window.location.origin + window.location.pathname + '?';
 
             // Ajouter les paramètres de recherche à l'URL
             newURL += 'zone_economique=' + encodeURIComponent(zoneEconomique) + '&';
@@ -847,9 +846,15 @@ if ($client = $recupUser->fetch()) {
 
             // Modifier l'URL de la page sans rechargement
             window.history.replaceState(null, null, newURL);
-        }
-    }
-</script>
+        });
+
+        window.addEventListener('popstate', function() {
+            // Recharger la page pour afficher les résultats de la recherche
+            location.reload();
+        });
+    </script>
+
+
 
 
 

@@ -488,7 +488,7 @@ if ($client = $recupUser->fetch()) {
                         <form id="searchForm" method="post" class="w-full" autocomplete="off">
                             <div class="flex items-center py-3 dark:border-gray-600">
                                 <!-- Champ de recherche -->
-                                <input type="text" name="recherche" placeholder="Rechercher un produit ou service" class="flex-1 border-none bg-transparent focus:outline-none dark:text-white rounded-l-md" />
+                                <input type="text" name="recherche" placeholder="Rechercher un produit ou service" class="flex-1 border-none bg-transparent focus:outline-none dark:text-white rounded-l-md" value="<?php echo isset($_POST['recherche']) ? $_POST['recherche'] : ''; ?>" />
                                 <!-- Bouton de recherche -->
                                 <button type="submit" class="flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-md ml-2">
                                     <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -502,28 +502,28 @@ if ($client = $recupUser->fetch()) {
                                 <div class="dropdown" style="width: calc(33% - 10px);">
                                     <!-- Dropdown Trigger -->
                                     <select name="zone_economique" class="dropdown-trigger w-full">
-                                        <option value="" disabled selected>Zone economique</option>
-                                        <option value="Proximité">Proximité</option>
-                                        <option value="Locale">Locale</option>
-                                        <option value="Nationale">Nationale</option>
-                                        <option value="Sous Régionale">Sous Régionale</option>
-                                        <option value="Continentale">Continentale</option>
-                                        <option value="Internationale">Internationale</option>
+                                        <option value="" disabled <?php echo (!isset($_POST['zone_economique']) || $_POST['zone_economique'] == '') ? 'selected' : ''; ?>>Zone economique</option>
+                                        <option value="Proximité" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Proximité') ? 'selected' : ''; ?>>Proximité</option>
+                                        <option value="Locale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Locale') ? 'selected' : ''; ?>>Locale</option>
+                                        <option value="Nationale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Nationale') ? 'selected' : ''; ?>>Nationale</option>
+                                        <option value="Sous Régionale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Sous Régionale') ? 'selected' : ''; ?>>Sous Régionale</option>
+                                        <option value="Continentale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Continentale') ? 'selected' : ''; ?>>Continentale</option>
+                                        <option value="Internationale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Internationale') ? 'selected' : ''; ?>>Internationale</option>
                                     </select>
                                 </div>
                                 <!-- Dropdown 2 -->
                                 <div class="dropdown" style="width: calc(33% - 10px);">
                                     <!-- Dropdown Trigger -->
                                     <select name="type_produit" class="dropdown-trigger w-full">
-                                        <option value="" disabled selected>Type de produit</option>
-                                        <option value="Importé">Importé</option>
-                                        <option value="Local">Local</option>
+                                        <option value="" disabled <?php echo (!isset($_POST['type_produit']) || $_POST['type_produit'] == '') ? 'selected' : ''; ?>>Type de produit</option>
+                                        <option value="Importé" <?php echo (isset($_POST['type_produit']) && $_POST['type_produit'] == 'Importé') ? 'selected' : ''; ?>>Importé</option>
+                                        <option value="Local" <?php echo (isset($_POST['type_produit']) && $_POST['type_produit'] == 'Local') ? 'selected' : ''; ?>>Local</option>
                                     </select>
                                 </div>
                                 <!-- Dropdown 3 -->
                                 <div style="width: calc(33% - 10px);">
                                     <!-- Input field -->
-                                    <input type="text" name="quantite" class="w-full" placeholder="Quantité">
+                                    <input type="text" name="quantite" class="w-full" placeholder="Quantité" value="<?php echo isset($_POST['quantite']) ? $_POST['quantite'] : ''; ?>">
                                 </div>
                             </div>
                         </form>
@@ -585,12 +585,11 @@ if ($client = $recupUser->fetch()) {
                                         <a href="detailprod.php?id=<?= $produit['id_prod'] ?>">
                                             <h4 class="text-lg text-black dark:text-white"><?= $produit['nomArt']; ?></h4>
                                         </a>
-
                                     </div>
                                     <div class="flex">
-                                        <button class="text-white p-2 bg-green-500 rounded-md mr-2">Faire un appel d'offre</button>
+                                     
                                         <div class="flex p-1 items-center text-xs bg-teal-100/60 text-teal-600 rounded">
-                                        <ion-icon name="person" class="drop-shadow-md"></ion-icon>
+                                        <ion-icon name="person" class="drop-shadow-md mr-1"></ion-icon>
                                             <span class="">12</span>
 
                                         </div>
@@ -754,75 +753,29 @@ if ($client = $recupUser->fetch()) {
 </body>
 
 <script>
-    function previewImage(input) {
-        const preview = document.getElementById('image-preview');
-        const removeButton = document.getElementById('remove-button');
-        const file = input.files[0];
-        const reader = new FileReader();
+        window.addEventListener('DOMContentLoaded', function() {
+            // Récupérer les valeurs des champs de recherche
+            var zoneEconomique = document.querySelector('select[name="zone_economique"]').value;
+            var typeProduit = document.querySelector('select[name="type_produit"]').value;
+            var quantite = document.querySelector('input[name="quantite"]').value;
+            var recherche = document.querySelector('input[name="recherche"]').value;
 
-        reader.onloadend = function() {
-            preview.src = reader.result;
-            preview.classList.remove('hidden');
-            removeButton.classList.remove('hidden');
-        }
+            // Construire l'URL avec les paramètres de recherche
+            var newURL = window.location.origin + window.location.pathname + '?';
 
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
-            preview.classList.add('hidden');
-            removeButton.classList.add('hidden');
-        }
-    }
+            // Ajouter les paramètres de recherche à l'URL
+            newURL += 'zone_economique=' + encodeURIComponent(zoneEconomique) + '&';
+            newURL += 'type_produit=' + encodeURIComponent(typeProduit) + '&';
+            newURL += 'quantite=' + encodeURIComponent(quantite) + '&';
+            newURL += 'recherche=' + encodeURIComponent(recherche);
 
-    function removeImage() {
-        const preview = document.getElementById('image-preview');
-        const removeButton = document.getElementById('remove-button');
-        const fileInput = document.getElementById('file-upload');
+            // Modifier l'URL de la page sans rechargement
+            window.history.replaceState(null, null, newURL);
+        });
 
-        preview.src = '';
-        preview.classList.add('hidden');
-        removeButton.classList.add('hidden');
-        fileInput.value = ''; // Clear the file input
-    }
-
-    function previewImage2(input) {
-        const preview = document.getElementById('image-preview2');
-        const removeButton = document.getElementById('remove-button2');
-        const file = input.files[0];
-        const reader = new FileReader();
-
-        reader.onloadend = function() {
-            preview.src = reader.result;
-            preview.classList.remove('hidden');
-            removeButton.classList.remove('hidden');
-        }
-
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
-            preview.classList.add('hidden');
-            removeButton.classList.add('hidden');
-        }
-    }
-
-    function removeImage2() {
-        const preview = document.getElementById('image-preview2');
-        const removeButton = document.getElementById('remove-button2');
-        const fileInput = document.getElementById('file-upload2');
-
-        preview.src = '';
-        preview.classList.add('hidden');
-        removeButton.classList.add('hidden');
-        fileInput.value = ''; // Clear the file input
-    }
-
-    window.onload = function() {
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
-        }
-    }
-</script>
-
+        window.addEventListener('popstate', function() {
+            // Recharger la page pour afficher les résultats de la recherche
+            location.reload();
+        });
+    </script>
 </html>
