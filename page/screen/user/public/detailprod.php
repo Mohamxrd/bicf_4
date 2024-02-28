@@ -61,8 +61,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $format_prod = $prods['formatProd'];
         $quantite_prodmin = $prods['qteProd_min'];
         $quatite_promax = $prods['qteProd_max'];
-        $livraison_prod = $prods['LivreCapProd']; // Modifier en fonction du nom de la colonne
-        
+        $livraison_prod = $prods['LivreCapProd'];
+         // Modifier en fonction du nom de la colonne
+        $id_vendeur = $prods['id_user'];
 
         // Modifier en fonction du nom de la colonne
         // Ajoutez d'autres attributs au besoin
