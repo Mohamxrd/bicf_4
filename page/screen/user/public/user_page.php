@@ -120,9 +120,9 @@ if ($client = $recupUser->fetch()) {
                                 <div class="mt-4" tabindex="-1" uk-slider="finite:true;sets: true">
 
                                     <div class="uk-slider-container pb-1">
-                                        <ul class="uk-slider-items grid grid-cols-2 gap-4" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
+                                        <ul class="uk-slider-items grid-small" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
                                             <a href="addprod.php">
-                                                <li class="w-full" uk-scrollspy-class="uk-animation-fade">
+                                                <li class="w-40" uk-scrollspy-class="uk-animation-fade">
                                                     <div class="p-3 px-4 rounded-lg bg-teal-100/60 text-teal-600 dark:text-white dark:bg-dark4">
                                                         <ion-icon name="cart" class="text-2xl drop-shadow-md"></ion-icon>
                                                         <div class="mt-1.5 text-sm font-medium"> Produit </div>
@@ -130,11 +130,20 @@ if ($client = $recupUser->fetch()) {
                                                 </li>
                                             </a>
                                             <a href="addcons.php">
-                                                <li class="w-full">
+                                                <li class="w-40">
                                                     <div class="p-3 px-4 rounded-lg bg-sky-100/60 text-sky-600 dark:text-white dark:bg-dark4">
                                                         <ion-icon name="pricetags" class="text-2xl drop-shadow-md"></ion-icon>
 
                                                         <div class="mt-1.5 text-sm font-medium"> Consommation </div>
+                                                    </div>
+                                                </li>
+                                            </a>
+                                            <a href="appelof.php">
+                                                <li class="w-40">
+                                                    <div class="p-3 px-4 rounded-lg bg-purple-100/60 text-purple-600 dark:text-white dark:bg-dark4">
+                                                        
+                                                        <ion-icon name="logo-capacitor" class="text-2xl drop-shadow-md"></ion-icon>
+                                                        <div class="mt-1.5 text-sm font-medium"> Appel d'offre </div>
                                                     </div>
                                                 </li>
                                             </a>
@@ -602,15 +611,15 @@ if ($client = $recupUser->fetch()) {
                         if ($recherche != "") {
                             $sql .= " AND nomArt LIKE '%$recherche%'";
                         }
-                        
+
 
                         // Exécuter la requête SQL
                         $requete = $conn->prepare($sql);
                         $requete->execute();
-                     
+
                         // Afficher les résultats
                         while ($produit = $requete->fetch()) {
-                            // Incrémenter le nombre de résultats trouvés
+                            // Incrémenter le nombre de résultats trouvésƒ
                             $resultatsTrouves++;
                     ?>
                             <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
