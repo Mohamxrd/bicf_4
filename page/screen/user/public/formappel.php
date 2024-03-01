@@ -2,22 +2,22 @@
 session_start();
 @include('../../../config.php');
 
-// Vérifier si l'utilisateur est connecté
+
+
 if (!isset($_SESSION['nom_user'])) {
     header('location: ../../../auth/login.php');
-    exit(); // Arrête l'exécution du script après la redirection
+    exit(); // Ajout pour terminer l'exécution après la redirection
 }
 
-// Récupérer l'ID de l'utilisateur à partir de la session
-$id_user = $_SESSION['id_user'];
 
-// Récupérer les informations de l'utilisateur à partir de la base de données
+
+$id_user = $_SESSION['id_user'];
+// Récupération des informations de l'utilisateur
 $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
 $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $recupUser->execute();
 
 if ($client = $recupUser->fetch()) {
-    // Récupérer les champs de l'utilisateur
     $nom_client = $client['nom_user'];
     $username_client = $client['username'];
     $phonenumber = $client['tel_user'];
@@ -26,86 +26,23 @@ if ($client = $recupUser->fetch()) {
     $activSector_user = $client['activSector_user'];
     $adress_user = $client['adress_user'];
     $email_user = $client['email_user'];
-    $pays_user = $client['pays_user'];
-    $local_user = $client['local_user'];
-    $ActivZone_user = $client['ActivZone_user'];
-}
 
-// Récupérer le nom de l'agent à partir de son ID
-if (isset($id_agent)) {
-    $recupAgent = $conn->prepare('SELECT nom_admin FROM admintable WHERE id_admin = :id_admin');
+
+    // Maintenant, récupérez les informations de l'agent
+    $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
     $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
     $recupAgent->execute();
 
     if ($agent = $recupAgent->fetch()) {
         $nom_agent = $agent['nom_admin'];
     }
-}
-
-// Récupérer les informations sur le produit à partir de son ID
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $id_prod = $_GET['id'];
-
-    $recupprods = $conn->prepare("SELECT * FROM prodUser WHERE id_prod = :id_prod ");
-    $recupprods->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
-    $recupprods->execute();
-
-    if ($prods = $recupprods->fetch()) {
-        // Récupérer les champs du produit
-        $nom_prod = $prods['nomArt'];
-        $description_prod = $prods['desProd'];
-        $prix_prod = $prods['PrixProd'];
-        $type_prod = $prods['typeProd'];
-        $conditionnement_prod = $prods['condProd'];
-        $format_prod = $prods['formatProd'];
-        $quantite_prodmin = $prods['qteProd_min'];
-        $quatite_promax = $prods['qteProd_max'];
-        $livraison_prod = $prods['LivreCapProd'];
-
-        $id_vendeur = $prods['id_user'];
-    }
-}
-
-$errorMsg = '';
-$successMsg = '';
-
-// Traitement du formulaire d'achat
-if (isset($_POST['submit'])) {
-    // Valider les données du formulaire
-    $quantite = filter_var($_POST['Quantité'], FILTER_VALIDATE_INT);
-    $localite = htmlspecialchars($_POST['local']);
-    $description = htmlspecialchars($_POST['desProd']);
-
-    if ($quantite === false || $quantite <= 0) {
-        $errorMsg = 'Veuillez saisir une quantité valide.';
-    } elseif (empty($localite) || empty($description)) {
-        $errorMsg = 'Veuillez remplir tous les champs.';
-    } else {
-        // Préparer la requête d'insertion avec une requête préparée
-        $insertQuery = $conn->prepare("INSERT INTO notifUser (message, localite, quantiteProd, id_user, id_trader, id_prod) VALUES (:description, :localite, :quantite, :id_user, :id_trader , :id_prod)");
-
-        // Associer les valeurs aux paramètres de la requête
-        $insertQuery->bindParam(':description', $description, PDO::PARAM_STR);
-        $insertQuery->bindParam(':localite', $localite, PDO::PARAM_STR);
-        $insertQuery->bindParam(':quantite', $quantite, PDO::PARAM_INT);
-        $insertQuery->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-        $insertQuery->bindParam(':id_trader', $id_vendeur, PDO::PARAM_INT);
-        $insertQuery->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
-
-        // Exécuter la requête
-        if ($insertQuery->execute()) {
-            $successMsg = "Les données ont été insérées avec succès.";
-        } else {
-            // Loguer l'erreur dans un fichier de journal
-            error_log("Erreur lors de l'insertion des données dans la table notifUser : " . $insertQuery->errorInfo()[2]);
-
-            // Afficher un message d'erreur générique
-            $errorMsg = "Une erreur s'est produite. Veuillez réessayer plus tard.";
-        }
-    }
+    // ... Ajoutez d'autres champs au besoin ...
+} else {
+    // Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
+    echo "Erreur: Utilisateur non trouvé dans la base de données.";
+    exit();
 }
 ?>
-
 
 
 
@@ -127,6 +64,12 @@ if (isset($_POST['submit'])) {
     <!-- css files -->
     <link rel="stylesheet" href="assets/css/tailwind.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Thème Tailwind pour DatePicker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_green.css">
+
 
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -220,6 +163,7 @@ if (isset($_POST['submit'])) {
                                     </div>
 
 
+
                                     <!-- slide nav icons -->
                                     <div class="dark:hidden">
                                         <a class="absolute -translate-y-1/2 top-1/2 -left-4 flex items-center w-8 h-full px-1.5 justify-start bg-gradient-to-r from-white via-white dark:from-slate-600 dark:via-slate-500 dark:from-transparent dark:via-transparent" href="#" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-xl dark:text-white"></ion-icon> </a>
@@ -272,87 +216,7 @@ if (isset($_POST['submit'])) {
                                 <div class="text-sm h-[400px] w-full overflow-y-auto pr-2">
 
                                     <!-- contents list -->
-                                    <div class="pl-2 p-1 text-sm font-normal dark:text-white">
 
-                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
-                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
-                                            <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Alexa Gray</b> started following you.
-                                                    Welcome him to your profile. 👋 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 4 hours
-                                                    ago </div>
-                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5">
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
-                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-7.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
-                                            <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1">Jesse Steeve</b> mentioned you in a story.
-                                                    Check it out and reply. 📣 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
-                                                    ago </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
-                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-6.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
-                                            <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Alexa stella</b> commented on your photo
-                                                    “Wow, stunning shot!” 💬 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
-                                                    ago </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
-                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
-                                            <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> John Michael</b> who you might know, is
-                                                    on socialite.</p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 2 hours
-                                                    ago </div>
-                                            </div>
-                                            <button type="button" class="button text-white bg-primary">fallow</button>
-                                        </a>
-                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
-                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
-                                            <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Sarah Gray</b> sent you a message. He
-                                                    wants to chat with you. 💖 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 4 hours
-                                                    ago </div>
-                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5">
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
-                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-4.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
-                                            <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Jesse Steeve</b> sarah tagged you <br> in
-                                                    a photo of your birthday party. 📸 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
-                                                    ago </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
-                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
-                                            <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Lewis Lewis</b> mentioned you in a story.
-                                                    Check it out and reply. 📣 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
-                                                    ago </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
-                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-7.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
-                                            <div class="flex-1 ">
-                                                <p> <b class="font-bold mr-1"> Martin Gray</b> liked your photo of the
-                                                    Eiffel Tower. 😍 </p>
-                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
-                                                    ago </div>
-                                            </div>
-                                        </a>
-
-                                    </div>
 
                                 </div>
 
@@ -608,218 +472,141 @@ if (isset($_POST['submit'])) {
 
         <!-- main contents -->
 
-
         <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
-            <div class="mb-3">
-                <h1 class=" text-center font-bold text-2xl">DETAILS DU PRODUITS</h1>
-            </div>
+            <!-- timeline -->
 
-            <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
 
-                <!-- search -->
-                <div class="mb-4 flex-1 mx-auto  ">
+            <div class="max-w-3xl mx-auto">
+                <div class="box relative rounded-lg shadow-md p-6">
 
-                    <div class="md:max-w-[650px] mx-auto flex-1 xl:space-y-6 space-y-3">
-
-                        <div class="flex items-center py-3 dark:border-gray-600 my-3">
-
-                            <!--  TITRE DU PRODUIT  -->
-                            <h1 class="text-xl"><?= $nom_prod ?></h1>
-
-                        </div>
-                    </div>
-
-                    <div class="mb-4 grid sm:grid-cols-2 gap-3" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
-
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title "> Type du produit </h4>
-                                <p><?= $type_prod ?></p>
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title"> conditionnement </h4>
-                                <p><?= $conditionnement_prod ?></p>
-                            </div>
-                        </div>
-
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title"> format </h4>
-                                <p><?= $format_prod ?></p>
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title"> Quantité traité</h4>
-                                <p>[<?= $quantite_prodmin ?> - <?= $quatite_promax ?>]</p>
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title"> Prix par unité </h4>
-                                <p><?= $prix_prod ?></p>
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title">Capacité de livré</h4>
-                                <p><?= $livraison_prod ?></p>
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title"> Zone economique </h4>
-                                <p><?= $ActivZone_user ?></p>
-                            </div>
-                        </div>
-                        <div class="card flex space-x-5 p-5">
-                            <div class="card-body flex-1 p-0">
-                                <h4 class="card-title"> Ville, Commune</h4>
-                                <p><?= $local_user ?>, <?= $adress_user  ?></p>
-                            </div>
-                        </div>
+                    <div class="flex-1">
+                        <h3 class="md:text-xl text-base font-semibold text-black dark:text-white mb-4">Faire l'appel d'offre</h3>
 
                     </div>
-                    <div class=" card flex space-x-5 p-5">
-                        <div class="card-body flex-1 p-0">
-                            <h4 class="card-title"> Description</h4>
-                            <p><?= $description_prod ?></p>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- image -->
 
-                <div class="flex-1 items-center justify-center">
+                    <div class=" text-sm">
 
-                    <div class="flex items-center flex-col lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
-                        <div class=" p-5 m-5  px-6 border1 dark:bg-dark2">
-                            <?php if (!empty($prods['imgProd'])) : ?>
-                                <img src="<?= $prods['imgProd'] ?>" alt="Image du produit">
+                        <div class="p-4 space-y-2">
+
+
+                            <?php if (isset($errorMsg)) : ?>
+                                <div uk-alert>
+                                    <div class="p-2 border bg-red-50 border-red-500/30 rounded-xl dark:bg-slate-700">
+                                        <div class="inline-flex items-center justify-between gap-6">
+                                            <!-- Icon -->
+                                            <div class="p-1 text-white shadow rounded-xl shadow-red-300" style="background-color: red">
+                                                <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path fill-rule="evenodd" d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm9.4-5.5a1 1 0 1 0 0 2 1 1 0 1 0 0-2ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4c0-.6-.4-1-1-1h-2Z" clip-rule="evenodd" />
+                                                </svg>
+
+                                            </div>
+                                            <!-- Text -->
+                                            <div class="text-base font-semibold text-red"><?= $errorMsg ?></div>
+                                            <!-- Icon close -->
+
+                                        </div>
+                                    </div>
+                                </div>
                             <?php endif; ?>
-                        </div>
 
-                        <?php if (isset($id_user) && isset($id_vendeur) && $id_user != $id_vendeur) : ?>
+                            <?php if (isset($successMsg)) : ?>
+                                <div uk-alert>
+                                    <div class="p-2 border bg-green-50 border-green-500/30 rounded-xl dark:bg-slate-700">
+                                        <div class="inline-flex items-center justify-between gap-6">
+                                            <!-- Icon -->
+                                            <div class="p-1 text-white bg-green-500 shadow rounded-xl shadow-green-300">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                                                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                                                </svg>
+                                            </div>
+                                            <!-- Text -->
+                                            <div class="text-base font-semibold text-green-700"><?= $successMsg ?></div>
+                                            <!-- Icon close -->
 
-                            <div class="flex flex-col justify-center items-center mt-4 w-[300px]">
-                                <!-- Utilisation de flexbox pour centrer verticalement -->
-                                <a href="#" uk-toggle="target: #achatd" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
-                                <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Achat Grouper</a>
-                            </div>
-
-                        <?php else : ?>
-
-                            <p class="text-center mt-4 text-gray-500">Ce produit vous appartient</p>
-
-                        <?php endif; ?>
-
-
-
-
-                        <div class="lg:p-20 p-10" id="achatd" uk-modal>
-
-                            <div class="relative mx-auto bg-white  rounded-lg shadow-xl uk-modal-dialog w-[400px]">
-
-                                <form method="post">
-                                    <div class="px-6 py-4 border-b">
-                                        <h2 class="text-xl font-semibold">Achat direct</h2>
+                                        </div>
                                     </div>
-                                    <div class="p-6 overflow-y-auto " uk-overflow-auto>
-                                        <input type="number" class="w-full mb-3" placeholder="Quantité" name="Quantité">
-                                        <input type="text" class="w-full mb-3" placeholder="Localité" name="local">
-                                        <textarea class="w-full h-20" name="desProd" id="" cols="30" rows="10" placeholder="Description"></textarea>
+                                </div>
+
+                            <?php endif; ?>
+
+
+                            <form action="" method="post" enctype="multipart/form-data">
+                                <input type="text" class="w-full mb-3" placeholder="Nom du produit" name="titre_prod">
+                                <input type="text" class="w-full mb-3" placeholder="Quantité" name="quantité">
+                                <input type="number" class="w-full mb-3" placeholder="Prix unitaire max" name="prixmax">
+
+                                <input type="number" class="w-full mb-3" placeholder="Prix par unité (FCFA)" name="prixprod">
+                                <select class="w-full mb-3" name="type_prod">
+                                    <option value="" disabled selected>Payement</option>
+                                    <option value="Mode">Mode</option>
+                                    <option value="Comptant">Comptant</option>
+                                    <option value="A credit">À credit</option>
+                                </select>
+                                <select class="w-full mb-3" name="livraisonProd">
+                                    <option value="" disabled selected>Livraison</option>
+                                    <option value="Oui">Oui</option>
+                                    <option value="Non">Non</option>
+                                </select>
+
+
+                                <div date-rangepicker class="flex items-center w-full mb-3">
+                                    <div class="w-1/2 mr-2 relative">
+                                        <input name="start" id="date-start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sélectionner la date de début">
+                                        
                                     </div>
-                                    <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
-                                        <button class="px-4 py-1.5 rounded-md uk-modal-close" type="reset">Annuler</button>
-                                        <button class="px-5 py-1.5 bg-gray-100 rounded-md " type="submit" name="submit">Envoyer</button>
+                                    <span class="mx-4 text-gray-500">à</span>
+                                    <div class="w-1/2 ml-2 relative">
+                                        <input name="end" id="date-end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sélectionner la date de fin">
+                                        
                                     </div>
-                                </form>
+                                </div>
 
 
-                                <!-- close button -->
-                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
 
-                            </div>
+                                <textarea class="w-full h-20" name="desProd" id="" cols="30" rows="10" placeholder="Description"></textarea>
 
+                                <div class="flex justify-between p-3 items-center">
+                                    <h3 class="text-black dark:text-white text-xl">Ajouter une piece joint (facultatif)</h3>
+                                    <div class="p-4 border-dotted border-2 border-gray-400 rounded-md relative">
+                                        <label for="file-upload" class="w-[100px] cursor-pointer">
+                                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fill-rule="evenodd" d="M9 2.2V7H4.2l.4-.5 3.9-4 .5-.3Zm2-.2v5a2 2 0 0 1-2 2H4v11c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Z" clip-rule="evenodd" />
+                                            </svg>
+                                        </label>
+                                        <input id="file-upload" class="hidden" type="file" onchange="previewImage(this)" name="image">
+                                        <img id="image-preview" class="absolute inset-0 w-full h-full object-cover hidden">
+                                        <button onclick="removeImage()" id="remove-button" class="absolute top-2 right-3 text-red-500 text-xl font-bold rounded-full bg-white p-1 hidden">&times;</button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
+                                    <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
+                                        Annuler</button>
+                                    <button type="submit" name="submit" class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span class="ripple-overlay"></span></button>
+                                </div>
+                            </form>
                         </div>
-
-                        <div class="lg:p-20 p-10" id="achatn" uk-modal>
-
-                            <div class="relative mx-auto bg-white  rounded-lg shadow-xl uk-modal-dialog w-[400px]">
-
-                                <div class="px-6 py-4 border-b">
-                                    <h2 class="text-xl font-semibold">Achat negocier</h2>
-                                </div>
-
-                                <div class="p-6 overflow-y-auto h-96" uk-overflow-auto>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                </div>
-
-                                <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
-                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Cancel</button>
-                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Save</button>
-                                </div>
-
-                                <!-- close button -->
-                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                        <div class="lg:p-20 p-10" id="achatg" uk-modal>
-
-                            <div class="relative mx-auto bg-white  rounded-lg shadow-xl uk-modal-dialog w-[400px]">
-
-                                <div class="px-6 py-4 border-b">
-                                    <h2 class="text-xl font-semibold">Achat direct</h2>
-                                </div>
-
-                                <div class="p-6 overflow-y-auto h-96" uk-overflow-auto>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                </div>
-
-                                <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
-                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Cancel</button>
-                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Save</button>
-                                </div>
-
-                                <!-- close button -->
-                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-
-                            </div>
-
-                        </div>
-
                     </div>
                 </div>
-
-
-
             </div>
-
-
         </main>
 
     </div>
+
+
+    <!-- open chat box -->
+
+
+
+    <!-- post preview modal -->
+
+
+    <!-- create status -->
+
+
+    <!-- create story -->
 
 
     <!-- Javascript  -->
@@ -831,17 +618,94 @@ if (isset($_POST['submit'])) {
     <!-- Ion icon -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-    <script>
-        window.onload = function() {
-            if (window.history.replaceState) {
-                window.history.replaceState(null, null, window.location.href);
-            }
-        }
-    </script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 
 
 </body>
+
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('image-preview');
+        const removeButton = document.getElementById('remove-button');
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function() {
+            preview.src = reader.result;
+            preview.classList.remove('hidden');
+            removeButton.classList.remove('hidden');
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.classList.add('hidden');
+            removeButton.classList.add('hidden');
+        }
+    }
+
+    function removeImage() {
+        const preview = document.getElementById('image-preview');
+        const removeButton = document.getElementById('remove-button');
+        const fileInput = document.getElementById('file-upload');
+
+        preview.src = '';
+        preview.classList.add('hidden');
+        removeButton.classList.add('hidden');
+        fileInput.value = ''; // Clear the file input
+    }
+
+    function previewImage2(input) {
+        const preview = document.getElementById('image-preview2');
+        const removeButton = document.getElementById('remove-button2');
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function() {
+            preview.src = reader.result;
+            preview.classList.remove('hidden');
+            removeButton.classList.remove('hidden');
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.classList.add('hidden');
+            removeButton.classList.add('hidden');
+        }
+    }
+
+    function removeImage2() {
+        const preview = document.getElementById('image-preview2');
+        const removeButton = document.getElementById('remove-button2');
+        const fileInput = document.getElementById('file-upload2');
+
+        preview.src = '';
+        preview.classList.add('hidden');
+        removeButton.classList.add('hidden');
+        fileInput.value = ''; // Clear the file input
+    }
+
+    window.onload = function() {
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    }
+
+    flatpickr("#date-start", {
+        enableTime: false, // désactiver le choix de l'heure
+        dateFormat: "Y-m-d", // format de la date
+        // d'autres options si nécessaire
+    });
+    flatpickr("#date-end", {
+        enableTime: false,
+        dateFormat: "Y-m-d",
+        // d'autres options si nécessaire
+    });
+</script>
+
+
 
 </html>

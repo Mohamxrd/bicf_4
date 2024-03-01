@@ -590,7 +590,7 @@ if ($client = $recupUser->fetch()) {
                         $recherche = $_POST['recherche'];
 
                         // Construire la requête SQL en fonction des filtres sélectionnés
-                        $sql = "SELECT * FROM prodUser WHERE 1=1"; // Clause WHERE 1=1 permet de construire dynamiquement la requête
+                        $sql = "SELECT * FROM prodUser WHERE 1=1 "; // Clause WHERE 1=1 permet de construire dynamiquement la requête
 
                         if ($zoneEconomique != "") {
                             $sql .= " AND zonecoProd = '$zoneEconomique'";

@@ -906,8 +906,14 @@ if (isset($_POST['submit2'])) {
         removeButton.classList.add('hidden');
         fileInput.value = ''; // Clear the file input
     }
-
-    
 </script>
+<script>
+    window.onload = function() {
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    }
+</script>
+
 
 </html>

@@ -38,18 +38,19 @@ if ($client = $recupUser->fetch()) {
     exit();
 }
 
-$recupAchat = $conn->prepare("SELECT achatProd.*, prodUser.* FROM achatProd 
-LEFT JOIN prodUser ON achatProd.id_prod = prodUser.id_prod 
-WHERE achatProd.id_user2 = :id_user ORDER BY achatProd.date_ajout DESC");
+// Préparez la requête pour récupérer les notifications de l'utilisateur à partir de la table notifUser
+$recupNotif = $conn->prepare("SELECT notifUser.*, prodUser.* FROM notifUser 
+LEFT JOIN prodUser ON notifUser.id_prod = prodUser.id_prod 
+WHERE notifUser.id_trader = :id_user ORDER BY notifUser.date_ajout DESC");
 
 // Liez la valeur de $id_user à la variable de paramètre :id_user dans la requête
-$recupAchat->bindParam(':id_user', $_SESSION['id_user'], PDO::PARAM_INT);
+$recupNotif->bindParam(':id_user', $_SESSION['id_user'], PDO::PARAM_INT);
 
 // Exécutez la requête préparée
-$recupAchat->execute();
+$recupNotif->execute();
 
-
-$nombreNotif = $recupAchat->rowCount();
+// Récupérez le nombre de notifications
+$nombreNotif = $recupNotif->rowCount();
 
 
 
@@ -138,7 +139,7 @@ $nombreNotif = $recupAchat->rowCount();
                                 <!-- slider -->
                                 <div class="mt-4" tabindex="-1" uk-slider="finite:true;sets: true">
 
-                                <div class="uk-slider-container pb-1">
+                                    <div class="uk-slider-container pb-1">
                                         <ul class="uk-slider-items grid-small" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
                                             <a href="addprod.php">
                                                 <li class="w-40" uk-scrollspy-class="uk-animation-fade">
@@ -160,7 +161,7 @@ $nombreNotif = $recupAchat->rowCount();
                                             <a href="appelof.php">
                                                 <li class="w-40">
                                                     <div class="p-3 px-4 rounded-lg bg-purple-100/60 text-purple-600 dark:text-white dark:bg-dark4">
-                                                        
+
                                                         <ion-icon name="logo-capacitor" class="text-2xl drop-shadow-md"></ion-icon>
                                                         <div class="mt-1.5 text-sm font-medium"> Appel d'offre </div>
                                                     </div>
@@ -575,21 +576,22 @@ $nombreNotif = $recupAchat->rowCount();
 
 
                 <?php
+                // Boucle sur les notifications récupérées depuis la table notifUser
+                while ($notification = $recupNotif->fetch()) {
+                    // Récupération des informations de la notification
+                    $id_notification = $notification['id_notif'];
+                    $message = $notification['message'];
+                    $localite = $notification['localite'];
+                    $quantite = $notification['quantiteProd'];
+                    $confirm = $notification['confirm'];
+                    $id_client = $notification['id_user'];
 
-                while ($achat = $recupAchat->fetch()) {
-                    $id_achat = $achat['id'];
-                    $quantite = $achat['quantiteProd'];
-                    $descrip = $achat['descrip'];
-                    $local = $achat['localite'];
-                    $confirm = $achat['confirm'];
-
-                    // Informations du produit de la table prodUser
-                    $nom_produit = $achat['nomArt'];
-                    $prix_produit = $achat['PrixProd'];
-
-                    // Récupérer l'ID de l'achat
-
+                    // Informations sur le produit associé à la notification
+                    $nom_produit = $notification['nomArt'];
+                    $prix_produit = $notification['PrixProd'];
                 ?>
+
+                    <!-- Affichage de chaque notification -->
                     <div class="mb-3 space-y-3 text-sm font-semibold dark:text-white" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
                         <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
                             <div class="flex-1"><?= $nom_produit ?> <!-- Titre du produit -->
@@ -598,41 +600,32 @@ $nombreNotif = $recupAchat->rowCount();
                                     <span class="block text-xs font-medium dark:text-white/70">
                                         Quantité: <?= $quantite ?>
                                     </span>
-                                <?php endif; ?>
-
-                                <?php if ($confirm == 'accepte') :  ?>
-
                                     <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p>Votre demande à été acepter par le fournieur</p>
+                                        <p><?= $message ?></p>
                                     </span>
-
-                                <?php endif; ?>
-                                <?php if ($confirm == 'refus') :  ?>
-
+                                <?php elseif ($confirm == 'accepte') : ?>
                                     <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p>Le fourniseur à refuser votre demande</p>
+                                        <p>Votre demande a été acceptée par le fournisseur</p>
                                     </span>
-
+                                <?php elseif ($confirm == 'refus') : ?>
+                                    <span class="block text-xs font-medium  dark:text-white/70">
+                                        <p>Le fournisseur a refusé votre demande</p>
+                                    </span>
                                 <?php endif; ?>
-                                <span class="block text-xs font-medium  dark:text-white/70">
-                                    <p><?= $descrip ?></p>
-                                </span>
+
 
                             </div>
+
                             <form method="post">
                                 <?php if ($confirm == '') : ?>
-
-                                    <input type="hidden" name="id_achat" value="<?= $id_achat ?>">
+                                    <input type="hidden" name="id_notification" value="<?= $id_notification ?>">
                                     <button type="submit" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
-
-                                    <button type="submit" name="refus" href="#" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Refuser</button>
-                                <?php endif; ?>
-                                <?php if ($confirm == 'accepte') :  ?>
-                                    <button href="#"  class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
-                                    <button type="submit" href="#" name="annuler" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red">Annuler</button>
+                                    <button type="submit" name="refus" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Refuser</button>
+                                <?php elseif ($confirm == 'accepte') : ?>
+                                    <button type="submit" name="confirmer" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
+                                    <button type="submit" name="annuler" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Annuler</button>
                                 <?php endif; ?>
                             </form>
-
                         </div>
                     </div>
                 <?php
@@ -642,40 +635,70 @@ $nombreNotif = $recupAchat->rowCount();
                 <?php
 
                 if (isset($_POST['accepter'])) {
+                    // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
+                    if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
+                        // Récupérez l'ID de la notification à partir du formulaire posté
+                        $id_notification = $_POST['id_notification'];
+                        // Récupérez l'ID de l'utilisateur depuis la session
+                        $id_user = $_SESSION['id_user'];
 
-                    $id_user = $_SESSION['id_user']; // Assurez-vous que $id_user est correctement défini
+                        // Exécutez la requête SQL pour mettre à jour les valeurs dans la table notifUser
+                        $updateNotif = $conn->prepare("UPDATE notifUser SET confirm = 'accepte', id_trader = id_user, id_user = null WHERE id_notif = :id_notification AND id_trader = :id_user");
 
-                    // Exécutez une requête SQL pour mettre à jour les valeurs dans la table achatProd
-                    // Pour la mise à jour d'un enregistrement existant
-                    $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = id_user1, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'accepte' WHERE id = :id_achat AND id_user2 = :id_user");
+                        // Liez les valeurs aux paramètres de la requête
+                        $updateNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
+                        $updateNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
-
-                    $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
-                    $updateAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-                    $updateAchat->execute();
+                        // Exécutez la requête préparée
+                        $updateNotif->execute();
+                    }
                 }
 
+
                 if (isset($_POST['refus'])) {
+                    // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
+                    if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
+                        // Récupérez l'ID de la notification à partir du formulaire posté
+                        $id_notification = $_POST['id_notification'];
 
-                    $id_user = $_SESSION['id_user']; // Assurez-vous que $id_user est correctement défini
+                        // Récupérez l'ID de l'utilisateur depuis la session
+                        $id_user = $_SESSION['id_user'];
 
-                    $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = id_user1, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'refus' WHERE id = :id_achat AND id_user2 = :id_user");
+                        // Exécutez la requête SQL pour mettre à jour les valeurs dans la table notifUser
+                        $updateNotif = $conn->prepare("UPDATE notifUser SET confirm = 'refus', id_trader = id_user, id_user = null WHERE id_notif = :id_notification AND id_trader = :id_user");
 
+                        // Liez les valeurs aux paramètres de la requête
+                        $updateNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
+                        $updateNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
-                    $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
-                    $updateAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-                    $updateAchat->execute();
+                        // Exécutez la requête préparée
+                        $updateNotif->execute();
+                    }
                 }
 
 
                 if (isset($_POST['annuler'])) {
-                    $id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+                    // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
+                    if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
+                        // Récupérez l'ID de la notification à partir du formulaire posté
+                        if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
+                            // Récupérez l'ID de la notification à partir du formulaire posté
+                            $id_notification = $_POST['id_notification'];
 
-                    $updateAchat = $conn->prepare("UPDATE achatProd SET id_user2 = null, id_user1 = NULL, quantiteProd = NULL, descrip = NULL, confirm = 'annuler' WHERE id = :id_achat AND id_user2 = :id_user");
+                            // Récupérez l'ID de l'utilisateur depuis la session
+                            $id_user = $_SESSION['id_user'];
 
-                    $updateAchat->bindParam(':id_achat', $id_achat, PDO::PARAM_INT);
-                    $updateAchat->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-                    $updateAchat->execute();
+                            // Exécutez la requête SQL pour mettre à jour les valeurs dans la table notifUser
+                            $updateNotif = $conn->prepare("UPDATE notifUser SET confirm = null, id_trader = null, id_user = null WHERE id_notif = :id_notification AND id_trader = :id_user");
+
+                            // Liez les valeurs aux paramètres de la requête
+                            $updateNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
+                            $updateNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+
+                            // Exécutez la requête préparée
+                            $updateNotif->execute();
+                        }
+                    }
                 }
                 ?>
 
@@ -713,11 +736,11 @@ $nombreNotif = $recupAchat->rowCount();
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script>
-         window.onload = function() {
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
+        window.onload = function() {
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
         }
-    }
     </script>
 
 

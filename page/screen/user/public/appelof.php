@@ -540,18 +540,20 @@ if ($client = $recupUser->fetch()) {
                     // Initialiser une variable pour suivre le nombre de résultats trouvés
                     $resultatsTrouves = 0;
 
+                    $zoneEconomique = "";
+                    $typeProduit = "";
+                    $quantite = "";
+                    $recherche = "";
+
                     // Vérifier si la requête de recherche a été soumise
                     if (isset($_POST['recherche'])) {
-                        // Récupérer les valeurs des filtres et du terme de recherche
-
                         $zoneEconomique = isset($_POST['zone_economique']) ? $_POST['zone_economique'] : "";
                         $typeProduit = isset($_POST['type_produit']) ? $_POST['type_produit'] : "";
-
                         $quantite = $_POST['quantite'];
                         $recherche = $_POST['recherche'];
 
                         // Construire la requête SQL en fonction des filtres sélectionnés
-                        $sql = "SELECT * FROM prodUser WHERE 1=1"; // Clause WHERE 1=1 permet de construire dynamiquement la requête
+                        $sql = "SELECT COUNT(DISTINCT id_user) AS total FROM prodUser WHERE 1=1"; // Clause WHERE 1=1 permet de construire dynamiquement la requête
 
                         if ($zoneEconomique != "") {
                             $sql .= " AND zonecoProd = '$zoneEconomique'";
@@ -569,64 +571,87 @@ if ($client = $recupUser->fetch()) {
                             $sql .= " AND nomArt LIKE '%$recherche%'";
                         }
 
-
                         // Exécuter la requête SQL
                         $requete = $conn->prepare($sql);
                         $requete->execute();
 
-                        // Afficher les résultats
-                        while ($produit = $requete->fetch()) {
-                            // Incrémenter le nombre de résultats trouvésƒ
-                            $resultatsTrouves++;
+                        // Obtenir le nombre de résultats trouvés
+                        $resultatRequete = $requete->fetch();
+                        $resultatsTrouves = $resultatRequete['total'];
+
+                        // Afficher les résultats s'il y en a
+                        if ($resultatsTrouves > 0) {
                     ?>
                             <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
                                 <div class="flex items-center gap-3 sm:p-4 p-2.5 text-sm font-medium">
                                     <div class="flex-1">
-                                        <a href="detailprod.php?id=<?= $produit['id_prod'] ?>">
-                                            <h4 class="text-lg text-black dark:text-white"><?= $produit['nomArt']; ?></h4>
-                                        </a>
+                                        <h4 class="text-lg text-black dark:text-white"><?= $recherche ?></h4>
                                     </div>
                                     <div class="flex">
-                                     
                                         <div class="flex p-1 items-center text-xs bg-teal-100/60 text-teal-600 rounded">
-                                        <ion-icon name="person" class="drop-shadow-md mr-1"></ion-icon>
-                                            <span class="">12</span>
-
+                                            <ion-icon name="person" class="drop-shadow-md mr-1"></ion-icon>
+                                            <span><?= $resultatsTrouves ?></span>
                                         </div>
                                     </div>
-
-
                                 </div>
+                            </div>
 
+                            <!-- Résultats de la recherche -->
+                            <div class="flex flex-col justify-center bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3 p-3">
+                                <?php
+                                // Construire une nouvelle requête pour obtenir les détails des produits correspondants à la recherche
+                                $sqlDetails = "SELECT nomArt FROM prodUser WHERE 1=1";
+
+                                if ($zoneEconomique != "") {
+                                    $sqlDetails .= " AND zonecoProd = '$zoneEconomique'";
+                                }
+
+                                if ($typeProduit != "") {
+                                    $sqlDetails .= " AND typeProd = '$typeProduit'";
+                                }
+
+                                if ($quantite != "") {
+                                    $sqlDetails .= " AND ('$quantite' BETWEEN qteProd_min AND qteProd_max OR qteProd_min = '' OR qteProd_max = '')";
+                                }
+
+                                if ($recherche != "") {
+                                    $sqlDetails .= " AND nomArt LIKE '%$recherche%'";
+                                }
+
+                                // Exécuter la requête SQL pour les détails des produits
+                                $requeteDetails = $conn->prepare($sqlDetails);
+                                $requeteDetails->execute();
+
+                                // Afficher les détails des produits
+                                while ($produit = $requeteDetails->fetch()) {
+                                ?>
+                                    <div class="flex items-center gap-3 sm:p-4 p-2.5 text-sm font-medium border-b">
+                                        <div class="flex-1">
+                                            <h4 class="text-lg text-black dark:text-white"><?= $produit['nomArt'] ?></h4>
+                                        </div>
+                                        <div class="flex">
+                                            <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-600 dark:focus:ring-teal-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+                                <div class="flex justify-center items-center dark:text-white/80 p-4 w-full">
+                                    <button onclick="window.location.href = 'formappel.php'" class="text-white p-2 bg-blue-500 rounded-md">Faire un appel d'offre</button>
+                                </div>
 
                             </div>
                         <?php
-                        }
-
-                        // Vérifier s'il n'y a aucun résultat trouvé
-                        if ($resultatsTrouves == 0) {
-                        ?>
+                        } else { ?>
                             <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">
                                 <p>Aucun résultat trouvé.</p>
                             </div>
                         <?php
                         }
-                    } else {
-                        // Si la requête de recherche n'a pas été soumise, afficher tous les produits
-
-                        ?>
+                    } else { ?>
                         <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">
-
                             <div class="text-sm text-gray-500 mt-6 text-center">Tapez dans la barre de recherche le produit ou le service dont vous avez besoin pour faire un appel d'offre</div>
                         </div>
-                    <?php
-                    }
-                    ?>
-
-
-
-
-
+                    <?php } ?>
 
 
                 </div>
@@ -753,29 +778,30 @@ if ($client = $recupUser->fetch()) {
 </body>
 
 <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            // Récupérer les valeurs des champs de recherche
-            var zoneEconomique = document.querySelector('select[name="zone_economique"]').value;
-            var typeProduit = document.querySelector('select[name="type_produit"]').value;
-            var quantite = document.querySelector('input[name="quantite"]').value;
-            var recherche = document.querySelector('input[name="recherche"]').value;
+    window.addEventListener('DOMContentLoaded', function() {
+        // Récupérer les valeurs des champs de recherche
+        var zoneEconomique = document.querySelector('select[name="zone_economique"]').value;
+        var typeProduit = document.querySelector('select[name="type_produit"]').value;
+        var quantite = document.querySelector('input[name="quantite"]').value;
+        var recherche = document.querySelector('input[name="recherche"]').value;
 
-            // Construire l'URL avec les paramètres de recherche
-            var newURL = window.location.origin + window.location.pathname + '?';
+        // Construire l'URL avec les paramètres de recherche
+        var newURL = window.location.origin + window.location.pathname + '?';
 
-            // Ajouter les paramètres de recherche à l'URL
-            newURL += 'zone_economique=' + encodeURIComponent(zoneEconomique) + '&';
-            newURL += 'type_produit=' + encodeURIComponent(typeProduit) + '&';
-            newURL += 'quantite=' + encodeURIComponent(quantite) + '&';
-            newURL += 'recherche=' + encodeURIComponent(recherche);
+        // Ajouter les paramètres de recherche à l'URL
+        newURL += 'zone_economique=' + encodeURIComponent(zoneEconomique) + '&';
+        newURL += 'type_produit=' + encodeURIComponent(typeProduit) + '&';
+        newURL += 'quantite=' + encodeURIComponent(quantite) + '&';
+        newURL += 'recherche=' + encodeURIComponent(recherche);
 
-            // Modifier l'URL de la page sans rechargement
-            window.history.replaceState(null, null, newURL);
-        });
+        // Modifier l'URL de la page sans rechargement
+        window.history.replaceState(null, null, newURL);
+    });
 
-        window.addEventListener('popstate', function() {
-            // Recharger la page pour afficher les résultats de la recherche
-            location.reload();
-        });
-    </script>
+    window.addEventListener('popstate', function() {
+        // Recharger la page pour afficher les résultats de la recherche
+        location.reload();
+    });
+</script>
+
 </html>
