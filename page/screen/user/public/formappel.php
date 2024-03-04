@@ -42,6 +42,21 @@ if ($client = $recupUser->fetch()) {
     echo "Erreur: Utilisateur non trouvé dans la base de données.";
     exit();
 }
+
+if(isset($_POST['submit'])){
+
+    $titre_prod = $_POST['titre_prod'];
+    $quantite = $_POST['quantité'];
+    $prixmax = $_POST['prixmax'];
+    $payement = $_POST['payement'];
+    $livraisonProd = $_POST['livraisonProd'];
+    $dateTot = $_POST['dateTot'];
+    $dateTard = $_POST['dateTard'];
+    $desProd = $_POST['desProd'];
+
+    
+
+}
 ?>
 
 
@@ -538,12 +553,14 @@ if ($client = $recupUser->fetch()) {
                                 <input type="text" class="w-full mb-3" placeholder="Quantité" name="quantité">
                                 <input type="number" class="w-full mb-3" placeholder="Prix unitaire max" name="prixmax">
 
-                                <input type="number" class="w-full mb-3" placeholder="Prix par unité (FCFA)" name="prixprod">
-                                <select class="w-full mb-3" name="type_prod">
+
+                                <select class="w-full mb-3" name="payement">
                                     <option value="" disabled selected>Payement</option>
-                                    <option value="Mode">Mode</option>
-                                    <option value="Comptant">Comptant</option>
+                                    <option value="Payerment comptant">Payement comptant</option>
+                                    <option value="Avance partielle">Avance partielle</option>
                                     <option value="A credit">À credit</option>
+                                    <option value="Vente à terme">Vente à terme</option>
+                                    <option value="Quotionnement / Quarantie de prèt">Quotionnement / Garantie de prèt</option>
                                 </select>
                                 <select class="w-full mb-3" name="livraisonProd">
                                     <option value="" disabled selected>Livraison</option>
@@ -554,13 +571,19 @@ if ($client = $recupUser->fetch()) {
 
                                 <div date-rangepicker class="flex items-center w-full mb-3">
                                     <div class="w-1/2 mr-2 relative">
-                                        <input name="start" id="date-start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sélectionner la date de début">
-                                        
+                                        <?php
+                                        // Obtenez la date actuelle au format "Y-m-d"
+                                        $dateActuelle = date('Y-m-d', strtotime('+2 days'));
+                                        ?>
+                                        <label for="datePicker" >Au plus tôt</label>
+                                        <input type="date" id="datePicker" name="dateTot" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sélectionner la date de début" min="<?php echo $dateActuelle; ?>">
                                     </div>
-                                    <span class="mx-4 text-gray-500">à</span>
+
+                                    <span class="mx-4 text-gray-500 ">à</span>
                                     <div class="w-1/2 ml-2 relative">
-                                        <input name="end" id="date-end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sélectionner la date de fin">
-                                        
+                                        <label for="date-end" class="mb-1">Au plus tard</label>
+                                        <input type="date" id="datePicker" name="dateTard" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Sélectionner la date de début" min="<?php echo $dateActuelle; ?>">
+
                                     </div>
                                 </div>
 
@@ -584,7 +607,7 @@ if ($client = $recupUser->fetch()) {
                                 <div class="flex items-center gap-4 mt-4 lg:pl-[10.5rem]">
                                     <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
                                         Annuler</button>
-                                    <button type="submit" name="submit" class="button lg:px-10 bg-primary text-white max-md:flex-1"> Ajouter <span class="ripple-overlay"></span></button>
+                                    <button type="submit" name="submit" class="button lg:px-10 bg-primary text-white max-md:flex-1"> Envoyer <span class="ripple-overlay"></span></button>
                                 </div>
                             </form>
                         </div>

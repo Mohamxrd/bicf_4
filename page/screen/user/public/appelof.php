@@ -629,9 +629,6 @@ if ($client = $recupUser->fetch()) {
                                         <div class="flex-1">
                                             <h4 class="text-lg text-black dark:text-white"><?= $produit['nomArt'] ?></h4>
                                         </div>
-                                        <div class="flex">
-                                            <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-teal-600 bg-gray-100 border-gray-300 rounded focus:ring-teal-600 dark:focus:ring-teal-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" checked>
-                                        </div>
                                     </div>
                                 <?php } ?>
 
