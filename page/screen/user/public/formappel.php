@@ -43,20 +43,102 @@ if ($client = $recupUser->fetch()) {
     exit();
 }
 
+
+
 if(isset($_POST['submit'])){
 
-    $titre_prod = $_POST['titre_prod'];
-    $quantite = $_POST['quantité'];
-    $prixmax = $_POST['prixmax'];
-    $payement = $_POST['payement'];
-    $livraisonProd = $_POST['livraisonProd'];
-    $dateTot = $_POST['dateTot'];
-    $dateTard = $_POST['dateTard'];
-    $desProd = $_POST['desProd'];
+    // Récupération des données du formulaire
+    $titre_prod = isset($_POST['titre_prod']) ? htmlspecialchars($_POST['titre_prod']) : '';
+    $quantite = isset($_POST['quantite']) ? htmlspecialchars($_POST['quantite']) : '';
+    $prixmax = isset($_POST['prixmax']) ? htmlspecialchars($_POST['prixmax']) : '';
+    $payement = isset($_POST['payement']) ? htmlspecialchars($_POST['payement']) : '';
+    $livraisonProd = isset($_POST['livraisonProd']) ? htmlspecialchars($_POST['livraisonProd']) : '';
+    $dateTot = isset($_POST['dateTot']) ? htmlspecialchars($_POST['dateTot']) : '';
+    $dateTard = isset($_POST['dateTard']) ? htmlspecialchars($_POST['dateTard']) : '';
+    $desProd = isset($_POST['desProd']) ? htmlspecialchars($_POST['desProd']) : '';
 
-    
+    // Vérification si les champs obligatoires sont vides
+    if(empty($titre_prod) || empty($quantite) || empty($prixmax) || empty($payement) || empty($livraisonProd) || empty($dateTot) || empty($dateTard) || empty($desProd)){
+        $errorMsg = 'Veuillez remplir tous les champs.';
+    } else {
+        // Récupération de l'ID de l'utilisateur à partir de la session
+        $id_demander = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
+        // Préparation de la requête d'insertion
+        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt, quantite, prixMax, payement, dateTot, dateTard, descrip, id_demander, id_trader) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+        // Si une image a été téléchargée, la traiter
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $image_name = $_FILES['image']['name']; // Nom de l'image
+            $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
+            $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
+            $target_file = $target_dir . basename($image_name);
+
+            // Déplacer l'image téléchargée vers le dossier de destination
+            if (move_uploaded_file($image_tmp_name, $target_file)) {
+                // L'image a été téléchargée avec succès
+
+                // Préparation de la requête d'insertion avec l'image
+                $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt, quantite, prixMax, payement, dateTot, dateTard, descrip, joint, id_demander, id_trader) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                // Exécution de la requête d'insertion avec l'image
+                if($insertAppel) {
+                    if(isset($_GET['id_trader'])){
+                        $id_trader = explode(",", $_GET['id_trader']);
+
+                        // Boucler sur chaque id_trader
+                        foreach($id_trader as $id){
+
+                            // Exécuter la requête d'insertion avec les valeurs appropriées
+                            $insertAppel->execute([$titre_prod, $quantite, $prixmax, $payement, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id]);
+                        }
+                    }
+
+                    // Message de succès
+                    $successMsg = "L'appel d'offre a été enregistré avec succès.";
+                } else {
+                    // Erreur lors de la préparation de la requête
+                    $errorMsg = "Une erreur s'est produite lors de l'enregistrement de l'appel d'offre.";
+                }
+            } else {
+                // Erreur lors du téléchargement de l'image
+                $errorMsg = "Une erreur s'est produite lors du téléchargement de l'image.";
+            }
+        } else {
+            // Pas d'image téléchargée
+            // Préparation de la requête d'insertion sans l'image
+            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt, quantite, prixMax, payement, dateTot, dateTard, descrip, id_demander, id_trader) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+            // Exécution de la requête d'insertion sans l'image
+            if($insertAppel) {
+                if(isset($_GET['id_trader'])){
+                    $id_trader = explode(",", $_GET['id_trader']);
+
+                    // Boucler sur chaque id_trader
+                    foreach($id_trader as $id){
+                        // Exécuter la requête d'insertion avec les valeurs appropriées
+                        $insertAppel->execute([$titre_prod, $quantite, $prixmax, $payement, $dateTot, $dateTard, $desProd, $id_demander, $id]);
+                    }
+                }
+                // Message de succès
+                $successMsg = "L'appel d'offre a été enregistré avec succès.";
+            } else {
+                // Erreur lors de la préparation de la requête
+                $errorMsg = "Une erreur s'est produite lors de l'enregistrement de l'appel d'offre.";
+            }
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
 ?>
 
 
@@ -550,7 +632,7 @@ if(isset($_POST['submit'])){
 
                             <form action="" method="post" enctype="multipart/form-data">
                                 <input type="text" class="w-full mb-3" placeholder="Nom du produit" name="titre_prod">
-                                <input type="text" class="w-full mb-3" placeholder="Quantité" name="quantité">
+                                <input type="text" class="w-full mb-3" placeholder="Quantité" name="quantite">
                                 <input type="number" class="w-full mb-3" placeholder="Prix unitaire max" name="prixmax">
 
 
