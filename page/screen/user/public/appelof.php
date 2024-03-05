@@ -633,8 +633,42 @@ if ($client = $recupUser->fetch()) {
                                 <?php } ?>
 
                                 <div class="flex justify-center items-center dark:text-white/80 p-4 w-full">
-                                    <button onclick="window.location.href = 'formappel.php'" class="text-white p-2 bg-blue-500 rounded-md">Faire un appel d'offre</button>
+                                    <button onclick="faireAppelOffre()" class="text-white p-2 bg-blue-500 rounded-md">Faire un appel d'offre</button>
+
+                                    <?php
+                                    // Requête SQL pour récupérer tous les id_user distincts de prodUser
+                                    $sql = "SELECT DISTINCT id_user FROM prodUser";
+
+                                    // Exécution de la requête SQL
+                                    $requete = $conn->prepare($sql);
+                                    $requete->execute();
+
+                                    // Récupération des résultats
+                                    $resultats = $requete->fetchAll(PDO::FETCH_ASSOC);
+
+                                    // Fermeture de la requête de sélection
+                                    $requete->closeCursor();
+
+                                    // Création d'un tableau pour stocker les id_user
+                                    $id_trader = array();
+
+                                    // Boucle sur les résultats pour remplir le tableau
+                                    foreach ($resultats as $resultat) {
+                                        $id_trader[] = $resultat['id_user'];
+                                    }
+                                    ?>
+
+                                    <script>
+                                        function faireAppelOffre() {
+                                            // Création de l'URL avec les id_trader
+                                            var url = 'formappel.php?id_trader=<?php echo implode(",", $id_trader); ?>';
+
+                                            // Redirection avec les id_trader dans l'URL
+                                            window.location.href = url;
+                                        }
+                                    </script>
                                 </div>
+
 
                             </div>
                         <?php
