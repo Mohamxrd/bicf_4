@@ -47,6 +47,21 @@ if ($client = $recupUser->fetch()) {
 
 if(isset($_POST['submit'])){
 
+    function genererCodeAleatoire($longueur) {
+        $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $code = '';
+    
+        for ($i = 0; $i < $longueur; $i++) {
+            $code .= $caracteres[rand(0, strlen($caracteres) - 1)];
+        }
+    
+        return $code;
+    }
+    
+    // Exemple d'utilisation
+    $code = genererCodeAleatoire(10);
+    
+
     // Récupération des données du formulaire
     $titre_prod = isset($_POST['titre_prod']) ? htmlspecialchars($_POST['titre_prod']) : '';
     $quantite = isset($_POST['quantite']) ? htmlspecialchars($_POST['quantite']) : '';
@@ -65,7 +80,7 @@ if(isset($_POST['submit'])){
         $id_demander = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
         // Préparation de la requête d'insertion
-        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt, quantite, prixMax, payement, dateTot, dateTard, descrip, id_demander, id_trader) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt, quantite, prixMax, payement, dateTot, dateTard, descrip, id_demander, id_trader, code_unique	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, $code)");
 
         // Si une image a été téléchargée, la traiter
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -107,7 +122,7 @@ if(isset($_POST['submit'])){
         } else {
             // Pas d'image téléchargée
             // Préparation de la requête d'insertion sans l'image
-            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt, quantite, prixMax, payement, dateTot, dateTard, descrip, id_demander, id_trader) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt, quantite, prixMax, payement, dateTot, dateTard, descrip, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             // Exécution de la requête d'insertion sans l'image
             if($insertAppel) {
@@ -117,7 +132,7 @@ if(isset($_POST['submit'])){
                     // Boucler sur chaque id_trader
                     foreach($id_trader as $id){
                         // Exécuter la requête d'insertion avec les valeurs appropriées
-                        $insertAppel->execute([$titre_prod, $quantite, $prixmax, $payement, $dateTot, $dateTard, $desProd, $id_demander, $id]);
+                        $insertAppel->execute([$titre_prod, $quantite, $prixmax, $payement, $dateTot, $dateTard, $desProd, $id_demander, $id, $code]);
                     }
                 }
                 // Message de succès
