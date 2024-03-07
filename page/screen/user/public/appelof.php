@@ -652,11 +652,19 @@ if ($client = $recupUser->fetch()) {
                                     // Création d'un tableau pour stocker les id_user
                                     $id_trader = array();
 
+                                    // ID de l'utilisateur actif
+                                    $id_utilisateur_actif = $_SESSION['id_user'];
+
                                     // Boucle sur les résultats pour remplir le tableau
                                     foreach ($resultats as $resultat) {
-                                        $id_trader[] = $resultat['id_user'];
+                                        // Vérifier si l'id_user est différent de l'id de la session active
+                                        if ($resultat['id_user'] != $id_utilisateur_actif) {
+                                            // Ajouter l'id_user au tableau
+                                            $id_trader[] = $resultat['id_user'];
+                                        }
                                     }
                                     ?>
+
 
                                     <script>
                                         function faireAppelOffre() {

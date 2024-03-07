@@ -42,6 +42,28 @@ if (isset($id_agent)) {
     }
 }
 
+if (isset($_GET['id']) && is_numeric($_GET['id'])){
+    $id_appel = $_GET['id'];
+
+    $recupAppel = $conn->prepare("SELECT * FROM appelOffre WHERE id_appeloffre = :id_appel ");
+    $recupAppel->bindParam(':id_appel', $id_appel, PDO::PARAM_INT);
+    $recupAppel->execute();
+
+    if($appel = $recupAppel->fetch()){
+        $titre_prod = $appel['nomArt_appel'];
+        $quantite = $appel['quantite'];
+        $prixMax = $appel['prixMax'];
+        $payement = $appel['payement'];
+        $livraison = $appel['livraison'];
+        $dateTot = $appel['dateTot'];
+        $dateTard = $appel['dateTard'];
+        $descrip = $appel['descrip'];
+
+
+
+    }
+}
+
 
 
 ?>
@@ -565,7 +587,7 @@ if (isset($id_agent)) {
                         <div class="flex items-center py-3 dark:border-gray-600 my-3">
 
                             <!--  TITRE DU PRODUIT  -->
-                            <h1 class="text-xl">Parfum</h1>
+                            <h1 class="text-xl"><?= $titre_prod ?></h1>
 
                         </div>
                     </div>
@@ -575,38 +597,38 @@ if (isset($id_agent)) {
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title "> Quantité</h4>
-                                <p></p>
+                                <p><?= $quantite ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title"> Prix unitaire max</h4>
-                                <p></p>
+                                <p><?= $prixMax ?></p>
                             </div>
                         </div>
 
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title"> Payement </h4>
-                                <p></p>
+                                <p><?= $payement ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title"> Livraison</h4>
-                                <p></p>
+                                <p><?= $livraison ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title"> Au plus tôt </h4>
-                                <p></p>
+                                <p><?= $dateTot ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title">Au plus tard</h4>
-                                <p></p>
+                                <p><?= $dateTard ?></p>
                             </div>
                         </div>
 
@@ -616,7 +638,7 @@ if (isset($id_agent)) {
                     <div class=" card flex space-x-5 p-5">
                         <div class="card-body flex-1 p-0">
                             <h4 class="card-title"> Description</h4>
-                            <p></p>
+                            <p><?= $descrip ?> </p>
                         </div>
                     </div>
 

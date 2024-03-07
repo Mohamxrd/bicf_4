@@ -40,11 +40,12 @@ if ($client = $recupUser->fetch()) {
 
 // Préparez la requête pour récupérer les notifications de l'utilisateur à partir de la table notifUser
 $recupNotif = $conn->prepare("SELECT notifUser.*, prodUser.*, appelOffre.* 
-                              FROM notifUser 
-                              LEFT JOIN prodUser ON notifUser.id_prod = prodUser.id_prod 
-                              LEFT JOIN appelOffre ON notifUser.code_appel = appelOffre.code_unique 
-                              WHERE notifUser.id_trader = :id_user OR ( notifUser.code_appel = :code_appel AND notifUser.id_trader = :id_user )
-                              ORDER BY notifUser.date_ajout DESC");
+FROM notifUser 
+LEFT JOIN prodUser ON notifUser.id_prod = prodUser.id_prod 
+LEFT JOIN appelOffre ON notifUser.code_appel = appelOffre.code_unique AND appelOffre.id_trader = :id_user
+WHERE notifUser.id_trader = :id_user 
+
+ORDER BY notifUser.date_ajout DESC");
 
 $recupNotif->bindParam(':code_appel', $code_appel, PDO::PARAM_STR);
 $recupNotif->bindParam(':id_user', $_SESSION['id_user'], PDO::PARAM_INT);
@@ -581,7 +582,7 @@ $nombreNotif = $recupNotif->rowCount();
 
                 <?php
                 // Boucle sur les notifications récupérées depuis la table notifUser
-                while ($notification = $recupNotif->fetch() ) {
+                while ($notification = $recupNotif->fetch()) {
                     // Récupération des informations de la notification
                     $id_notification = $notification['id_notif'];
                     $message = $notification['message'];
@@ -593,7 +594,10 @@ $nombreNotif = $recupNotif->rowCount();
                     // Informations sur le produit associé à la notification
                     $nom_produit = $notification['nomArt'];
                     $prix_produit = $notification['PrixProd'];
+
+                    //information sur l'appel d'offre
                     $nomAppel = $notification['nomArt_appel'];
+                    $id_appel = $notification['id_appeloffre'];
 
                 ?>
 
@@ -623,9 +627,9 @@ $nombreNotif = $recupNotif->rowCount();
                                 <?php elseif ($confirm == 'appel') : ?>
                                     <?= $nomAppel ?>
                                     <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p>Vous été identifier dans un appel d'offre</p>
+                                        <p>Vous avez été identifier dans un appel d'offre</p>
                                     </span>
-                                <?php endif;?>
+                                <?php endif; ?>
 
 
                             </div>
@@ -638,12 +642,12 @@ $nombreNotif = $recupNotif->rowCount();
                                 <?php elseif ($confirm == 'accepte') : ?>
                                     <button type="submit" name="confirmer" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
                                     <button type="submit" name="annuler" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Annuler</button>
-                                <?php elseif ($confirm == 'appel') :?>
-                                    <button type="submit" name="voir" class="px-3 py-1 bg-blue-500 text-white text-sm  rounded ">Voir</button>
-                                
-                                <?php endif;?>
+                                <?php elseif ($confirm == 'appel') : ?>
+                                    <a href="detailnegos.php?id=<?= $id_appel ?>"  type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
 
-                                
+                                <?php endif; ?>
+
+
                             </form>
                         </div>
                     </div>
@@ -760,6 +764,9 @@ $nombreNotif = $recupNotif->rowCount();
                 window.history.replaceState(null, null, window.location.href);
             }
         }
+
+
+        
     </script>
 
 
