@@ -39,12 +39,16 @@ if ($client = $recupUser->fetch()) {
 }
 
 // Préparez la requête pour récupérer les notifications de l'utilisateur à partir de la table notifUser
-$recupNotif = $conn->prepare("SELECT notifUser.*, prodUser.* FROM notifUser 
-LEFT JOIN prodUser ON notifUser.id_prod = prodUser.id_prod 
-WHERE notifUser.id_trader = :id_user ORDER BY notifUser.date_ajout DESC");
+$recupNotif = $conn->prepare("SELECT notifUser.*, prodUser.*, appelOffre.* 
+                              FROM notifUser 
+                              LEFT JOIN prodUser ON notifUser.id_prod = prodUser.id_prod 
+                              LEFT JOIN appelOffre ON notifUser.code_appel = appelOffre.code_unique 
+                              WHERE notifUser.id_trader = :id_user OR ( notifUser.code_appel = :code_appel AND notifUser.id_trader = :id_user )
+                              ORDER BY notifUser.date_ajout DESC");
 
-// Liez la valeur de $id_user à la variable de paramètre :id_user dans la requête
+$recupNotif->bindParam(':code_appel', $code_appel, PDO::PARAM_STR);
 $recupNotif->bindParam(':id_user', $_SESSION['id_user'], PDO::PARAM_INT);
+
 
 // Exécutez la requête préparée
 $recupNotif->execute();
@@ -577,7 +581,7 @@ $nombreNotif = $recupNotif->rowCount();
 
                 <?php
                 // Boucle sur les notifications récupérées depuis la table notifUser
-                while ($notification = $recupNotif->fetch()) {
+                while ($notification = $recupNotif->fetch() ) {
                     // Récupération des informations de la notification
                     $id_notification = $notification['id_notif'];
                     $message = $notification['message'];
@@ -589,14 +593,17 @@ $nombreNotif = $recupNotif->rowCount();
                     // Informations sur le produit associé à la notification
                     $nom_produit = $notification['nomArt'];
                     $prix_produit = $notification['PrixProd'];
+                    $nomAppel = $notification['nomArt_appel'];
+
                 ?>
 
                     <!-- Affichage de chaque notification -->
                     <div class="mb-3 space-y-3 text-sm font-semibold dark:text-white" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
                         <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
-                            <div class="flex-1"><?= $nom_produit ?> <!-- Titre du produit -->
+                            <div class="flex-1"> <!-- Titre du produit -->
 
                                 <?php if ($confirm == '') : ?>
+                                    <?= $nom_produit ?>
                                     <span class="block text-xs font-medium dark:text-white/70">
                                         Quantité: <?= $quantite ?>
                                     </span>
@@ -604,14 +611,21 @@ $nombreNotif = $recupNotif->rowCount();
                                         <p><?= $message ?></p>
                                     </span>
                                 <?php elseif ($confirm == 'accepte') : ?>
+                                    <?= $nom_produit ?>
                                     <span class="block text-xs font-medium  dark:text-white/70">
                                         <p>Votre demande a été acceptée par le fournisseur</p>
                                     </span>
                                 <?php elseif ($confirm == 'refus') : ?>
+                                    <?= $nom_produit ?>
                                     <span class="block text-xs font-medium  dark:text-white/70">
                                         <p>Le fournisseur a refusé votre demande</p>
                                     </span>
-                                <?php endif; ?>
+                                <?php elseif ($confirm == 'appel') : ?>
+                                    <?= $nomAppel ?>
+                                    <span class="block text-xs font-medium  dark:text-white/70">
+                                        <p>Vous été identifier dans un appel d'offre</p>
+                                    </span>
+                                <?php endif;?>
 
 
                             </div>
@@ -624,7 +638,12 @@ $nombreNotif = $recupNotif->rowCount();
                                 <?php elseif ($confirm == 'accepte') : ?>
                                     <button type="submit" name="confirmer" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
                                     <button type="submit" name="annuler" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Annuler</button>
-                                <?php endif; ?>
+                                <?php elseif ($confirm == 'appel') :?>
+                                    <button type="submit" name="voir" class="px-3 py-1 bg-blue-500 text-white text-sm  rounded ">Voir</button>
+                                
+                                <?php endif;?>
+
+                                
                             </form>
                         </div>
                     </div>
