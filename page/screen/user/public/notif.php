@@ -653,9 +653,6 @@ $nombreNotif = $recupNotif->rowCount();
                     </div>
                 <?php
                 }
-                ?>
-
-                <?php
 
                 if (isset($_POST['accepter'])) {
                     // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier

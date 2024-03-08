@@ -528,14 +528,9 @@ if ($client = $recupUser->fetch()) {
                             </div>
                         </form>
                     </div>
+                    
 
-
-
-
-
-
-
-
+                    <!-- //recherche -->
                     <?php
                     // Initialiser une variable pour suivre le nombre de résultats trouvés
                     $resultatsTrouves = 0;
@@ -553,7 +548,7 @@ if ($client = $recupUser->fetch()) {
                         $recherche = $_POST['recherche'];
 
                         // Construire la requête SQL en fonction des filtres sélectionnés
-                        $sql = "SELECT COUNT(DISTINCT id_user) AS total FROM prodUser WHERE 1=1"; // Clause WHERE 1=1 permet de construire dynamiquement la requête
+                        $sql = "SELECT MIN(prixProd) AS min_price, COUNT(DISTINCT id_user) AS total FROM prodUser WHERE 1=1"; // Clause WHERE 1=1 permet de construire dynamiquement la requête
 
                         if ($zoneEconomique != "") {
                             $sql .= " AND zonecoProd = '$zoneEconomique'";
@@ -578,6 +573,7 @@ if ($client = $recupUser->fetch()) {
                         // Obtenir le nombre de résultats trouvés
                         $resultatRequete = $requete->fetch();
                         $resultatsTrouves = $resultatRequete['total'];
+                        $minPrice = $resultatRequete['min_price'];
 
                         // Afficher les résultats s'il y en a
                         if ($resultatsTrouves > 0) {
@@ -639,6 +635,8 @@ if ($client = $recupUser->fetch()) {
                                     // Requête SQL pour récupérer tous les id_user distincts de prodUser
                                     $sql = "SELECT DISTINCT id_user FROM prodUser";
 
+                            
+
                                     // Exécution de la requête SQL
                                     $requete = $conn->prepare($sql);
                                     $requete->execute();
@@ -669,7 +667,7 @@ if ($client = $recupUser->fetch()) {
                                     <script>
                                         function faireAppelOffre() {
                                             // Création de l'URL avec les id_trader
-                                            var url = 'formappel.php?id_trader=<?php echo implode(",", $id_trader); ?>';
+                                            var url = 'formappel.php?id_trader=<?php echo implode(",", $id_trader); ?>&minPrice=<?php echo urlencode($minPrice); ?>&recherche=<?php echo urlencode($recherche); ?>';
 
                                             // Redirection avec les id_trader dans l'URL
                                             window.location.href = url;
@@ -788,20 +786,6 @@ if ($client = $recupUser->fetch()) {
         </main>
 
     </div>
-
-
-    <!-- open chat box -->
-
-
-
-    <!-- post preview modal -->
-
-
-    <!-- create status -->
-
-
-    <!-- create story -->
-
 
     <!-- Javascript  -->
     <script src="assets/js/uikit.min.js"></script>

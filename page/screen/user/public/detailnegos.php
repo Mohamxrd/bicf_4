@@ -42,14 +42,14 @@ if (isset($id_agent)) {
     }
 }
 
-if (isset($_GET['id']) && is_numeric($_GET['id'])){
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id_appel = $_GET['id'];
 
     $recupAppel = $conn->prepare("SELECT * FROM appelOffre WHERE id_appeloffre = :id_appel ");
     $recupAppel->bindParam(':id_appel', $id_appel, PDO::PARAM_INT);
     $recupAppel->execute();
 
-    if($appel = $recupAppel->fetch()){
+    if ($appel = $recupAppel->fetch()) {
         $titre_prod = $appel['nomArt_appel'];
         $quantite = $appel['quantite'];
         $prixMax = $appel['prixMax'];
@@ -59,10 +59,21 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
         $dateTard = $appel['dateTard'];
         $descrip = $appel['descrip'];
 
-
-
+        $code = $appel['code_unique'];
+        $joint = $appel['joint'];
     }
 }
+
+$recupComment = $conn->prepare("SELECT comment.*, user.* 
+                                FROM comment 
+                                INNER JOIN user ON comment.id_trader = user.id_user
+                                WHERE comment.code_unique = :code_unique");
+
+$recupComment->bindParam(':code_unique', $code, PDO::PARAM_STR);
+$recupComment->execute();
+
+
+
 
 
 
@@ -78,6 +89,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
 
     <!-- Favicon -->
     <link href="assets/images/favicon.png" rel="icon" type="image/png">
@@ -633,6 +646,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                         </div>
 
 
+
                     </div>
 
                     <div class=" card flex space-x-5 p-5">
@@ -642,11 +656,15 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                         </div>
                     </div>
 
-                    <div class="flex flex-col justify-center items-center mt-4 w-full">
+                    <?php if (!empty($joint)) : ?>
+
+                    <div class="flex flex-col justify-center items-center mt-4 w-full " uk-lightbox="">
                         <!-- Utilisation de flexbox pour centrer verticalement -->
                         <a href="#" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Voir la piece jointe</a>
 
                     </div>
+
+                    <?php endif; ?>
                 </div>
 
                 <!-- image -->
@@ -659,90 +677,105 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
 
                         <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 w-full">
 
-                            
+
 
                             <!-- comments -->
-                            <div class="h-[400px] overflow-y-auto sm:p-4 p-2.5 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40">
+                            <div class="h-[400px] overflow-y-auto sm:p-4 p-4 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40">
 
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Steeve </a>
-                                        <p class="mt-0.5"> I love taking photos of nature and animals. 🌳🐶</p>
+                                <?php
+                                // Initialiser la variable booléenne à true
+                                $auMoinsUneOffreSoumise = false;
+
+                                while ($comment = $recupComment->fetch()) {
+                                    $prixNegos = $comment['prixTrade'];
+                                    $nomTrader = $comment['nom_user'];
+
+                                    // Vérifier si $prixNegos est différent de null
+                                    if ($prixNegos !== null) {
+                                        $auMoinsUneOffreSoumise = true; // Définir la variable à true si au moins un prix est non nul
+
+                                        // Afficher l'offre
+                                ?>
+                                        <div class="flex items-start gap-3 relative">
+                                            <a href="timeline.html"> <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
+                                            <div class="flex-1">
+                                                <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> <?= $nomTrader ?> </a>
+                                                <p class="mt-0.5"> <?= $prixNegos ?> FCFA</p>
+                                            </div>
+                                        </div>
+                                    <?php
+                                    }
+                                }
+
+                                // Vérifier si aucune offre n'a été soumise
+                                if (!$auMoinsUneOffreSoumise) {
+                                    ?>
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <p class="text-gray-800"> Aucune offre n'a été soumise</p>
                                     </div>
-                                </div>
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Monroe </a>
-                                        <p class="mt-0.5"> I enjoy people and emotions. 😊😢 </p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Jesse </a>
-                                        <p class="mt-0.5"> Photography is my passion. 🎨📸 </p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Steeve </a>
-                                        <p class="mt-0.5"> I love taking photos of nature and animals. 🌳🐶</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Monroe </a>
-                                        <p class="mt-0.5"> I enjoy people and emotions. 😊😢 </p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Jesse </a>
-                                        <p class="mt-0.5"> Photography is my passion. 🎨📸 </p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Steeve </a>
-                                        <p class="mt-0.5"> I love taking photos of nature and animals. 🌳🐶</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Monroe </a>
-                                        <p class="mt-0.5"> I enjoy people and emotions. 😊😢 </p>
-                                    </div>
-                                </div>
-                                <div class="flex items-start gap-3 relative">
-                                    <a href="timeline.html"> <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
-                                    <div class="flex-1">
-                                        <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> Jesse </a>
-                                        <p class="mt-0.5"> Photography is my passion. 🎨📸 </p>
-                                    </div>
-                                </div>
-                                
+                                <?php
+                                }
+                                ?>
+
+
+
+
+
+
                             </div>
+                            <?php
+                            // Vérifier si le formulaire a été soumis
+                            if (isset($_POST['submit'])) {
+                                // Assurez-vous que les variables POST sont correctement récupérées
+                                $prixSoumis = isset($_POST['prix']) ? $_POST['prix'] : null;
+                                $id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : null;
+
+                                // Vérifiez si les variables sont définies
+                                if ($id_user !== null) {
+                                    // Vérifiez si le prix soumis est supérieur au prix maximum
+                                    if ($prixSoumis > $prixMax) {
+                                        // Afficher un message d'erreur
+                                        $errorMsg = "Le prix soumis est supérieur au prix maximum autorisé.";
+                                    } elseif ($prixSoumis == 0) {
+                                        // Afficher un message d'erreur si aucun prix n'a été soumis
+                                        $errorMsg = "Aucun prix n'a été soumis";
+                                    } else {
+                                        // Préparation de la requête de mise à jour
+                                        $updateprix = $conn->prepare('UPDATE comment SET prixTrade = :prixSoumis WHERE id_trader = :id_user');
+
+                                        // Liaison des valeurs aux paramètres de la requête
+                                        $updateprix->bindParam(':prixSoumis', $prixSoumis, PDO::PARAM_INT);
+                                        $updateprix->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+
+                                        // Exécution de la requête
+                                        $updateprix->execute();
+                                       
+                                    }
+                                } else {
+                                    // Si l'identifiant de l'utilisateur n'est pas défini, afficher un message d'erreur
+                                    $errorMsg = "L'identifiant de l'utilisateur n'est pas défini.";
+                                }
+                            }
+                            ?>
 
                             <!-- add comment -->
-                            <div class="sm:px-4 sm:py-3 p-2.5 border-t border-gray-100 flex items-center gap-1 dark:border-slate-700/40">
-
-                                <img src="assets/images/avatars/avatar-7.jpg" alt="" class="w-6 h-6 rounded-full">
-
-                                <div class="flex-1 relative overflow-hidden h-10">
-                                    <input type="number"  placeholder="Faire une offre..." rows="1" class="w-full resize-none bg-transparent px-4 py-2 focus:!border-transparent focus:!ring-transparent" aria-haspopup="true" aria-expanded="false"></input>
-
+                            <form id="myForm" action="" method="post">
+                                <div class="sm:px-4 sm:py-3 p-2.5 border-t border-gray-100 flex items-center gap-1 dark:border-slate-700/40">
+                                    <img src="assets/images/avatars/avatar-7.jpg" alt="" class="w-6 h-6 rounded-full">
+                                    <div class="flex-1 relative overflow-hidden h-10">
+                                        <input name="prix" type="number" placeholder="Faire une offre..." rows="1" class="w-full resize-none bg-transparent px-4 py-2 focus:!border-transparent focus:!ring-transparent" aria-haspopup="true" aria-expanded="false">
+                                    </div>
+                                    <button type="submit" name="submit" class="text-sm text-white rounded-full py-1.5 px-3.5 bg-blue-500">Envoyer</button>
                                 </div>
 
+                                <?php
+                                // Condition pour afficher le message d'erreur
+                                if (isset($errorMsg)) {
+                                    echo "<p class='text-red-500 text-center p-3'>$errorMsg</p>";
+                                }
+                                ?>
+                            </form>
 
-                                <button type="submit" class="text-sm text-white rounded-full py-1.5 px-3.5 bg-blue-500"> Envoyer</button>
-                            </div>
 
                         </div>
 
@@ -775,8 +808,17 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])){
                 window.history.replaceState(null, null, window.location.href);
             }
         }
-    </script>
 
+        function refreshOnce() {
+            // Actualiser la page
+            window.location.reload();
+            // Désactiver l'événement de soumission du formulaire pour éviter l'actualisation infinie
+            document.getElementById("myForm").removeEventListener("submit", refreshOnce);
+        }
+
+        // Attacher l'événement de soumission du formulaire à la fonction de rafraîchissement une fois
+        document.getElementById("myForm").addEventListener("submit", refreshOnce);
+    </script>
 
 
 </body>

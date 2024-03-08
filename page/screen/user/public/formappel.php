@@ -43,6 +43,12 @@ if ($client = $recupUser->fetch()) {
     exit();
 }
 
+// Récupération du prix minimal depuis l'URL
+if ($_GET['minPrice'] &  $_GET['recherche']) {
+    $minPrice = $_GET['minPrice'];
+    $recherche = $_GET['recherche'];
+}
+
 
 
 if (isset($_POST['submit'])) {
@@ -66,7 +72,6 @@ if (isset($_POST['submit'])) {
     // Récupération des données du formulaire
     $titre_prod = isset($_POST['titre_prod']) ? htmlspecialchars($_POST['titre_prod']) : '';
     $quantite = isset($_POST['quantite']) ? htmlspecialchars($_POST['quantite']) : '';
-    $prixmax = isset($_POST['prixmax']) ? htmlspecialchars($_POST['prixmax']) : '';
     $payement = isset($_POST['payement']) ? htmlspecialchars($_POST['payement']) : '';
     $livraisonProd = isset($_POST['livraisonProd']) ? htmlspecialchars($_POST['livraisonProd']) : '';
     $dateTot = isset($_POST['dateTot']) ? htmlspecialchars($_POST['dateTot']) : '';
@@ -74,14 +79,14 @@ if (isset($_POST['submit'])) {
     $desProd = isset($_POST['desProd']) ? htmlspecialchars($_POST['desProd']) : '';
 
     // Vérification si les champs obligatoires sont vides
-    if (empty($titre_prod) || empty($quantite) || empty($prixmax) || empty($payement) || empty($livraisonProd) || empty($dateTot) || empty($dateTard) || empty($desProd)) {
+    if (empty($titre_prod) || empty($quantite) || empty($payement) || empty($livraisonProd) || empty($dateTot) || empty($dateTard) || empty($desProd)) {
         $errorMsg = 'Veuillez remplir tous les champs.';
     } else {
         // Récupération de l'ID de l'utilisateur à partir de la session
         $id_demander = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
         // Préparation de la requête d'insertion
-        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison ,  dateTot, dateTard, descrip, id_demander, id_trader, code_unique	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, $code)");
+        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         // Si une image a été téléchargée, la traiter
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -95,7 +100,7 @@ if (isset($_POST['submit'])) {
                 // L'image a été téléchargée avec succès
 
                 // Préparation de la requête d'insertion avec l'image
-                $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison , dateTot, dateTard, descrip, joint, id_demander, id_trader) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 // Exécution de la requête d'insertion avec l'image
                 if ($insertAppel) {
@@ -104,16 +109,18 @@ if (isset($_POST['submit'])) {
 
                         // Boucler sur chaque id_trader
                         foreach ($id_trader as $id) {
-
                             // Exécuter la requête d'insertion avec les valeurs appropriées
-                            $insertAppel->execute([$titre_prod, $quantite, $prixmax, $payement, $livraisonProd , $dateTot, $dateTard, $desProd, $id_demander, $id, $code]);
+                            $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id, $code]);
 
                             // Ajout de la notification
-                            $notif_insert = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm ,  code_appel) VALUES (?, ?, ?, ?, ?)");
-                            $notif_insert->execute(["Vous avez reçu un appel d'offre", $id_demander, $id, "appel" , $code]);
+                            $notif_insert = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
+                            $notif_insert->execute(["Vous avez reçu un appel d'offre", $id_demander, $id, "appel", $code]);
+
+                            // Ajout du commentaire
+                            $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, code_unique) VALUES (?, ?, ?)");
+                            $comment_insert->execute([null, $id, $code]);
                         }
                     }
-
                     // Message de succès
                     $successMsg = "L'appel d'offre a été enregistré avec succès.";
                 } else {
@@ -126,9 +133,6 @@ if (isset($_POST['submit'])) {
             }
         } else {
             // Pas d'image téléchargée
-            // Préparation de la requête d'insertion sans l'image
-            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, dateTot, dateTard, descrip, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
             // Exécution de la requête d'insertion sans l'image
             if ($insertAppel) {
                 if (isset($_GET['id_trader'])) {
@@ -137,11 +141,15 @@ if (isset($_POST['submit'])) {
                     // Boucler sur chaque id_trader
                     foreach ($id_trader as $id) {
                         // Exécuter la requête d'insertion avec les valeurs appropriées
-                        $insertAppel->execute([$titre_prod, $quantite, $prixmax, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code]);
+                        $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code]);
 
                         // Ajout de la notification
-                        $notif_insert = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm ,  code_appel) VALUES (?, ?, ?, ?, ?)");
-                        $notif_insert->execute(["Vous avez reçu un appel d'offre", $id_demander, $id, "appel" , $code]);
+                        $notif_insert = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
+                        $notif_insert->execute(["Vous avez reçu un appel d'offre", $id_demander, $id, "appel", $code]);
+
+                        // Ajout du commentaire
+                        $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, code_unique) VALUES (?, ?, ?)");
+                        $comment_insert->execute([null, $id, $code]);
                     }
                 }
                 // Message de succès
@@ -656,9 +664,16 @@ if (isset($_POST['submit'])) {
 
 
                             <form action="" method="post" enctype="multipart/form-data">
-                                <input type="text" class="w-full mb-3" placeholder="Nom du produit" name="titre_prod">
+
+                            <div class="w-full card flex mb-3 p-5">
+                                    <div class="card-body flex-1 p-0">
+                                        <h4 class="card-title"> Prix unitaire max</h4>
+                                        <p><?= $minPrice ?></p>
+                                    </div>
+                                </div>
+                            <input type="text" class="w-full mb-3"  name="titre_prod" value="<?= $recherche ?>" >
                                 <input type="text" class="w-full mb-3" placeholder="Quantité" name="quantite">
-                                <input type="number" class="w-full mb-3" placeholder="Prix unitaire max" name="prixmax">
+                                
 
 
                                 <select class="w-full mb-3" name="payement">
