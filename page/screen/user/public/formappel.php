@@ -44,7 +44,7 @@ if ($client = $recupUser->fetch()) {
 }
 
 // Récupération du prix minimal depuis l'URL
-if ($_GET['minPrice'] &  $_GET['recherche']) {
+if (isset($_GET['minPrice']) && isset($_GET['recherche'])) {
     $minPrice = $_GET['minPrice'];
     $recherche = $_GET['recherche'];
 }
@@ -135,7 +135,7 @@ if (isset($_POST['submit'])) {
             // Pas d'image téléchargée
             // Exécution de la requête d'insertion sans l'image
 
-            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander,  code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             if ($insertAppel) {
                 if (isset($_GET['id_trader'])) {
                     $id_trader = explode(",", $_GET['id_trader']);
@@ -667,15 +667,15 @@ if (isset($_POST['submit'])) {
 
                             <form action="" method="post" enctype="multipart/form-data">
 
-                            <div class="w-full card flex mb-3 p-5">
+                                <div class="w-full card flex mb-3 p-5">
                                     <div class="card-body flex-1 p-0">
                                         <h4 class="card-title"> Prix unitaire max</h4>
                                         <p><?= $minPrice ?></p>
                                     </div>
                                 </div>
-                            <input type="text" class="w-full mb-3"  name="titre_prod" value="<?= $recherche ?>" >
+                                <input type="text" class="w-full mb-3" name="titre_prod" value="<?= $recherche ?>">
                                 <input type="text" class="w-full mb-3" placeholder="Quantité" name="quantite">
-                                
+
 
 
                                 <select class="w-full mb-3" name="payement">

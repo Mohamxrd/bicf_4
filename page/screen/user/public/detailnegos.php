@@ -58,9 +58,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $dateTot = $appel['dateTot'];
         $dateTard = $appel['dateTard'];
         $descrip = $appel['descrip'];
-
         $code = $appel['code_unique'];
         $joint = $appel['joint'];
+        $date_ajout = $appel['date_ajout'];
     }
 }
 
@@ -780,19 +780,26 @@ $recupComment->execute();
 
                     </div>
 
-                    <div id="countdown-container" class="flex justify-center items-center ">
-    <div id="countdown" class="flex items-center gap-2 text-4xl font-semibold bg-purple-100/60 text-purple-600  p-3 rounded-xl" style="width: auto;">
-        <div>-</div>:
-        <div>-</div>:
-        <div>-</div>:
-        <div>-</div>
-    </div>
-</div>
+                    <div id="countdown-container" class="flex flex-col justify-center items-center ">
+
+                        <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
+                            <div>-</div>:
+                            <div>-</div>:
+                            <div>-</div>:
+                            <div>-</div>
+                        </div>
+
+
+                    </div>
 
 
                     <script>
-                        // Définir la date cible du compte à rebours (par exemple, le 28 mai 2024 à 00:00:00)
-                        const targetDate = new Date('2024-05-28T00:00:00');
+                        // Convertir la date de départ et la date cible en objets Date JavaScript
+
+                        const startDate = new Date("<?= $date_ajout; ?>");
+
+                        // Ajouter 6 heures à la date de départ pour obtenir la date cible
+                        const targetDate = new Date(startDate.getTime() + (6 * 60 * 60 * 1000));
 
                         // Mettre à jour le compte à rebours à intervalles réguliers
                         const countdownTimer = setInterval(updateCountdown, 1000);
@@ -801,7 +808,7 @@ $recupComment->execute();
                             // Obtenir la date et l'heure actuelles
                             const currentDate = new Date();
 
-                            // Calculer la différence entre la date cible et la date actuelle en millisecondes
+                            // Calculer la différence entre la date cible et la date de départ en millisecondes
                             const difference = targetDate.getTime() - currentDate.getTime();
 
                             // Convertir la différence en jours, heures, minutes et secondes
@@ -813,16 +820,16 @@ $recupComment->execute();
                             // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
                             const countdownElement = document.getElementById('countdown');
                             countdownElement.innerHTML = `
-            <div>${days}</div>:
-            <div>${hours}</div>:
-            <div>${minutes}</div>:
-            <div>${seconds}</div>
-        `;
+                             <div>${days}j</div>:
+                             <div>${hours}h</div>:
+                             <div>${minutes}m</div>:
+                             <div>${seconds}s</div>
+                             `;
 
                             // Arrêter le compte à rebours lorsque la date cible est atteinte
                             if (difference <= 0) {
                                 clearInterval(countdownTimer);
-                                countdownElement.innerHTML = "Le compte à rebours est terminé!";
+                                countdownElement.innerHTML = "Temps ecoulé !";
                             }
                         }
                     </script>
