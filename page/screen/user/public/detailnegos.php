@@ -67,10 +67,13 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 $recupComment = $conn->prepare("SELECT comment.*, user.* 
                                 FROM comment 
                                 INNER JOIN user ON comment.id_trader = user.id_user
-                                WHERE comment.code_unique = :code_unique");
+                                WHERE comment.code_unique = :code_unique ORDER BY comment.prixTrade ASC");
 
 $recupComment->bindParam(':code_unique', $code, PDO::PARAM_STR);
 $recupComment->execute();
+
+
+
 
 
 
@@ -657,14 +660,12 @@ $recupComment->execute();
                     </div>
 
                     <?php if (!empty($joint)) : ?>
-
-                    <div class="flex flex-col justify-center items-center mt-4 w-full " uk-lightbox="">
-                        <!-- Utilisation de flexbox pour centrer verticalement -->
-                        <a href="#" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Voir la piece jointe</a>
-
-                    </div>
-
+                        <div class="flex flex-col justify-center items-center mt-4 w-full" uk-lightbox="">
+                            <!-- Utilisation de flexbox pour centrer verticalement -->
+                            <a href="<?= $joint ?>" target="_blank" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Voir la piece jointe</a>
+                        </div>
                     <?php endif; ?>
+
                 </div>
 
                 <!-- image -->
@@ -683,18 +684,13 @@ $recupComment->execute();
                             <div class="h-[400px] overflow-y-auto sm:p-4 p-4 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40">
 
                                 <?php
-                                // Initialiser la variable booléenne à true
                                 $auMoinsUneOffreSoumise = false;
 
                                 while ($comment = $recupComment->fetch()) {
                                     $prixNegos = $comment['prixTrade'];
                                     $nomTrader = $comment['nom_user'];
-
-                                    // Vérifier si $prixNegos est différent de null
                                     if ($prixNegos !== null) {
-                                        $auMoinsUneOffreSoumise = true; // Définir la variable à true si au moins un prix est non nul
-
-                                        // Afficher l'offre
+                                        $auMoinsUneOffreSoumise = true;
                                 ?>
                                         <div class="flex items-start gap-3 relative">
                                             <a href="timeline.html"> <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
@@ -741,15 +737,16 @@ $recupComment->execute();
                                         $errorMsg = "Aucun prix n'a été soumis";
                                     } else {
                                         // Préparation de la requête de mise à jour
-                                        $updateprix = $conn->prepare('UPDATE comment SET prixTrade = :prixSoumis WHERE id_trader = :id_user');
+                                        $updateprix = $conn->prepare('UPDATE comment SET prixTrade = :prixSoumis WHERE id_trader = :id_user AND code_unique = :code_unique');
 
                                         // Liaison des valeurs aux paramètres de la requête
+                                        $updateprix->bindParam(':code_unique', $code, PDO::PARAM_STR);
                                         $updateprix->bindParam(':prixSoumis', $prixSoumis, PDO::PARAM_INT);
                                         $updateprix->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                        
 
                                         // Exécution de la requête
                                         $updateprix->execute();
-                                       
                                     }
                                 } else {
                                     // Si l'identifiant de l'utilisateur n'est pas défini, afficher un message d'erreur
@@ -775,6 +772,8 @@ $recupComment->execute();
                                 }
                                 ?>
                             </form>
+
+
 
 
                         </div>

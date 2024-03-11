@@ -643,7 +643,7 @@ $nombreNotif = $recupNotif->rowCount();
                                     <button type="submit" name="confirmer" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
                                     <button type="submit" name="annuler" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Annuler</button>
                                 <?php elseif ($confirm == 'appel') : ?>
-                                    <a href="detailnegos.php?id=<?= $id_appel ?>"  type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
+                                    <a href="detailnegos.php?id=<?= $id_appel ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
 
                                 <?php endif; ?>
 
@@ -701,25 +701,23 @@ $nombreNotif = $recupNotif->rowCount();
                     // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
                     if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
                         // Récupérez l'ID de la notification à partir du formulaire posté
-                        if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
-                            // Récupérez l'ID de la notification à partir du formulaire posté
-                            $id_notification = $_POST['id_notification'];
+                        $id_notification = $_POST['id_notification'];
 
-                            // Récupérez l'ID de l'utilisateur depuis la session
-                            $id_user = $_SESSION['id_user'];
+                        // Récupérez l'ID de l'utilisateur depuis la session
+                        $id_user = $_SESSION['id_user'];
 
-                            // Exécutez la requête SQL pour mettre à jour les valeurs dans la table notifUser
-                            $updateNotif = $conn->prepare("UPDATE notifUser SET confirm = null, id_trader = null, id_user = null WHERE id_notif = :id_notification AND id_trader = :id_user");
+                        // Exécutez la requête SQL pour supprimer l'entrée de la table notifUser
+                        $deleteNotif = $conn->prepare("DELETE FROM notifUser WHERE id_notif = :id_notification AND id_trader = :id_user");
 
-                            // Liez les valeurs aux paramètres de la requête
-                            $updateNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
-                            $updateNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                        // Liez les valeurs aux paramètres de la requête
+                        $deleteNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
+                        $deleteNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
-                            // Exécutez la requête préparée
-                            $updateNotif->execute();
-                        }
+                        // Exécutez la requête préparée
+                        $deleteNotif->execute();
                     }
                 }
+
                 ?>
 
 
@@ -761,9 +759,6 @@ $nombreNotif = $recupNotif->rowCount();
                 window.history.replaceState(null, null, window.location.href);
             }
         }
-
-
-        
     </script>
 
 
