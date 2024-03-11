@@ -11,7 +11,8 @@ if (!isset($_SESSION['nom_user'])) {
 
 
 
-$id_user = $_SESSION['id_user'];
+$id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+
 // Récupération des informations de l'utilisateur
 $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
 $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
@@ -528,7 +529,7 @@ if ($client = $recupUser->fetch()) {
                             </div>
                         </form>
                     </div>
-                    
+
 
                     <!-- //recherche -->
                     <?php
@@ -564,6 +565,10 @@ if ($client = $recupUser->fetch()) {
 
                         if ($recherche != "") {
                             $sql .= " AND nomArt LIKE '%$recherche%'";
+                        }
+
+                        if (!empty($id_user)) {
+                            $sql .= " AND id_user != '$id_user'";
                         }
 
                         // Exécuter la requête SQL
@@ -633,34 +638,53 @@ if ($client = $recupUser->fetch()) {
 
                                     <?php
                                     // Requête SQL pour récupérer tous les id_user distincts de prodUser
-                                    $sql = "SELECT DISTINCT id_user FROM prodUser";
+                                    $sql = "SELECT DISTINCT id_user FROM prodUser WHERE 1=1"; // Commencez la requête avec 1=1 pour permettre la construction dynamique
 
-                            
+                                    // Ajoutez les conditions supplémentaires en fonction des critères de recherche
+                                    if ($zoneEconomique != "") {
+                                        $sql .= " AND zonecoProd = '$zoneEconomique'";
+                                    }
 
-                                    // Exécution de la requête SQL
+                                    if ($typeProduit != "") {
+                                        $sql .= " AND typeProd = '$typeProduit'";
+                                    }
+
+                                    if ($quantite != "") {
+                                        $sql .= " AND ('$quantite' BETWEEN qteProd_min AND qteProd_max OR qteProd_min = '' OR qteProd_max = '')";
+                                    }
+
+                                    if ($recherche != "") {
+                                        $sql .= " AND nomArt LIKE '%$recherche%'";
+                                    }
+
+                                    if (!empty($id_user)) {
+                                        $sql .= " AND id_user != '$id_user'";
+                                    }
+
+                                    // Exécutez la requête SQL
                                     $requete = $conn->prepare($sql);
                                     $requete->execute();
 
-                                    // Récupération des résultats
+                                    // Récupérez les résultats
                                     $resultats = $requete->fetchAll(PDO::FETCH_ASSOC);
 
-                                    // Fermeture de la requête de sélection
+                                    // Fermez la requête
                                     $requete->closeCursor();
 
-                                    // Création d'un tableau pour stocker les id_user
+                                    // Créez un tableau pour stocker les id_user
                                     $id_trader = array();
 
-                                    // ID de l'utilisateur actif
-                                    $id_utilisateur_actif = $_SESSION['id_user'];
-
-                                    // Boucle sur les résultats pour remplir le tableau
+                                    // Bouclez sur les résultats pour remplir le tableau
                                     foreach ($resultats as $resultat) {
-                                        // Vérifier si l'id_user est différent de l'id de la session active
-                                        if ($resultat['id_user'] != $id_utilisateur_actif) {
-                                            // Ajouter l'id_user au tableau
+                                        // Vérifiez si l'id_user est différent de l'id de la session active
+                                        if ($resultat['id_user'] != $id_user) {
+                                            // Ajoutez l'id_user au tableau
                                             $id_trader[] = $resultat['id_user'];
                                         }
                                     }
+
+                                    // Affichez le contenu du tableau pour vérification
+                                    var_dump($id_trader);
                                     ?>
 
 
