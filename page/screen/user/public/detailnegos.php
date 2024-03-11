@@ -743,7 +743,7 @@ $recupComment->execute();
                                         $updateprix->bindParam(':code_unique', $code, PDO::PARAM_STR);
                                         $updateprix->bindParam(':prixSoumis', $prixSoumis, PDO::PARAM_INT);
                                         $updateprix->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-                                        
+
 
                                         // Exécution de la requête
                                         $updateprix->execute();
@@ -779,6 +779,54 @@ $recupComment->execute();
                         </div>
 
                     </div>
+
+                    <div id="countdown-container" class="flex justify-center items-center ">
+    <div id="countdown" class="flex items-center gap-2 text-4xl font-semibold text-white p-3 rounded-xl" style="background-color: #141517; width: auto;">
+        <div>-</div>:
+        <div>-</div>:
+        <div>-</div>:
+        <div>-</div>
+    </div>
+</div>
+
+
+                    <script>
+                        // Définir la date cible du compte à rebours (par exemple, le 28 mai 2024 à 00:00:00)
+                        const targetDate = new Date('2024-05-28T00:00:00');
+
+                        // Mettre à jour le compte à rebours à intervalles réguliers
+                        const countdownTimer = setInterval(updateCountdown, 1000);
+
+                        function updateCountdown() {
+                            // Obtenir la date et l'heure actuelles
+                            const currentDate = new Date();
+
+                            // Calculer la différence entre la date cible et la date actuelle en millisecondes
+                            const difference = targetDate.getTime() - currentDate.getTime();
+
+                            // Convertir la différence en jours, heures, minutes et secondes
+                            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                            // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
+                            const countdownElement = document.getElementById('countdown');
+                            countdownElement.innerHTML = `
+            <div>${days}</div>:
+            <div>${hours}</div>:
+            <div>${minutes}</div>:
+            <div>${seconds}</div>
+        `;
+
+                            // Arrêter le compte à rebours lorsque la date cible est atteinte
+                            if (difference <= 0) {
+                                clearInterval(countdownTimer);
+                                countdownElement.innerHTML = "Le compte à rebours est terminé!";
+                            }
+                        }
+                    </script>
+
                 </div>
 
 
