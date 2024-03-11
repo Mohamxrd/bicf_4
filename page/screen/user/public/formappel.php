@@ -134,6 +134,8 @@ if (isset($_POST['submit'])) {
         } else {
             // Pas d'image téléchargée
             // Exécution de la requête d'insertion sans l'image
+
+            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander,  code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             if ($insertAppel) {
                 if (isset($_GET['id_trader'])) {
                     $id_trader = explode(",", $_GET['id_trader']);

@@ -781,7 +781,7 @@ $recupComment->execute();
                     </div>
 
                     <div id="countdown-container" class="flex justify-center items-center ">
-    <div id="countdown" class="flex items-center gap-2 text-4xl font-semibold text-white p-3 rounded-xl" style="background-color: #141517; width: auto;">
+    <div id="countdown" class="flex items-center gap-2 text-4xl font-semibold bg-purple-100/60 text-purple-600  p-3 rounded-xl" style="width: auto;">
         <div>-</div>:
         <div>-</div>:
         <div>-</div>:
