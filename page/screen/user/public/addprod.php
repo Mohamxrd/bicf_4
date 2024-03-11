@@ -45,8 +45,6 @@ if ($client = $recupUser->fetch()) {
 
 
 if (isset($_POST['submit'])) {
-    // Assurez-vous que le formulaire est soumis
-
     // Assurez-vous que les données sont présentes et validez-les si nécessaire
     $Nom_du_produit = isset($_POST['titre_prod']) ? htmlspecialchars($_POST['titre_prod']) : '';
     $Type_de_produit = isset($_POST['type_prod']) ? htmlspecialchars($_POST['type_prod']) : '';

@@ -72,14 +72,6 @@ $recupComment = $conn->prepare("SELECT comment.*, user.*
 $recupComment->bindParam(':code_unique', $code, PDO::PARAM_STR);
 $recupComment->execute();
 
-
-
-
-
-
-
-
-
 ?>
 
 
@@ -712,12 +704,6 @@ $recupComment->execute();
                                 <?php
                                 }
                                 ?>
-
-
-
-
-
-
                             </div>
                             <?php
                             // Vérifier si le formulaire a été soumis
