@@ -118,29 +118,32 @@ if (isset($_POST['submitG'])) {
         $insertGroup = $conn->prepare('INSERT INTO achatGroup (quantiteProd, localite, id_user, id_trader, id_prod) VALUES (:quantite, :localite, :id_user, :id_trader, :id_prod)');
 
 
-       
-         $insertGroup->bindParam(':localite', $localite, PDO::PARAM_STR);
-         $insertGroup->bindParam(':quantite', $quantite, PDO::PARAM_INT);
-         $insertGroup->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-         $insertGroup->bindParam(':id_trader', $id_vendeur, PDO::PARAM_INT);
-         $insertGroup->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
 
-         if($insertGroup->execute()){
-             $successMsg = "Les données ont été insérées avec succès.";
+        $insertGroup->bindParam(':localite', $localite, PDO::PARAM_STR);
+        $insertGroup->bindParam(':quantite', $quantite, PDO::PARAM_INT);
+        $insertGroup->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $insertGroup->bindParam(':id_trader', $id_vendeur, PDO::PARAM_INT);
+        $insertGroup->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
 
-         }else{
-             // Loguer l'erreur dans un fichier de journal
-             error_log("Erreur lors de l'insertion des données dans la table notifUser : ". $insertGroup->errorInfo()[2]);
+        if ($insertGroup->execute()) {
+            $successMsg = "Les données ont été insérées avec succès.";
+        } else {
+            // Loguer l'erreur dans un fichier de journal
+            error_log("Erreur lors de l'insertion des données dans la table notifUser : " . $insertGroup->errorInfo()[2]);
 
-             // Afficher un message d'erreur générique
-             $errorMsg = "Une erreur s'est produite. Veuillez réessayer plus tard.";
-         }
-
-
+            // Afficher un message d'erreur générique
+            $errorMsg = "Une erreur s'est produite. Veuillez réessayer plus tard.";
+        }
     }
-
 }
 
+// recuperer le nombre de ligne
+
+$recupGroup = $conn->prepare("SELECT * FROM achatGroup WHERE id_prod = :id_prod");
+$recupGroup->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+$recupGroup->execute();
+
+$nombreGroup = $recupGroup->rowCount()
 
 ?>
 
@@ -741,19 +744,24 @@ if (isset($_POST['submitG'])) {
                             <?php endif; ?>
                         </div>
 
-                        <?php if (isset($id_user) && isset($id_vendeur) && $id_user != $id_vendeur) : ?>
-
+                        <?php
+                        // Vérifie si les variables $id_user et $id_vendeur sont définies et qu'elles ne sont pas égales
+                        if (isset($id_user) && isset($id_vendeur) && $id_user != $id_vendeur) :
+                        ?>
+                            <!-- Si les conditions ci-dessus sont remplies, affiche ces éléments -->
                             <div class="flex flex-col justify-center items-center mt-4 w-[300px]">
                                 <!-- Utilisation de flexbox pour centrer verticalement -->
                                 <a href="#" uk-toggle="target: #achatd" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
-                                <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Achat Grouper</a>
+                                <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Achat Grouper <?php if ($nombreGroup > 0) { ?>
+                                        (<?= $nombreGroup ?>)
+                                    <?php } ?>
+                                </a>
                             </div>
-
                         <?php else : ?>
-
+                            <!-- Si les conditions ci-dessus ne sont pas remplies, affiche ce message -->
                             <p class="text-center mt-4 text-gray-500">Ce produit vous appartient</p>
-
                         <?php endif; ?>
+
 
 
 
@@ -801,7 +809,7 @@ if (isset($_POST['submitG'])) {
                                     <div class="p-6 overflow-y-auto " uk-overflow-auto>
                                         <input type="number" class="w-full mb-3" placeholder="Quantité" name="Quantité">
                                         <input type="text" class="w-full mb-3" placeholder="Localité" name="local">
-                                       
+
                                     </div>
                                     <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
                                         <button class="px-4 py-1.5 rounded-md uk-modal-close" type="reset">Annuler</button>
@@ -821,7 +829,7 @@ if (isset($_POST['submitG'])) {
 
                         </div>
 
-                        
+
                     </div>
                 </div>
 
