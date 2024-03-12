@@ -768,6 +768,8 @@ $recupComment->execute();
 
                     <div id="countdown-container" class="flex flex-col justify-center items-center ">
 
+                    <span class="mb-2">Temps restant pour cette negociatiation</span>
+
                         <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
                             <div>-</div>:
                             <div>-</div>:

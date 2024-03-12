@@ -69,7 +69,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 $errorMsg = '';
 $successMsg = '';
 
-// Traitement du formulaire d'achat
+// Traitement du formulaire d'achat direct
 if (isset($_POST['submit'])) {
     // Valider les données du formulaire
     $quantite = filter_var($_POST['Quantité'], FILTER_VALIDATE_INT);
@@ -105,6 +105,9 @@ if (isset($_POST['submit'])) {
     }
 }
 
+
+//achat grouypé
+
 if (isset($_POST['submitG'])) {
 
     $quantite = filter_var($_POST['Quantité'], FILTER_VALIDATE_INT);
@@ -137,13 +140,24 @@ if (isset($_POST['submitG'])) {
     }
 }
 
-// recuperer le nombre de ligne
+// recuperer le nombre de ligne achat groupé
 
 $recupGroup = $conn->prepare("SELECT DISTINCT id_user FROM achatGroup WHERE id_prod = :id_prod");
 $recupGroup->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
 $recupGroup->execute();
 
 $nombreGroup = $recupGroup->rowCount();
+
+// recuperer la date la plus encienne
+
+$recupDatePlusAncienne = $conn->prepare("SELECT MIN(date_ajout) AS date_plus_ancienne FROM achatGroup WHERE id_prod = :id_prod");
+$recupDatePlusAncienne->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+$recupDatePlusAncienne->execute();
+
+$resultatDate = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
+
+$datePlusAncienne = $resultatDate['date_plus_ancienne'];
+
 
 
 
@@ -755,10 +769,11 @@ $nombreGroup = $recupGroup->rowCount();
                             <div class="flex flex-col justify-center items-center mt-4 w-[300px]">
                                 <!-- Utilisation de flexbox pour centrer verticalement -->
                                 <a href="#" uk-toggle="target: #achatd" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Achat Direct</a>
-                                <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Achat Grouper <?php if ($nombreGroup > 0) { ?>
-                                        (<?= $nombreGroup ?>)
-                                    <?php } ?>
+                                <a href="#" uk-toggle="target: #achatg" class="w-full p-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Achat Groupé<?php if ($nombreGroup > 0) { ?>
+                                    (<?= $nombreGroup ?> participant<?php if ($nombreGroup > 1) { ?>s<?php } ?>)
+                                <?php } ?>
                                 </a>
+
                             </div>
                         <?php else : ?>
                             <!-- Si les conditions ci-dessus ne sont pas remplies, affiche ce message -->
@@ -831,6 +846,59 @@ $nombreGroup = $recupGroup->rowCount();
                             </div>
 
                         </div>
+
+                        <?php if ($nombreGroup > 0 && isset($id_user) && isset($id_vendeur) && $id_user != $id_vendeur) { ?>
+                            <div id="countdown-container" class="flex flex-col justify-center items-center ">
+                                <span class="mb-2">Temps restant pour cet achat groupé</span>
+                                <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
+                                    <div>-</div>:
+                                    <div>-</div>:
+                                    <div>-</div>:
+                                    <div>-</div>
+                                </div>
+                            </div>
+                        <?php } ?>
+
+
+                        <script>
+                            // Convertir la date de départ en objet Date JavaScript
+                            const startDate = new Date("<?= $datePlusAncienne; ?>");
+
+                            // Ajouter 5 jours à la date de départ
+                            startDate.setDate(startDate.getDate() + 5);
+
+                            // Mettre à jour le compte à rebours à intervalles réguliers
+                            const countdownTimer = setInterval(updateCountdown, 1000);
+
+                            function updateCountdown() {
+                                // Obtenir la date et l'heure actuelles
+                                const currentDate = new Date();
+
+                                // Calculer la différence entre la date cible et la date de départ en millisecondes
+                                const difference = startDate.getTime() - currentDate.getTime();
+
+                                // Convertir la différence en jours, heures, minutes et secondes
+                                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                                // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
+                                const countdownElement = document.getElementById('countdown');
+                                countdownElement.innerHTML = `
+            <div>${days}j</div>:
+            <div>${hours}h</div>:
+            <div>${minutes}m</div>:
+            <div>${seconds}s</div>
+        `;
+
+                                // Arrêter le compte à rebours lorsque la date cible est atteinte
+                                if (difference <= 0) {
+                                    clearInterval(countdownTimer);
+                                    countdownElement.innerHTML = "Temps écoulé !";
+                                }
+                            }
+                        </script>
 
 
                     </div>
