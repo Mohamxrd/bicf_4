@@ -139,11 +139,14 @@ if (isset($_POST['submitG'])) {
 
 // recuperer le nombre de ligne
 
-$recupGroup = $conn->prepare("SELECT * FROM achatGroup WHERE id_prod = :id_prod");
+$recupGroup = $conn->prepare("SELECT DISTINCT id_user FROM achatGroup WHERE id_prod = :id_prod");
 $recupGroup->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
 $recupGroup->execute();
 
-$nombreGroup = $recupGroup->rowCount()
+$nombreGroup = $recupGroup->rowCount();
+
+
+
 
 ?>
 
