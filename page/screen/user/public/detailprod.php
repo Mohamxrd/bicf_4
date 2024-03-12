@@ -104,6 +104,44 @@ if (isset($_POST['submit'])) {
         }
     }
 }
+
+if (isset($_POST['submitG'])) {
+
+    $quantite = filter_var($_POST['Quantité'], FILTER_VALIDATE_INT);
+    $localite = htmlspecialchars($_POST['local']);
+
+    if ($quantite === false || $quantite <= 0) {
+        $errorMsg = 'Veuillez saisir une quantité valide.';
+    } elseif (empty($localite)) {
+        $errorMsg = 'Veuillez remplir tous les champs.';
+    } else {
+        $insertGroup = $conn->prepare('INSERT INTO achatGroup (quantiteProd, localite, id_user, id_trader, id_prod) VALUES (:quantite, :localite, :id_user, :id_trader, :id_prod)');
+
+
+       
+         $insertGroup->bindParam(':localite', $localite, PDO::PARAM_STR);
+         $insertGroup->bindParam(':quantite', $quantite, PDO::PARAM_INT);
+         $insertGroup->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+         $insertGroup->bindParam(':id_trader', $id_vendeur, PDO::PARAM_INT);
+         $insertGroup->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+
+         if($insertGroup->execute()){
+             $successMsg = "Les données ont été insérées avec succès.";
+
+         }else{
+             // Loguer l'erreur dans un fichier de journal
+             error_log("Erreur lors de l'insertion des données dans la table notifUser : ". $insertGroup->errorInfo()[2]);
+
+             // Afficher un message d'erreur générique
+             $errorMsg = "Une erreur s'est produite. Veuillez réessayer plus tard.";
+         }
+
+
+    }
+
+}
+
+
 ?>
 
 
@@ -751,52 +789,26 @@ if (isset($_POST['submit'])) {
 
                         </div>
 
-                        <div class="lg:p-20 p-10" id="achatn" uk-modal>
-
-                            <div class="relative mx-auto bg-white  rounded-lg shadow-xl uk-modal-dialog w-[400px]">
-
-                                <div class="px-6 py-4 border-b">
-                                    <h2 class="text-xl font-semibold">Achat negocier</h2>
-                                </div>
-
-                                <div class="p-6 overflow-y-auto h-96" uk-overflow-auto>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-                                </div>
-
-                                <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
-                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Cancel</button>
-                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Save</button>
-                                </div>
-
-                                <!-- close button -->
-                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-
-                            </div>
-
-                        </div>
-
                         <div class="lg:p-20 p-10" id="achatg" uk-modal>
 
                             <div class="relative mx-auto bg-white  rounded-lg shadow-xl uk-modal-dialog w-[400px]">
 
-                                <div class="px-6 py-4 border-b">
-                                    <h2 class="text-xl font-semibold">Achat direct</h2>
-                                </div>
 
-                                <div class="p-6 overflow-y-auto h-96" uk-overflow-auto>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                <form method="post">
+                                    <div class="px-6 py-4 border-b">
+                                        <h2 class="text-xl font-semibold">Achat Grouper</h2>
+                                    </div>
+                                    <div class="p-6 overflow-y-auto " uk-overflow-auto>
+                                        <input type="number" class="w-full mb-3" placeholder="Quantité" name="Quantité">
+                                        <input type="text" class="w-full mb-3" placeholder="Localité" name="local">
+                                       
+                                    </div>
+                                    <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
+                                        <button class="px-4 py-1.5 rounded-md uk-modal-close" type="reset">Annuler</button>
+                                        <button class="px-5 py-1.5 bg-gray-100 rounded-md " type="submit" name="submitG">Envoyer</button>
+                                    </div>
+                                </form>
 
-                                </div>
-
-                                <div class="flex justify-end p-6 text-sm font-medium px-6 py-4 border-t">
-                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Cancel</button>
-                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Save</button>
-                                </div>
 
                                 <!-- close button -->
                                 <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
@@ -809,6 +821,7 @@ if (isset($_POST['submit'])) {
 
                         </div>
 
+                        
                     </div>
                 </div>
 
