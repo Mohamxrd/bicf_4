@@ -169,7 +169,7 @@ $datePlusAncienne = $resultatDate['date_plus_ancienne'];
 
 
 $dateDuJour = date("Y-m-d H:i:s");
-$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "-5 days"));
+$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "+5 days"));
 
 // Insérer les données dans la table notifUser
 if ($dateDuJour > $tempEcoule) {
