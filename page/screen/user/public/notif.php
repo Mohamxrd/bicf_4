@@ -629,13 +629,22 @@ $nombreNotif = $recupNotif->rowCount();
                                     <span class="block text-xs font-medium  dark:text-white/70">
                                         <p>Vous avez été identifier dans un appel d'offre</p>
                                     </span>
+                                <?php elseif ($confirm == 'groupeDirect') : ?>
+                                    <?= $nom_produit ?>
+                                    <span class="block text-xs font-medium dark:text-white/70">
+                                        Quantité: <?= $quantite ?>
+                                    </span>
+
+                                    <span class="block text-xs font-medium  dark:text-white/70">
+                                        <p><?= $message ?></p>
+                                    </span>
                                 <?php endif; ?>
 
 
                             </div>
 
                             <form method="post">
-                                <?php if ($confirm == '') : ?>
+                                <?php if ($confirm == '' || $confirm == 'groupeDirect') : ?>
                                     <input type="hidden" name="id_notification" value="<?= $id_notification ?>">
                                     <button type="submit" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
                                     <button type="submit" name="refus" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Refuser</button>
@@ -654,25 +663,25 @@ $nombreNotif = $recupNotif->rowCount();
                 <?php
                 }
 
-                if (isset($_POST['accepter'])) {
-                    // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
-                    if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
-                        // Récupérez l'ID de la notification à partir du formulaire posté
-                        $id_notification = $_POST['id_notification'];
-                        // Récupérez l'ID de l'utilisateur depuis la session
-                        $id_user = $_SESSION['id_user'];
+                // if (isset($_POST['accepter'])) {
+                //     // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
+                //     if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
+                //         // Récupérez l'ID de la notification à partir du formulaire posté
+                //         $id_notification = $_POST['id_notification'];
+                //         // Récupérez l'ID de l'utilisateur depuis la session
+                //         $id_user = $_SESSION['id_user'];
 
-                        // Exécutez la requête SQL pour mettre à jour les valeurs dans la table notifUser
-                        $updateNotif = $conn->prepare("UPDATE notifUser SET confirm = 'accepte', id_trader = id_user, id_user = null WHERE id_notif = :id_notification AND id_trader = :id_user");
+                //         // Exécutez la requête SQL pour mettre à jour les valeurs dans la table notifUser
+                //         $updateNotif = $conn->prepare("UPDATE notifUser SET confirm = 'accepte', id_trader = id_user, id_user = null WHERE id_notif = :id_notification AND id_trader = :id_user");
 
-                        // Liez les valeurs aux paramètres de la requête
-                        $updateNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
-                        $updateNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                //         // Liez les valeurs aux paramètres de la requête
+                //         $updateNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
+                //         $updateNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
-                        // Exécutez la requête préparée
-                        $updateNotif->execute();
-                    }
-                }
+                //         // Exécutez la requête préparée
+                //         $updateNotif->execute();
+                //     }
+                // }
 
 
                 if (isset($_POST['refus'])) {

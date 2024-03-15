@@ -684,7 +684,7 @@ if ($client = $recupUser->fetch()) {
                                     }
 
                                     // Affichez le contenu du tableau pour vérification
-                                    var_dump($id_trader);
+                             
                                     ?>
 
 

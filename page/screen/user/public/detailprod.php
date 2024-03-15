@@ -148,6 +148,15 @@ $recupGroup->execute();
 
 $nombreGroup = $recupGroup->rowCount();
 
+//Recuper la quantité 
+
+$recupQuantite = $conn->prepare("SELECT SUM(quantiteProd) AS total_quantite FROM achatGroup WHERE id_prod = :id_prod");
+$recupQuantite->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+$recupQuantite->execute();
+
+$total_quantite = $recupQuantite->fetchColumn();
+
+
 // recuperer la date la plus encienne
 
 $recupDatePlusAncienne = $conn->prepare("SELECT MIN(date_ajout) AS date_plus_ancienne FROM achatGroup WHERE id_prod = :id_prod");
@@ -157,6 +166,38 @@ $recupDatePlusAncienne->execute();
 $resultatDate = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
 
 $datePlusAncienne = $resultatDate['date_plus_ancienne'];
+
+
+$dateDuJour = date("Y-m-d H:i:s");
+$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "-5 days"));
+
+// Insérer les données dans la table notifUser
+if ($dateDuJour > $tempEcoule) {
+    $checkNotification = $conn->prepare("SELECT COUNT(*) FROM notifUser WHERE id_trader = :id_trader AND id_prod = :id_prod");
+    $checkNotification->bindParam(':id_trader', $id_vendeur, PDO::PARAM_INT);
+    $checkNotification->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+    $checkNotification->execute();
+
+    $count = $checkNotification->fetchColumn();
+
+    // Si aucune notification similaire n'existe, alors insérer la nouvelle notification
+    if ($count == 0) {
+        $inserNotif =  $conn->prepare("INSERT INTO notifUser (message, quantiteProd, confirm, id_trader, id_prod) VALUES (?, ?, ?, ?, ? )");
+        $inserNotif->execute(['Vous avez un achat groupé sur cet article', $total_quantite, 'groupeDirect', $id_vendeur, $id_prod]);
+
+
+        // Supprimer les données de la table achatGroup avec id_prod = $id_prod
+        $supprimerAchatGroup = $conn->prepare("DELETE FROM achatGroup WHERE id_prod = :id_prod");
+        $supprimerAchatGroup->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+        $supprimerAchatGroup->execute();
+    }
+}
+
+//recupérer les info des appel d'offre
+
+$recupAppel = $conn->prepare("SELECT * FROM notifUser")
+
+
 
 
 
