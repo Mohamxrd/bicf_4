@@ -591,7 +591,7 @@ if ($client = $recupUser->fetch()) {
                                     <div class="flex">
                                         <div class="flex p-1 items-center text-xs bg-teal-100/60 text-teal-600 rounded">
                                             <ion-icon name="person" class="drop-shadow-md mr-1"></ion-icon>
-                                            <span><?= $resultatsTrouves ?></span>
+                                            <span><?= $resultatsTrouves ?> Fournisseur</span>
                                         </div>
                                     </div>
                                 </div>
@@ -684,7 +684,7 @@ if ($client = $recupUser->fetch()) {
                                     }
 
                                     // Affichez le contenu du tableau pour vérification
-                             
+
                                     ?>
 
 
@@ -700,7 +700,46 @@ if ($client = $recupUser->fetch()) {
                                 </div>
 
 
+
+
                             </div>
+
+                            <div class="box w-full p-3 flex flex-col items-center mb-2">
+                                <div class="flex-1 mb-2 justify-start">
+                                    <h4 class="text-lg text-black dark:text-white">Nom du produit</h4>
+                                </div>
+
+                                <button class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participants (10)</button>
+
+                                <div id="countdown-container" class="flex flex-col justify-center items-center ">
+                                    <span class="mb-2">Temps restant pour cet achat groupé</span>
+                                    <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
+                                        <div>-</div>:
+                                        <div>-</div>:
+                                        <div>-</div>:
+                                        <div>-</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box w-full p-3 flex flex-col items-center mb-2">
+                                <div class="flex-1 mb-2 justify-start">
+                                    <h4 class="text-lg text-black dark:text-white">Nom du produit</h4>
+                                </div>
+
+                                <button class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participants (10)</button>
+
+                                <div id="countdown-container" class="flex flex-col justify-center items-center ">
+                                    <span class="mb-2">Temps restant pour cet achat groupé</span>
+                                    <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
+                                        <div>-</div>:
+                                        <div>-</div>:
+                                        <div>-</div>:
+                                        <div>-</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         <?php
                         } else { ?>
                             <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">

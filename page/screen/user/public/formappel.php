@@ -166,6 +166,117 @@ if (isset($_POST['submit'])) {
 
 
 
+if (isset($_POST['submit2'])) {
+
+    function genererCodeAleatoire($longueur)
+    {
+        $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $code = '';
+
+        for ($i = 0; $i < $longueur; $i++) {
+            $code .= $caracteres[rand(0, strlen($caracteres) - 1)];
+        }
+
+        return $code;
+    }
+
+    // Exemple d'utilisation
+    $code = genererCodeAleatoire(10);
+
+
+    // Récupération des données du formulaire
+    $titre_prod = isset($_POST['titre_prod']) ? htmlspecialchars($_POST['titre_prod']) : '';
+    $quantite = isset($_POST['quantite']) ? htmlspecialchars($_POST['quantite']) : '';
+    $payement = isset($_POST['payement']) ? htmlspecialchars($_POST['payement']) : '';
+    $livraisonProd = isset($_POST['livraisonProd']) ? htmlspecialchars($_POST['livraisonProd']) : '';
+    $dateTot = isset($_POST['dateTot']) ? htmlspecialchars($_POST['dateTot']) : '';
+    $dateTard = isset($_POST['dateTard']) ? htmlspecialchars($_POST['dateTard']) : '';
+    $desProd = isset($_POST['desProd']) ? htmlspecialchars($_POST['desProd']) : '';
+
+    // Vérification si les champs obligatoires sont vides
+    if (empty($titre_prod) || empty($quantite) || empty($payement) || empty($livraisonProd) || empty($dateTot) || empty($dateTard) || empty($desProd)) {
+        $errorMsg = 'Veuillez remplir tous les champs.';
+    } else {
+        // Récupération de l'ID de l'utilisateur à partir de la session
+        $id_demander = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
+
+        // Préparation de la requête d'insertion
+        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+        // Si une image a été téléchargée, la traiter
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            $image_name = $_FILES['image']['name']; // Nom de l'image
+            $image_tmp_name = $_FILES['image']['tmp_name']; // Chemin temporaire de l'image sur le serveur
+            $target_dir = "uploads/"; // Dossier où vous souhaitez stocker les images téléchargées
+            $target_file = $target_dir . basename($image_name);
+
+            // Déplacer l'image téléchargée vers le dossier de destination
+            if (move_uploaded_file($image_tmp_name, $target_file)) {
+                // L'image a été téléchargée avec succès
+
+                // Préparation de la requête d'insertion avec l'image
+                $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+                // Exécution de la requête d'insertion avec l'image
+                if ($insertAppel) {
+                    if (isset($_GET['id_trader'])) {
+                        $id_trader = explode(",", $_GET['id_trader']);
+
+                        // Boucler sur chaque id_trader
+                        foreach ($id_trader as $id) {
+                            // Exécuter la requête d'insertion avec les valeurs appropriées
+                            $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id, $code]);
+
+                           
+                        }
+                         // Ajouter dans la table offre groupe
+
+                        $inserOgroup = $conn->prepare("INSERT INTO offreGroup (qte_prod, id_demander, code_unique) VALUES (?, ? , ?)");
+                        $inserOgroup->execute([$quantite, $id_demander, $code]);
+                    }
+                    // Message de succès
+                    $successMsg = "L'appel d'offre a été enregistré avec succès.";
+                } else {
+                    // Erreur lors de la préparation de la requête
+                    $errorMsg = "Une erreur s'est produite lors de l'enregistrement de l'appel d'offre.";
+                }
+            } else {
+                // Erreur lors du téléchargement de l'image
+                $errorMsg = "Une erreur s'est produite lors du téléchargement de l'image.";
+            }
+        } else {
+            // Pas d'image téléchargée
+            // Exécution de la requête d'insertion sans l'image
+
+            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            if ($insertAppel) {
+                if (isset($_GET['id_trader'])) {
+                    $id_trader = explode(",", $_GET['id_trader']);
+
+                    // Boucler sur chaque id_trader
+                    foreach ($id_trader as $id) {
+                        // Exécuter la requête d'insertion avec les valeurs appropriées
+                        $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code]);
+
+                      
+                    }
+
+                
+                    $inserOgroup = $conn->prepare("INSERT INTO offreGroup (qte_prod, id_demander, code_unique) VALUES (?, ? , ?)");
+                    $inserOgroup->execute([$quantite, $id_demander, $code]);
+                }
+                // Message de succès
+                $successMsg = "L'appel d'offre a été enregistré avec succès.";
+            } else {
+                // Erreur lors de la préparation de la requête
+                $errorMsg = "Une erreur s'est produite lors de l'enregistrement de l'appel d'offre.";
+            }
+        }
+    }
+}
+
+
+
 
 
 
@@ -732,6 +843,7 @@ if (isset($_POST['submit'])) {
                                     <button type="reset" class="button lg:px-6 bg-secondery max-md:flex-1">
                                         Annuler</button>
                                     <button type="submit" name="submit" class="button lg:px-10 bg-primary text-white max-md:flex-1"> Envoyer <span class="ripple-overlay"></span></button>
+                                    <button type="submit" name="submit2" class="button lg:px-10 bg-green-500 text-white max-md:flex-1"> Grouper <span class="ripple-overlay"></span></button>
                                 </div>
                             </form>
                         </div>
