@@ -86,7 +86,7 @@ if (isset($_POST['submit'])) {
         $id_demander = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
         // Préparation de la requête d'insertion
-        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique, difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         // Si une image a été téléchargée, la traiter
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
                 // L'image a été téléchargée avec succès
 
                 // Préparation de la requête d'insertion avec l'image
-                $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique, difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 // Exécution de la requête d'insertion avec l'image
                 if ($insertAppel) {
@@ -110,7 +110,7 @@ if (isset($_POST['submit'])) {
                         // Boucler sur chaque id_trader
                         foreach ($id_trader as $id) {
                             // Exécuter la requête d'insertion avec les valeurs appropriées
-                            $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id, $code]);
+                            $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id, $code, "single"]);
 
                             // Ajout de la notification
                             $notif_insert = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
@@ -135,7 +135,7 @@ if (isset($_POST['submit'])) {
             // Pas d'image téléchargée
             // Exécution de la requête d'insertion sans l'image
 
-            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, id_demander, id_trader, code_unique, difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             if ($insertAppel) {
                 if (isset($_GET['id_trader'])) {
                     $id_trader = explode(",", $_GET['id_trader']);
@@ -143,7 +143,7 @@ if (isset($_POST['submit'])) {
                     // Boucler sur chaque id_trader
                     foreach ($id_trader as $id) {
                         // Exécuter la requête d'insertion avec les valeurs appropriées
-                        $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code]);
+                        $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code, "single"]);
 
                         // Ajout de la notification
                         $notif_insert = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
@@ -201,7 +201,7 @@ if (isset($_POST['submit2'])) {
         $id_demander = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
 
         // Préparation de la requête d'insertion
-        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique, difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         // Si une image a été téléchargée, la traiter
         if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -215,7 +215,7 @@ if (isset($_POST['submit2'])) {
                 // L'image a été téléchargée avec succès
 
                 // Préparation de la requête d'insertion avec l'image
-                $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, joint, id_demander, id_trader, code_unique, difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
                 // Exécution de la requête d'insertion avec l'image
                 if ($insertAppel) {
@@ -225,7 +225,7 @@ if (isset($_POST['submit2'])) {
                         // Boucler sur chaque id_trader
                         foreach ($id_trader as $id) {
                             // Exécuter la requête d'insertion avec les valeurs appropriées
-                            $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id, $code]);
+                            $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id, $code, "groupe"]);
 
                            
                         }
@@ -248,7 +248,7 @@ if (isset($_POST['submit2'])) {
             // Pas d'image téléchargée
             // Exécution de la requête d'insertion sans l'image
 
-            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, id_demander, id_trader, code_unique) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $insertAppel = $conn->prepare("INSERT INTO appelOffre (nomArt_appel, quantite, prixMax, payement, livraison, dateTot, dateTard, descrip, id_demander, id_trader, code_unique, difference) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             if ($insertAppel) {
                 if (isset($_GET['id_trader'])) {
                     $id_trader = explode(",", $_GET['id_trader']);
@@ -256,7 +256,7 @@ if (isset($_POST['submit2'])) {
                     // Boucler sur chaque id_trader
                     foreach ($id_trader as $id) {
                         // Exécuter la requête d'insertion avec les valeurs appropriées
-                        $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code]);
+                        $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code, "groupe"]);
 
                       
                     }

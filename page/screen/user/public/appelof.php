@@ -704,40 +704,6 @@ if ($client = $recupUser->fetch()) {
 
                             </div>
 
-                            <div class="box w-full p-3 flex flex-col items-center mb-2">
-                                <div class="flex-1 mb-2 justify-start">
-                                    <h4 class="text-lg text-black dark:text-white">Nom du produit</h4>
-                                </div>
-
-                                <button class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participants (10)</button>
-
-                                <div id="countdown-container" class="flex flex-col justify-center items-center ">
-                                    <span class="mb-2">Temps restant pour cet achat groupé</span>
-                                    <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
-                                        <div>-</div>:
-                                        <div>-</div>:
-                                        <div>-</div>:
-                                        <div>-</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="box w-full p-3 flex flex-col items-center mb-2">
-                                <div class="flex-1 mb-2 justify-start">
-                                    <h4 class="text-lg text-black dark:text-white">Nom du produit</h4>
-                                </div>
-
-                                <button class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participants (10)</button>
-
-                                <div id="countdown-container" class="flex flex-col justify-center items-center ">
-                                    <span class="mb-2">Temps restant pour cet achat groupé</span>
-                                    <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
-                                        <div>-</div>:
-                                        <div>-</div>:
-                                        <div>-</div>:
-                                        <div>-</div>
-                                    </div>
-                                </div>
-                            </div>
 
 
                         <?php
@@ -751,7 +717,81 @@ if ($client = $recupUser->fetch()) {
                         <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">
                             <div class="text-sm text-gray-500 mt-6 text-center">Tapez dans la barre de recherche le produit ou le service dont vous avez besoin pour faire un appel d'offre</div>
                         </div>
-                    <?php } ?>
+                        <?php }
+
+                    if (isset($_POST['recherche'])) {
+                        $recherche = $_POST['recherche'];
+
+                        // Requête SQL pour rechercher dans la table appelOffre
+                        $getGroup = $conn->prepare("SELECT DISTINCT code_unique, nomArt_appel FROM appelOffre WHERE difference = 'groupe' AND nomArt_appel LIKE :recherche");
+                        $getGroup->execute(array(':recherche' => '%' . $recherche . '%'));
+
+                        $nombrePers = $conn->prepare("SELECT COUNT(DISTINCT id_demander) AS totalPers FROM appelOffre WHERE difference = 'groupe' AND code_unique = :code_unique");
+
+                        // Liaison des paramètres
+                        $nombrePers->bindParam(':code_unique', $code_unique, PDO::PARAM_STR);
+                        
+                        // Exécution de la requête
+                        
+                        try {
+                            // Exécutez la requête pour récupérer le nombre total de personnes
+                            $nombrePers->execute();
+                            
+                            // Récupérez le nombre total de personnes
+                            $totalPers = $nombrePers->fetchColumn();
+                        
+                            // Affichez le résultat pour le débogage
+                            echo "Nombre total de personnes : $totalPers";
+                        } catch (PDOException $e) {
+                            // En cas d'erreur, affichez le message d'erreur
+                            echo "Erreur PDO : " . $e->getMessage();
+                        }
+
+
+                        // Vérifier s'il y a des résultats
+                        if ($getGroup->rowCount() > 0) {
+                            // Afficher les résultats
+                        ?>
+                            <div class="w-full my-6 flex items-center justify-center">
+                                <p class="text-xl">Resulats pour les appels offre groupé</p>
+                            </div>
+                            <?php
+
+                            while ($offreGroup = $getGroup->fetch()) {
+                                // Récupérer les données nécessaires
+                                $nomAppel = $offreGroup['nomArt_appel'];
+                                $code_unique = $offreGroup['code_unique'];
+
+                                // Afficher les résultats ici
+
+                            ?>
+                                <div class="box w-full p-3 flex flex-col items-center mb-3">
+                                    <div class="flex-1 mb-2 justify-start">
+                                        <h4 class="text-lg text-black dark:text-white"><?= $nomAppel ?></h4>
+                                    </div>
+
+                                    <button class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participant (<?=  $totalPers ?>)</button>
+
+                                    <div id="countdown-container" class="flex flex-col justify-center items-center ">
+                                        <span class="mb-2">Temps restant pour cet achat groupé</span>
+                                        <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
+                                            <div>-</div>:
+                                            <div>-</div>:
+                                            <div>-</div>:
+                                            <div>-</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                    <?php
+                            }
+                        }
+                    }
+                    ?>
+
+
+
+
 
 
                 </div>
