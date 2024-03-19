@@ -45,6 +45,9 @@ if ($client = $recupUser->fetch()) {
 
 
 
+
+
+
 ?>
 
 
@@ -726,26 +729,6 @@ if ($client = $recupUser->fetch()) {
                         $getGroup = $conn->prepare("SELECT DISTINCT code_unique, nomArt_appel FROM appelOffre WHERE difference = 'groupe' AND nomArt_appel LIKE :recherche");
                         $getGroup->execute(array(':recherche' => '%' . $recherche . '%'));
 
-                        $nombrePers = $conn->prepare("SELECT COUNT(DISTINCT id_demander) AS totalPers FROM appelOffre WHERE difference = 'groupe' AND code_unique = :code_unique");
-
-                        // Liaison des paramètres
-                        $nombrePers->bindParam(':code_unique', $code_unique, PDO::PARAM_STR);
-                        
-                        // Exécution de la requête
-                        
-                        try {
-                            // Exécutez la requête pour récupérer le nombre total de personnes
-                            $nombrePers->execute();
-                            
-                            // Récupérez le nombre total de personnes
-                            $totalPers = $nombrePers->fetchColumn();
-                        
-                            // Affichez le résultat pour le débogage
-                            echo "Nombre total de personnes : $totalPers";
-                        } catch (PDOException $e) {
-                            // En cas d'erreur, affichez le message d'erreur
-                            echo "Erreur PDO : " . $e->getMessage();
-                        }
 
 
                         // Vérifier s'il y a des résultats
@@ -762,7 +745,39 @@ if ($client = $recupUser->fetch()) {
                                 $nomAppel = $offreGroup['nomArt_appel'];
                                 $code_unique = $offreGroup['code_unique'];
 
+
                                 // Afficher les résultats ici
+                                try {
+                                    // Requête SQL pour compter le nombre d'ID demandeurs distincts
+                                    $nombrePers = $conn->prepare("SELECT COUNT(DISTINCT id_demander) AS totalPers FROM appelOffre WHERE code_unique = :code_unique");
+
+                                    // Liaison du paramètre
+                                    $nombrePers->bindParam(':code_unique', $code_unique, PDO::PARAM_STR);
+
+                                    // Exécution de la requête
+                                    $nombrePers->execute();
+
+                                    // Récupération du nombre total de personnes
+                                    $totalPers = $nombrePers->fetchColumn();
+
+                                    // Affichage du résultat
+                                    
+                                } catch (PDOException $e) {
+                                    // En cas d'erreur, afficher le message d'erreur
+                                    echo "Erreur PDO : " . $e->getMessage();
+                                }
+
+                                $recupDatePlusAncienne = $conn->prepare("SELECT MIN(date_ajout) AS date_plus_ancienne FROM appelOffre WHERE code_unique = :code_unique");
+                                $recupDatePlusAncienne->bindParam(':code_unique', $code_unique, PDO::PARAM_INT);
+                                $recupDatePlusAncienne->execute();
+
+                                $resultatDate = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
+
+                                $datePlusAncienne = $resultatDate['date_plus_ancienne'];
+
+                                $dateDuJour = date("Y-m-d H:i:s");
+                                $tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "+5 days"));
+
 
                             ?>
                                 <div class="box w-full p-3 flex flex-col items-center mb-3">
@@ -770,7 +785,7 @@ if ($client = $recupUser->fetch()) {
                                         <h4 class="text-lg text-black dark:text-white"><?= $nomAppel ?></h4>
                                     </div>
 
-                                    <button class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participant (<?=  $totalPers ?>)</button>
+                                    <button class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participant (<?= $totalPers ?>)</button>
 
                                     <div id="countdown-container" class="flex flex-col justify-center items-center ">
                                         <span class="mb-2">Temps restant pour cet achat groupé</span>
@@ -782,6 +797,8 @@ if ($client = $recupUser->fetch()) {
                                         </div>
                                     </div>
                                 </div>
+
+                                
 
                     <?php
                             }
@@ -928,6 +945,45 @@ if ($client = $recupUser->fetch()) {
         // Recharger la page pour afficher les résultats de la recherche
         location.reload();
     });
-</script>
+
+                                    // Convertir la date de départ en objet Date JavaScript
+                                    const startDate = new Date("<?= $datePlusAncienne; ?>");
+
+                                    // Ajouter 5 jours à la date de départ
+                                    startDate.setDate(startDate.getDate() + 5);
+
+                                    // Mettre à jour le compte à rebours à intervalles réguliers
+                                    const countdownTimer = setInterval(updateCountdown, 1000);
+
+                                    function updateCountdown() {
+                                        // Obtenir la date et l'heure actuelles
+                                        const currentDate = new Date();
+
+                                        // Calculer la différence entre la date cible et la date de départ en millisecondes
+                                        const difference = startDate.getTime() - currentDate.getTime();
+
+                                        // Convertir la différence en jours, heures, minutes et secondes
+                                        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                                        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                                        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                                        // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
+                                        const countdownElement = document.getElementById('countdown');
+                                        countdownElement.innerHTML = `
+            <div>${days}j</div>:
+            <div>${hours}h</div>:
+            <div>${minutes}m</div>:
+            <div>${seconds}s</div>
+        `;
+
+                                        // Arrêter le compte à rebours lorsque la date cible est atteinte
+                                        if (difference <= 0) {
+                                            clearInterval(countdownTimer);
+                                            countdownElement.innerHTML = "Temps écoulé !";
+                                        }
+                                    }
+                                </script>
+
 
 </html>
