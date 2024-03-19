@@ -743,7 +743,7 @@ if ($client = $recupUser->fetch()) {
                             while ($offreGroup = $getGroup->fetch()) {
                                 // Récupérer les données nécessaires
                                 $nomAppel = $offreGroup['nomArt_appel'];
-                                $code_unique = $offreGroup['code_unique'];
+                                $code = $offreGroup['code_unique'];
 
 
                                 // Afficher les résultats ici
@@ -752,7 +752,7 @@ if ($client = $recupUser->fetch()) {
                                     $nombrePers = $conn->prepare("SELECT COUNT(DISTINCT id_demander) AS totalPers FROM appelOffre WHERE code_unique = :code_unique");
 
                                     // Liaison du paramètre
-                                    $nombrePers->bindParam(':code_unique', $code_unique, PDO::PARAM_STR);
+                                    $nombrePers->bindParam(':code_unique', $code, PDO::PARAM_STR);
 
                                     // Exécution de la requête
                                     $nombrePers->execute();
@@ -761,22 +761,25 @@ if ($client = $recupUser->fetch()) {
                                     $totalPers = $nombrePers->fetchColumn();
 
                                     // Affichage du résultat
-                                    
+
                                 } catch (PDOException $e) {
                                     // En cas d'erreur, afficher le message d'erreur
                                     echo "Erreur PDO : " . $e->getMessage();
                                 }
 
                                 $recupDatePlusAncienne = $conn->prepare("SELECT MIN(date_ajout) AS date_plus_ancienne FROM appelOffre WHERE code_unique = :code_unique");
-                                $recupDatePlusAncienne->bindParam(':code_unique', $code_unique, PDO::PARAM_INT);
+                                $recupDatePlusAncienne->bindParam(':code_unique', $code, PDO::PARAM_STR); // Utilisez PDO::PARAM_STR pour lier en tant que chaîne de caractères
                                 $recupDatePlusAncienne->execute();
 
-                                $resultatDate = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
+                                $datePlusAncienneRow = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
+                                $datePlusAncienne = $datePlusAncienneRow['date_plus_ancienne'];
 
-                                $datePlusAncienne = $resultatDate['date_plus_ancienne'];
+
 
                                 $dateDuJour = date("Y-m-d H:i:s");
                                 $tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "+5 days"));
+
+
 
 
                             ?>
@@ -798,7 +801,7 @@ if ($client = $recupUser->fetch()) {
                                     </div>
                                 </div>
 
-                                
+
 
                     <?php
                             }
@@ -946,44 +949,44 @@ if ($client = $recupUser->fetch()) {
         location.reload();
     });
 
-                                    // Convertir la date de départ en objet Date JavaScript
-                                    const startDate = new Date("<?= $datePlusAncienne; ?>");
+    // Convertir la date de départ en objet Date JavaScript
+    const startDate = new Date("<?= $datePlusAncienne; ?>");
 
-                                    // Ajouter 5 jours à la date de départ
-                                    startDate.setDate(startDate.getDate() + 5);
+    // Ajouter 5 jours à la date de départ
+    startDate.setDate(startDate.getDate() + 5);
 
-                                    // Mettre à jour le compte à rebours à intervalles réguliers
-                                    const countdownTimer = setInterval(updateCountdown, 1000);
+    // Mettre à jour le compte à rebours à intervalles réguliers
+    const countdownTimer = setInterval(updateCountdown, 1000);
 
-                                    function updateCountdown() {
-                                        // Obtenir la date et l'heure actuelles
-                                        const currentDate = new Date();
+    function updateCountdown() {
+        // Obtenir la date et l'heure actuelles
+        const currentDate = new Date();
 
-                                        // Calculer la différence entre la date cible et la date de départ en millisecondes
-                                        const difference = startDate.getTime() - currentDate.getTime();
+        // Calculer la différence entre la date cible et la date de départ en millisecondes
+        const difference = startDate.getTime() - currentDate.getTime();
 
-                                        // Convertir la différence en jours, heures, minutes et secondes
-                                        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-                                        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-                                        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        // Convertir la différence en jours, heures, minutes et secondes
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-                                        // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
-                                        const countdownElement = document.getElementById('countdown');
-                                        countdownElement.innerHTML = `
+        // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
+        const countdownElement = document.getElementById('countdown');
+        countdownElement.innerHTML = `
             <div>${days}j</div>:
             <div>${hours}h</div>:
             <div>${minutes}m</div>:
             <div>${seconds}s</div>
         `;
 
-                                        // Arrêter le compte à rebours lorsque la date cible est atteinte
-                                        if (difference <= 0) {
-                                            clearInterval(countdownTimer);
-                                            countdownElement.innerHTML = "Temps écoulé !";
-                                        }
-                                    }
-                                </script>
+        // Arrêter le compte à rebours lorsque la date cible est atteinte
+        if (difference <= 0) {
+            clearInterval(countdownTimer);
+            countdownElement.innerHTML = "Temps écoulé !";
+        }
+    }
+</script>
 
 
 </html>
