@@ -167,8 +167,8 @@ if ($dateDuJour > $tempEcoule) {
             // Boucler sur chaque id_trader
             foreach ($id_trader as $id) {
                 // Ajout du NOTIF
-                $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd , id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?, ?)");
-                $notif_insert->execute(["Vous avez reçu un appel d'offre", $total_quantite ,  $id_demander, $id, "group", $code]);
+                $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd ,  id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
+                $notif_insert->execute(["Vous avez reçu un appel d'offre", $total_quantite ,  $id, "group", $code]);
 
                 // Ajout du commentaire
                 $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, code_unique) VALUES (?, ?, ?)");
