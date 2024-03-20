@@ -2,23 +2,22 @@
 session_start();
 @include('../../../config.php');
 
-
-
+// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['nom_user'])) {
     header('location: ../../../auth/login.php');
-    exit(); // Ajout pour terminer l'exécution après la redirection
+    exit(); // Arrête l'exécution du script après la redirection
 }
 
+// Récupérer l'ID de l'utilisateur à partir de la session
+$id_user = $_SESSION['id_user'];
 
-
-$id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : '';
-
-// Récupération des informations de l'utilisateur
+// Récupérer les informations de l'utilisateur à partir de la base de données
 $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
 $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $recupUser->execute();
 
 if ($client = $recupUser->fetch()) {
+    // Récupérer les champs de l'utilisateur
     $nom_client = $client['nom_user'];
     $username_client = $client['username'];
     $phonenumber = $client['tel_user'];
@@ -27,28 +26,54 @@ if ($client = $recupUser->fetch()) {
     $activSector_user = $client['activSector_user'];
     $adress_user = $client['adress_user'];
     $email_user = $client['email_user'];
+    $pays_user = $client['pays_user'];
+    $local_user = $client['local_user'];
+    $ActivZone_user = $client['ActivZone_user'];
+}
 
-    // Maintenant, récupérez les informations de l'agent
-    $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
+// Récupérer le nom de l'agent à partir de son ID
+if (isset($id_agent)) {
+    $recupAgent = $conn->prepare('SELECT nom_admin FROM admintable WHERE id_admin = :id_admin');
     $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
     $recupAgent->execute();
 
     if ($agent = $recupAgent->fetch()) {
         $nom_agent = $agent['nom_admin'];
     }
-    // ... Ajoutez d'autres champs au besoin ...
-} else {
-    // Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
-    echo "Erreur: Utilisateur non trouvé dans la base de données.";
-    exit();
 }
 
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id_appel = $_GET['id'];
 
+    $recupAppel = $conn->prepare("SELECT * FROM appelOffre WHERE id_appeloffre = :id_appel ");
+    $recupAppel->bindParam(':id_appel', $id_appel, PDO::PARAM_INT);
+    $recupAppel->execute();
 
+    if ($appel = $recupAppel->fetch()) {
+        $titre_prod = $appel['nomArt_appel'];
+        $quantite = $appel['quantite'];
+        $prixMax = $appel['prixMax'];
+        $payement = $appel['payement'];
+        $livraison = $appel['livraison'];
+        $dateTot = $appel['dateTot'];
+        $dateTard = $appel['dateTard'];
+        $descrip = $appel['descrip'];
+        $code = $appel['code_unique'];
+        $joint = $appel['joint'];
+        $date_ajout = $appel['date_ajout'];
+    }
+}
 
+$recupComment = $conn->prepare("SELECT comment.*, user.* 
+                                FROM comment 
+                                INNER JOIN user ON comment.id_trader = user.id_user
+                                WHERE comment.code_unique = :code_unique ORDER BY comment.prixTrade ASC");
 
+$recupComment->bindParam(':code_unique', $code, PDO::PARAM_STR);
+$recupComment->execute();
 
 ?>
+
 
 
 
@@ -59,6 +84,8 @@ if ($client = $recupUser->fetch()) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
 
     <!-- Favicon -->
     <link href="assets/images/favicon.png" rel="icon" type="image/png">
@@ -163,7 +190,6 @@ if ($client = $recupUser->fetch()) {
                                     </div>
 
 
-
                                     <!-- slide nav icons -->
                                     <div class="dark:hidden">
                                         <a class="absolute -translate-y-1/2 top-1/2 -left-4 flex items-center w-8 h-full px-1.5 justify-start bg-gradient-to-r from-white via-white dark:from-slate-600 dark:via-slate-500 dark:from-transparent dark:via-transparent" href="#" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-xl dark:text-white"></ion-icon> </a>
@@ -216,7 +242,87 @@ if ($client = $recupUser->fetch()) {
                                 <div class="text-sm h-[400px] w-full overflow-y-auto pr-2">
 
                                     <!-- contents list -->
+                                    <div class="pl-2 p-1 text-sm font-normal dark:text-white">
 
+                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
+                                            <div class="flex-1 ">
+                                                <p> <b class="font-bold mr-1"> Alexa Gray</b> started following you.
+                                                    Welcome him to your profile. 👋 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 4 hours
+                                                    ago </div>
+                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5">
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-7.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
+                                            <div class="flex-1 ">
+                                                <p> <b class="font-bold mr-1">Jesse Steeve</b> mentioned you in a story.
+                                                    Check it out and reply. 📣 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-6.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
+                                            <div class="flex-1 ">
+                                                <p> <b class="font-bold mr-1"> Alexa stella</b> commented on your photo
+                                                    “Wow, stunning shot!” 💬 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
+                                            <div class="flex-1 ">
+                                                <p> <b class="font-bold mr-1"> John Michael</b> who you might know, is
+                                                    on socialite.</p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 2 hours
+                                                    ago </div>
+                                            </div>
+                                            <button type="button" class="button text-white bg-primary">fallow</button>
+                                        </a>
+                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10 bg-teal-500/5">
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-3.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
+                                            <div class="flex-1 ">
+                                                <p> <b class="font-bold mr-1"> Sarah Gray</b> sent you a message. He
+                                                    wants to chat with you. 💖 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 4 hours
+                                                    ago </div>
+                                                <div class="w-2.5 h-2.5 bg-teal-600 rounded-full absolute right-3 top-5">
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-4.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
+                                            <div class="flex-1 ">
+                                                <p> <b class="font-bold mr-1"> Jesse Steeve</b> sarah tagged you <br> in
+                                                    a photo of your birthday party. 📸 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
+                                            <div class="flex-1 ">
+                                                <p> <b class="font-bold mr-1"> Lewis Lewis</b> mentioned you in a story.
+                                                    Check it out and reply. 📣 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
+                                            </div>
+                                        </a>
+                                        <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-7.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
+                                            <div class="flex-1 ">
+                                                <p> <b class="font-bold mr-1"> Martin Gray</b> liked your photo of the
+                                                    Eiffel Tower. 😍 </p>
+                                                <div class="text-xs text-gray-500 mt-1.5 dark:text-white/80"> 8 hours
+                                                    ago </div>
+                                            </div>
+                                        </a>
+
+                                    </div>
 
                                 </div>
 
@@ -472,467 +578,170 @@ if ($client = $recupUser->fetch()) {
 
         <!-- main contents -->
 
+
         <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
-            <!-- timeline -->
+            <div class="mb-3">
+                <h1 class=" text-center font-bold text-2xl">NEGOCIATION GROUPER</h1>
+            </div>
 
             <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
 
                 <!-- search -->
+                <div class="mb-4 flex-1 mx-auto  ">
 
-
-                <div class="flex-1 mx-auto  ">
-
-                    <!-- stories -->
-
-
-                    <!-- feed story -->
                     <div class="md:max-w-[650px] mx-auto flex-1 xl:space-y-6 space-y-3">
-                        <!-- Formulaire de recherche -->
-                        <form id="searchForm" method="post" class="w-full" autocomplete="off">
-                            <div class="flex items-center py-3 dark:border-gray-600">
-                                <!-- Champ de recherche -->
-                                <input type="text" name="recherche" placeholder="Rechercher un produit ou service" class="flex-1 border-none bg-transparent focus:outline-none dark:text-white rounded-l-md" value="<?php echo isset($_POST['recherche']) ? $_POST['recherche'] : ''; ?>" />
-                                <!-- Bouton de recherche -->
-                                <button type="submit" class="flex items-center px-3 py-1.5 bg-blue-500 text-white rounded-md ml-2">
-                                    <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                    </svg>
-                                </button>
-                            </div>
 
-                            <div class="flex justify-between">
-                                <!-- Dropdown 1 -->
-                                <div class="dropdown" style="width: calc(33% - 10px);">
-                                    <!-- Dropdown Trigger -->
-                                    <select name="zone_economique" class="dropdown-trigger w-full">
-                                        <option value="" disabled <?php echo (!isset($_POST['zone_economique']) || $_POST['zone_economique'] == '') ? 'selected' : ''; ?>>Zone economique</option>
-                                        <option value="Proximité" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Proximité') ? 'selected' : ''; ?>>Proximité</option>
-                                        <option value="Locale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Locale') ? 'selected' : ''; ?>>Locale</option>
-                                        <option value="Nationale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Nationale') ? 'selected' : ''; ?>>Nationale</option>
-                                        <option value="Sous Régionale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Sous Régionale') ? 'selected' : ''; ?>>Sous Régionale</option>
-                                        <option value="Continentale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Continentale') ? 'selected' : ''; ?>>Continentale</option>
-                                        <option value="Internationale" <?php echo (isset($_POST['zone_economique']) && $_POST['zone_economique'] == 'Internationale') ? 'selected' : ''; ?>>Internationale</option>
-                                    </select>
-                                </div>
-                                <!-- Dropdown 2 -->
-                                <div class="dropdown" style="width: calc(33% - 10px);">
-                                    <!-- Dropdown Trigger -->
-                                    <select name="type_produit" class="dropdown-trigger w-full">
-                                        <option value="" disabled <?php echo (!isset($_POST['type_produit']) || $_POST['type_produit'] == '') ? 'selected' : ''; ?>>Type de produit</option>
-                                        <option value="Importé" <?php echo (isset($_POST['type_produit']) && $_POST['type_produit'] == 'Importé') ? 'selected' : ''; ?>>Importé</option>
-                                        <option value="Local" <?php echo (isset($_POST['type_produit']) && $_POST['type_produit'] == 'Local') ? 'selected' : ''; ?>>Local</option>
-                                    </select>
-                                </div>
-                                <!-- Dropdown 3 -->
-                                <div style="width: calc(33% - 10px);">
-                                    <!-- Input field -->
-                                    <input type="text" name="quantite" class="w-full" placeholder="Quantité" value="<?php echo isset($_POST['quantite']) ? $_POST['quantite'] : ''; ?>">
-                                </div>
+                        <div class="flex items-center py-3 dark:border-gray-600 my-3">
+
+                            <!--  TITRE DU PRODUIT  -->
+                            <h1 class="text-xl"><?= $titre_prod ?></h1>
+
+                        </div>
+                    </div>
+
+                    <div class="mb-4 grid sm:grid-cols-2 gap-3" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
+
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title "> Quantité</h4>
+                                <p><?= $quantite ?></p>
                             </div>
-                        </form>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Prix unitaire max</h4>
+                                <p><?= $prixMax ?></p>
+                            </div>
+                        </div>
+
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Payement </h4>
+                                <p><?= $payement ?></p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Livraison</h4>
+                                <p><?= $livraison ?></p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Au plus tôt </h4>
+                                <p><?= $dateTot ?></p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title">Au plus tard</h4>
+                                <p><?= $dateTard ?></p>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class=" card flex space-x-5 p-5">
+                        <div class="card-body flex-1 p-0">
+                            <h4 class="card-title"> Description</h4>
+                            <p><?= $descrip ?> </p>
+                        </div>
+                    </div>
+
+                    <?php if (!empty($joint)) : ?>
+                        <div class="flex flex-col justify-center items-center mt-4 w-full" uk-lightbox="">
+                            <!-- Utilisation de flexbox pour centrer verticalement -->
+                            <a href="<?= $joint ?>" target="_blank" class="w-full p-2 m-2 text-center text-white text-sm bg-green-500 rounded">Voir la piece jointe</a>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+
+                <!-- image -->
+
+                <div class="flex-1 items-center justify-center mt-5">
+
+                    <div class="flex items-center flex-col lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
+
+                    <a href="" class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participant (<?= $totalPers ?>)</a>
+
+
+                    </div>
+
+                    <div id="countdown-container" class="flex flex-col justify-center items-center ">
+
+                        <span class="mb-2">Temps restant pour cette negociatiation</span>
+
+                        <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
+                            <div>-</div>:
+                            <div>-</div>:
+                            <div>-</div>:
+                            <div>-</div>
+                        </div>
+
+
                     </div>
 
 
-                    <!-- //recherche -->
-                    <?php
-                    // Initialiser une variable pour suivre le nombre de résultats trouvés
-                    $resultatsTrouves = 0;
-
-                    $zoneEconomique = "";
-                    $typeProduit = "";
-                    $quantite = "";
-                    $recherche = "";
-
-                    // Vérifier si la requête de recherche a été soumise
-                    if (isset($_POST['recherche'])) {
-                        $zoneEconomique = isset($_POST['zone_economique']) ? $_POST['zone_economique'] : "";
-                        $typeProduit = isset($_POST['type_produit']) ? $_POST['type_produit'] : "";
-                        $quantite = $_POST['quantite'];
-                        $recherche = $_POST['recherche'];
-
-                        // Construire la requête SQL en fonction des filtres sélectionnés
-                        $sql = "SELECT MIN(prixProd) AS min_price, COUNT(DISTINCT id_user) AS total FROM prodUser WHERE 1=1"; // Clause WHERE 1=1 permet de construire dynamiquement la requête
-
-                        if ($zoneEconomique != "") {
-                            $sql .= " AND zonecoProd = '$zoneEconomique'";
-                        }
-
-                        if ($typeProduit != "") {
-                            $sql .= " AND typeProd = '$typeProduit'";
-                        }
-
-                        if ($quantite != "") {
-                            $sql .= " AND ('$quantite' BETWEEN qteProd_min AND qteProd_max OR qteProd_min = '' OR qteProd_max = '')";
-                        }
-
-                        if ($recherche != "") {
-                            $sql .= " AND nomArt LIKE '%$recherche%'";
-                        }
-
-                        if (!empty($id_user)) {
-                            $sql .= " AND id_user != '$id_user'";
-                        }
-
-                        // Exécuter la requête SQL
-                        $requete = $conn->prepare($sql);
-                        $requete->execute();
-
-                        // Obtenir le nombre de résultats trouvés
-                        $resultatRequete = $requete->fetch();
-                        $resultatsTrouves = $resultatRequete['total'];
-                        $minPrice = $resultatRequete['min_price'];
-
-                        // Afficher les résultats s'il y en a
-                        if ($resultatsTrouves > 0) {
-                    ?>
-                            <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3">
-                                <div class="flex items-center gap-3 sm:p-4 p-2.5 text-sm font-medium">
-                                    <div class="flex-1">
-                                        <h4 class="text-lg text-black dark:text-white"><?= $recherche ?></h4>
-                                    </div>
-                                    <div class="flex">
-                                        <div class="flex p-1 items-center text-xs bg-teal-100/60 text-teal-600 rounded">
-                                            <ion-icon name="person" class="drop-shadow-md mr-1"></ion-icon>
-                                            <span><?= $resultatsTrouves ?> Fournisseur</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Résultats de la recherche -->
-                            <div class="flex flex-col justify-center bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 my-3 p-3">
-                                <?php
-                                // Construire une nouvelle requête pour obtenir les détails des produits correspondants à la recherche
-                                $sqlDetails = "SELECT nomArt FROM prodUser WHERE 1=1";
-
-                                if ($zoneEconomique != "") {
-                                    $sqlDetails .= " AND zonecoProd = '$zoneEconomique'";
-                                }
-
-                                if ($typeProduit != "") {
-                                    $sqlDetails .= " AND typeProd = '$typeProduit'";
-                                }
-
-                                if ($quantite != "") {
-                                    $sqlDetails .= " AND ('$quantite' BETWEEN qteProd_min AND qteProd_max OR qteProd_min = '' OR qteProd_max = '')";
-                                }
-
-                                if ($recherche != "") {
-                                    $sqlDetails .= " AND nomArt LIKE '%$recherche%'";
-                                }
-
-                                // Exécuter la requête SQL pour les détails des produits
-                                $requeteDetails = $conn->prepare($sqlDetails);
-                                $requeteDetails->execute();
-
-                                // Afficher les détails des produits
-                                while ($produit = $requeteDetails->fetch()) {
-                                ?>
-                                    <div class="flex items-center gap-3 sm:p-4 p-2.5 text-sm font-medium border-b">
-                                        <div class="flex-1">
-                                            <h4 class="text-lg text-black dark:text-white"><?= $produit['nomArt'] ?></h4>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-
-                                <div class="flex justify-center items-center dark:text-white/80 p-4 w-full">
-                                    <button onclick="faireAppelOffre()" class="text-white p-2 bg-blue-500 rounded-md">Faire un appel d'offre</button>
-
-                                    <?php
-                                    // Requête SQL pour récupérer tous les id_user distincts de prodUser
-                                    $sql = "SELECT DISTINCT id_user FROM prodUser WHERE 1=1"; // Commencez la requête avec 1=1 pour permettre la construction dynamique
-
-                                    // Ajoutez les conditions supplémentaires en fonction des critères de recherche
-                                    if ($zoneEconomique != "") {
-                                        $sql .= " AND zonecoProd = '$zoneEconomique'";
-                                    }
-
-                                    if ($typeProduit != "") {
-                                        $sql .= " AND typeProd = '$typeProduit'";
-                                    }
-
-                                    if ($quantite != "") {
-                                        $sql .= " AND ('$quantite' BETWEEN qteProd_min AND qteProd_max OR qteProd_min = '' OR qteProd_max = '')";
-                                    }
-
-                                    if ($recherche != "") {
-                                        $sql .= " AND nomArt LIKE '%$recherche%'";
-                                    }
-
-                                    if (!empty($id_user)) {
-                                        $sql .= " AND id_user != '$id_user'";
-                                    }
-
-                                    // Exécutez la requête SQL
-                                    $requete = $conn->prepare($sql);
-                                    $requete->execute();
-
-                                    // Récupérez les résultats
-                                    $resultats = $requete->fetchAll(PDO::FETCH_ASSOC);
-
-                                    // Fermez la requête
-                                    $requete->closeCursor();
-
-                                    // Créez un tableau pour stocker les id_user
-                                    $id_trader = array();
-
-                                    // Bouclez sur les résultats pour remplir le tableau
-                                    foreach ($resultats as $resultat) {
-                                        // Vérifiez si l'id_user est différent de l'id de la session active
-                                        if ($resultat['id_user'] != $id_user) {
-                                            // Ajoutez l'id_user au tableau
-                                            $id_trader[] = $resultat['id_user'];
-                                        }
-                                    }
-
-                                    // Affichez le contenu du tableau pour vérification
-
-                                    ?>
-
-
-                                    <script>
-                                        function faireAppelOffre() {
-                                            // Création de l'URL avec les id_trader
-                                            var url = 'formappel.php?id_trader=<?php echo implode(",", $id_trader); ?>&minPrice=<?php echo urlencode($minPrice); ?>&recherche=<?php echo urlencode($recherche); ?>';
-
-                                            // Redirection avec les id_trader dans l'URL
-                                            window.location.href = url;
-                                        }
-                                    </script>
-                                </div>
-
-
-
-
-                            </div>
-
-
-
-                        <?php
-                        } else { ?>
-                            <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">
-                                <p>Aucun résultat trouvé.</p>
-                            </div>
-                        <?php
-                        }
-                    } else { ?>
-                        <div class="w-full mt-6 h-96 flex  flex-col items-center justify-center">
-                            <div class="text-sm text-gray-500 mt-6 text-center">Tapez dans la barre de recherche le produit ou le service dont vous avez besoin pour faire un appel d'offre</div>
-                        </div>
-                        <?php }
-
-                    if (isset($_POST['recherche'])) {
-                        $recherche = $_POST['recherche'];
-
-                        // Requête SQL pour rechercher dans la table appelOffre
-                        $getGroup = $conn->prepare("SELECT DISTINCT code_unique, nomArt_appel FROM appelOffre WHERE difference = 'groupe' AND nomArt_appel LIKE :recherche");
-                        $getGroup->execute(array(':recherche' => '%' . $recherche . '%'));
-
-
-
-                        // Vérifier s'il y a des résultats
-                        if ($getGroup->rowCount() > 0) {
-                            // Afficher les résultats
-                        ?>
-                            <div class="w-full my-6 flex items-center justify-center">
-                                <p class="text-xl">Resulats pour les appels offre groupé</p>
-                            </div>
-                            <?php
-
-                            while ($offreGroup = $getGroup->fetch()) {
-                                // Récupérer les données nécessaires
-                                $nomAppel = $offreGroup['nomArt_appel'];
-                                $code = $offreGroup['code_unique'];
-
-
-                                // Afficher les résultats ici
-                                try {
-                                    // Requête SQL pour compter le nombre d'ID demandeurs distincts
-                                    $nombrePers = $conn->prepare("SELECT COUNT(DISTINCT id_demander) AS totalPers FROM offregroup WHERE code_unique = :code_unique");
-
-                                    // Liaison du paramètre
-                                    $nombrePers->bindParam(':code_unique', $code, PDO::PARAM_STR);
-
-                                    // Exécution de la requête
-                                    $nombrePers->execute();
-
-                                    // Récupération du nombre total de personnes
-                                    $totalPers = $nombrePers->fetchColumn();
-
-                                    // Affichage du résultat
-
-                                } catch (PDOException $e) {
-                                    // En cas d'erreur, afficher le message d'erreur
-                                    echo "Erreur PDO : " . $e->getMessage();
-                                }
-
-                                $recupDatePlusAncienne = $conn->prepare("SELECT MIN(date_ajout) AS date_plus_ancienne FROM appelOffre WHERE code_unique = :code_unique");
-                                $recupDatePlusAncienne->bindParam(':code_unique', $code, PDO::PARAM_STR); // Utilisez PDO::PARAM_STR pour lier en tant que chaîne de caractères
-                                $recupDatePlusAncienne->execute();
-
-                                $datePlusAncienneRow = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
-                                $datePlusAncienne = $datePlusAncienneRow['date_plus_ancienne'];
-
-
-
-
-                                $idRecupDatePlusAncienne = $conn->prepare("SELECT id_appeloffre FROM appelOffre WHERE code_unique = :code_unique AND date_ajout = :date_plus_ancienne");
-                                $idRecupDatePlusAncienne->bindParam(':code_unique', $code, PDO::PARAM_STR);
-                                $idRecupDatePlusAncienne->bindParam(':date_plus_ancienne', $datePlusAncienne, PDO::PARAM_STR);
-                                $idRecupDatePlusAncienne->execute();
-
-                                // Vérifiez si la requête a renvoyé des résultats
-                                if ($idRecupDatePlusAncienne->rowCount() > 0) {
-                                    // Récupérer l'ID
-                                    $row = $idRecupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
-                                    $id_appeloffre = $row['id_appeloffre'];
-
-                                    // Utilisez l'ID récupéré
-
-                                }
-
-                                $dateDuJour = date("Y-m-d H:i:s");
-                                $tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "+5 days"));
-
-
-
-
-                            ?>
-                                <div class="box w-full p-3 flex flex-col items-center mb-3">
-                                    <div class="flex-1 mb-2 justify-start">
-                                        <h4 class="text-lg text-black dark:text-white"><?= $nomAppel ?></h4>
-                                    </div>
-
-                                    <a href="detoffregrup.php?id=<?= $id_appeloffre ?>&id_trader=<?= implode(",", $id_trader); ?>&minPrice=<?= urlencode($minPrice); ?>&recherche=<?= urlencode($recherche); ?>" class="w-2/3 p-2 text-center text-white text-sm bg-blue-500 rounded my-2">Nombre de participant (<?= $totalPers ?>)</a>
-
-
-                                    <div id="countdown-container" class="flex flex-col justify-center items-center ">
-                                        <span class="mb-2">Temps restant pour cet achat groupé</span>
-                                        <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
-                                            <div>-</div>:
-                                            <div>-</div>:
-                                            <div>-</div>:
-                                            <div>-</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-                    <?php
+                    <script>
+                        // Convertir la date de départ et la date cible en objets Date JavaScript
+
+                        const startDate = new Date("<?= $date_ajout; ?>");
+
+                        // Ajouter 6 heures à la date de départ pour obtenir la date cible
+                        const targetDate = new Date(startDate.getTime() + (6 * 60 * 60 * 1000));
+
+                        // Mettre à jour le compte à rebours à intervalles réguliers
+                        const countdownTimer = setInterval(updateCountdown, 1000);
+
+                        function updateCountdown() {
+                            // Obtenir la date et l'heure actuelles
+                            const currentDate = new Date();
+
+                            // Calculer la différence entre la date cible et la date de départ en millisecondes
+                            const difference = targetDate.getTime() - currentDate.getTime();
+
+                            // Convertir la différence en jours, heures, minutes et secondes
+                            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                            // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
+                            const countdownElement = document.getElementById('countdown');
+                            countdownElement.innerHTML = `
+                             <div>${days}j</div>:
+                             <div>${hours}h</div>:
+                             <div>${minutes}m</div>:
+                             <div>${seconds}s</div>
+                             `;
+
+                            // Arrêter le compte à rebours lorsque la date cible est atteinte
+                            if (difference <= 0) {
+                                clearInterval(countdownTimer);
+                                countdownElement.innerHTML = "Temps ecoulé !";
                             }
                         }
-                    }
-                    ?>
-
-
-
-
-
+                    </script>
 
                 </div>
 
-
-
-
-                <!-- sidebar -->
-
-                <div class="flex-2" style="width: 350px; ">
-
-                    <div class="lg:space-y-4 lg:pb-8 max-lg:hidden sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
-
-
-
-                        <div class="box p-5 px-6 border1 dark:bg-dark2">
-
-                            <div class="flex justify-between text-black dark:text-white">
-                                <h3 class="font-bold text-base">Thème les plus recherché</h3>
-                                <button type="button"> <ion-icon name="sync-outline" class="text-xl"></ion-icon> </button>
-                            </div>
-
-                            <div class="space-y-3.5 capitalize text-xs font-normal mt-5 mb-2 text-gray-600 dark:text-white/80">
-                                <a href="#">
-                                    <div class="flex items-center gap-3 p">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> artificial intelligence </h4>
-                                            <div class="mt-0.5"> 1,245,62 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> Web developers</h4>
-                                            <div class="mt-0.5"> 1,624 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> Ui Designers</h4>
-                                            <div class="mt-0.5"> 820 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="#" class="block">
-                                    <div class="flex items-center gap-3">
-                                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-                                        </svg>
-                                        <div class="flex-1">
-                                            <h4 class="font-semibold text-black dark:text-white text-sm"> affiliate marketing </h4>
-                                            <div class="mt-0.5"> 480 post </div>
-                                        </div>
-                                    </div>
-                                </a>
-
-
-                            </div>
-
-
-                        </div>
-
-                    </div>
-                </div>
 
 
             </div>
-
 
 
         </main>
 
     </div>
 
+
     <!-- Javascript  -->
-    <script src="assets/js/uikit.min.js">
-        < /> <
-        script src = "assets/js/simplebar.js" >
-    </script>
+    <script src="assets/js/uikit.min.js"></script>
+    <script src="assets/js/simplebar.js"></script>
     <script src="assets/js/script.js"></script>
 
 
@@ -940,73 +749,25 @@ if ($client = $recupUser->fetch()) {
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
+    <script>
+        window.onload = function() {
+            if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
+        }
+
+        function refreshOnce() {
+            // Actualiser la page
+            window.location.reload();
+            // Désactiver l'événement de soumission du formulaire pour éviter l'actualisation infinie
+            document.getElementById("myForm").removeEventListener("submit", refreshOnce);
+        }
+
+        // Attacher l'événement de soumission du formulaire à la fonction de rafraîchissement une fois
+        document.getElementById("myForm").addEventListener("submit", refreshOnce);
+    </script>
+
 
 </body>
-
-<script>
-    window.addEventListener('DOMContentLoaded', function() {
-        // Récupérer les valeurs des champs de recherche
-        var zoneEconomique = document.querySelector('select[name="zone_economique"]').value;
-        var typeProduit = document.querySelector('select[name="type_produit"]').value;
-        var quantite = document.querySelector('input[name="quantite"]').value;
-        var recherche = document.querySelector('input[name="recherche"]').value;
-
-        // Construire l'URL avec les paramètres de recherche
-        var newURL = window.location.origin + window.location.pathname + '?';
-
-        // Ajouter les paramètres de recherche à l'URL
-        newURL += 'zone_economique=' + encodeURIComponent(zoneEconomique) + '&';
-        newURL += 'type_produit=' + encodeURIComponent(typeProduit) + '&';
-        newURL += 'quantite=' + encodeURIComponent(quantite) + '&';
-        newURL += 'recherche=' + encodeURIComponent(recherche);
-
-        // Modifier l'URL de la page sans rechargement
-        window.history.replaceState(null, null, newURL);
-    });
-
-    window.addEventListener('popstate', function() {
-        // Recharger la page pour afficher les résultats de la recherche
-        location.reload();
-    });
-
-    // Convertir la date de départ en objet Date JavaScript
-    const startDate = new Date("<?= $datePlusAncienne; ?>");
-
-    // Ajouter 5 jours à la date de départ
-    startDate.setDate(startDate.getDate() + 5);
-
-    // Mettre à jour le compte à rebours à intervalles réguliers
-    const countdownTimer = setInterval(updateCountdown, 1000);
-
-    function updateCountdown() {
-        // Obtenir la date et l'heure actuelles
-        const currentDate = new Date();
-
-        // Calculer la différence entre la date cible et la date de départ en millisecondes
-        const difference = startDate.getTime() - currentDate.getTime();
-
-        // Convertir la différence en jours, heures, minutes et secondes
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
-        const countdownElement = document.getElementById('countdown');
-        countdownElement.innerHTML = `
-            <div>${days}j</div>:
-            <div>${hours}h</div>:
-            <div>${minutes}m</div>:
-            <div>${seconds}s</div>
-        `;
-
-        // Arrêter le compte à rebours lorsque la date cible est atteinte
-        if (difference <= 0) {
-            clearInterval(countdownTimer);
-            countdownElement.innerHTML = "Temps écoulé !";
-        }
-    }
-</script>
-
 
 </html>

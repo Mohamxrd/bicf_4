@@ -63,14 +63,88 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $date_ajout = $appel['date_ajout'];
     }
 }
+$dateDuJour = date("Y-m-d H:i:s");
+$tempEcoule = date("Y-m-d H:i:s", strtotime($date_ajout . "+5 days"));
 
-$recupComment = $conn->prepare("SELECT comment.*, user.* 
-                                FROM comment 
-                                INNER JOIN user ON comment.id_trader = user.id_user
-                                WHERE comment.code_unique = :code_unique ORDER BY comment.prixTrade ASC");
+//insertion de la requete d'ajout de quantite
 
-$recupComment->bindParam(':code_unique', $code, PDO::PARAM_STR);
-$recupComment->execute();
+// Assurez-vous que les variables sont définies et non vides
+if(isset($appel['code_unique'], $_SESSION['id_user'], $_POST['ajout_quantite'])) {
+    $code = $appel['code_unique'];
+    $id_user = $_SESSION['id_user'];
+    $ajout_quantite = htmlspecialchars($_POST['ajout_quantite']);
+
+    // Assurez-vous que la quantité est un entier positif
+    if(filter_var($ajout_quantite, FILTER_VALIDATE_INT) && $ajout_quantite > 0) {
+        // Requête SQL préparée
+        $insertQuery = $conn->prepare("INSERT INTO offregroup (qte_prod, id_demander, code_unique) VALUES (:qte_prod, :id_demander, :code_unique)");
+
+        // Liaison des paramètres
+        $insertQuery->bindParam(':qte_prod', $ajout_quantite, PDO::PARAM_INT);
+        $insertQuery->bindParam(':id_demander', $id_user, PDO::PARAM_INT);
+        $insertQuery->bindParam(':code_unique', $code, PDO::PARAM_STR);
+
+        // Exécution de la requête
+        $insertQuery->execute();
+    } else {
+        echo "La quantité doit être un entier positif.";
+    }
+} else {
+    echo "Des données manquantes pour l'insertion.";
+}
+
+
+
+// la somme des quantite
+// Assurez-vous que le code unique est défini
+if (isset($appel['code_unique'])) {
+    // Récupérez le code unique
+    $code_unique = $appel['code_unique'];
+
+    // Requête SQL pour additionner toutes les quantités pour le même code unique
+    $sumQuery = $conn->prepare("SELECT SUM(qte_prod) AS total_quantite FROM offregroup WHERE code_unique = :code_unique");
+    $sumQuery->bindParam(':code_unique', $code_unique, PDO::PARAM_STR);
+    $sumQuery->execute();
+
+    // Récupérer le résultat de l'agrégation
+    $result = $sumQuery->fetch(PDO::FETCH_ASSOC);
+
+    // Vérifier si des résultats ont été trouvés
+    if ($result !== false) {
+        // Récupérer la somme des quantités
+        $total_quantite = $result['total_quantite'];
+
+        // Afficher la somme des quantités
+        echo "La somme des quantités pour le code unique $code_unique est : $total_quantite";
+    } else {
+        echo "Aucune quantité trouvée pour le code unique $code_unique";
+    }
+} else {
+    echo "Le code unique n'est pas défini.";
+}
+
+// Vérifier si le temps est écoulé
+$current_time = date("Y-m-d H:i:s");
+if ($current_time > $dateTard) {
+    // Temps écoulé, insérer une notification dans notifUser
+    $notif_insert_time = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
+    $notif_insert_time->execute(["Le temps pour l'appel d'offre est écoulé", $id_demander, $id_trader, "appel", $code]);
+}
+
+
+// Requête SQL pour compter le nombre d'ID demandeurs distincts
+$nombrePers = $conn->prepare("SELECT COUNT(DISTINCT id_demander) AS totalPers FROM offregroup WHERE code_unique = :code_unique");
+
+// Liaison du paramètre
+$nombrePers->bindParam(':code_unique', $code, PDO::PARAM_STR);
+
+// Exécution de la requête
+$nombrePers->execute();
+
+// Récupération du nombre total de personnes
+$totalPers = $nombrePers->fetchColumn();
+
+
 
 ?>
 
@@ -582,7 +656,7 @@ $recupComment->execute();
         <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
             <div class="mb-3">
-                <h1 class=" text-center font-bold text-2xl">NEGOCIATION</h1>
+                <h1 class=" text-center font-bold text-2xl">DETAILS DE LA NEGOCIATION</h1>
             </div>
 
             <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
@@ -605,7 +679,7 @@ $recupComment->execute();
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title "> Quantité</h4>
-                                <p><?= $quantite ?></p>
+                                <p><?= $total_quantite ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
@@ -666,20 +740,25 @@ $recupComment->execute();
 
                     <div class="flex items-center flex-col lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
+                        <form method="post" >
 
-                        <div class="w-full flex mt-8">
-                            <input type="number" class="w-full mr-2" placeholder="Ajouter votre quantité">
+                            <div class="w-full flex mt-8">
 
-                            <button type="submit" class="bg-blue-500 text-white rounded-md p-1">Ajouter</button>
+                                <input type="number"  name="ajout_quantite" class="w-full mr-2" placeholder="Ajouter votre quantité">
+                                <button type="submit" name="submit" class="bg-blue-500 text-white rounded-md p-1">Ajouter</button>
+                                
 
-                        </div>
-                    </div>
+                            </div>
 
-                    <div class="w-full box flex justify-between mb-3 p-5">
-                       
-                            <h4 class="card-title">Nombre de participant</h4>
-                            <p>24</p>
+                        </form>
+
                         
+                        <div class="w-full box flex justify-between mb-3 p-5">
+                            
+                            <h4 class="card-title">Nombre de participant</h4>
+                            <p> <?= $totalPers ?></p>
+                            
+                        </div>
                     </div>
 
 
@@ -701,10 +780,10 @@ $recupComment->execute();
                     <script>
                         // Convertir la date de départ et la date cible en objets Date JavaScript
 
-                        const startDate = new Date("<?= $date_ajout; ?>");
+                        const startDate = new Date("<?= $tempEcoule ?>");
 
                         // Ajouter 6 heures à la date de départ pour obtenir la date cible
-                        const targetDate = new Date(startDate.getTime() + (6 * 60 * 60 * 1000));
+                        const targetDate = new Date(startDate.getTime() + (0 * 60 * 60 * 1000));
 
                         // Mettre à jour le compte à rebours à intervalles réguliers
                         const countdownTimer = setInterval(updateCountdown, 1000);
@@ -714,7 +793,7 @@ $recupComment->execute();
                             const currentDate = new Date();
 
                             // Calculer la différence entre la date cible et la date de départ en millisecondes
-                            const difference = targetDate.getTime() - currentDate.getTime();
+                            const difference = 0;
 
                             // Convertir la différence en jours, heures, minutes et secondes
                             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
