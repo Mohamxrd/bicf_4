@@ -113,8 +113,8 @@ if (isset($_POST['submit'])) {
                             $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id, $code, "single"]);
 
                             // Ajout de la notification
-                            $notif_insert = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
-                            $notif_insert->execute(["Vous avez reçu un appel d'offre", $id_demander, $id, "appel", $code]);
+                            $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?, ?)");
+                            $notif_insert->execute(["Vous avez reçu un appel d'offre", $quantite, $id_demander, $id, "appel", $code]);
 
                             // Ajout du commentaire
                             $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, code_unique) VALUES (?, ?, ?)");
@@ -146,8 +146,8 @@ if (isset($_POST['submit'])) {
                         $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code, "single"]);
 
                         // Ajout de la notification
-                        $notif_insert = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
-                        $notif_insert->execute(["Vous avez reçu un appel d'offre", $id_demander, $id, "appel", $code]);
+                        $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?, ?)");
+                        $notif_insert->execute(["Vous avez reçu un appel d'offre", $quantite, $id_demander, $id, "appel", $code]);
 
                         // Ajout du commentaire
                         $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, code_unique) VALUES (?, ?, ?)");
@@ -226,10 +226,8 @@ if (isset($_POST['submit2'])) {
                         foreach ($id_trader as $id) {
                             // Exécuter la requête d'insertion avec les valeurs appropriées
                             $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $target_file, $id_demander, $id, $code, "groupe"]);
-
-                           
                         }
-                         // Ajouter dans la table offre groupe
+                        // Ajouter dans la table offre groupe
 
                         $inserOgroup = $conn->prepare("INSERT INTO offreGroup (qte_prod, id_demander, code_unique) VALUES (?, ? , ?)");
                         $inserOgroup->execute([$quantite, $id_demander, $code]);
@@ -257,11 +255,9 @@ if (isset($_POST['submit2'])) {
                     foreach ($id_trader as $id) {
                         // Exécuter la requête d'insertion avec les valeurs appropriées
                         $insertAppel->execute([$titre_prod, $quantite, $minPrice, $payement, $livraisonProd, $dateTot, $dateTard, $desProd, $id_demander, $id, $code, "groupe"]);
-
-                      
                     }
 
-                
+
                     $inserOgroup = $conn->prepare("INSERT INTO offreGroup (qte_prod, id_demander, code_unique) VALUES (?, ? , ?)");
                     $inserOgroup->execute([$quantite, $id_demander, $code]);
                 }
