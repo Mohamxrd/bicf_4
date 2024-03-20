@@ -69,13 +69,13 @@ $tempEcoule = date("Y-m-d H:i:s", strtotime($date_ajout . "+5 days"));
 //insertion de la requete d'ajout de quantite
 
 // Assurez-vous que les variables sont définies et non vides
-if(isset($appel['code_unique'], $_SESSION['id_user'], $_POST['ajout_quantite'])) {
+if (isset($appel['code_unique'], $_SESSION['id_user'], $_POST['ajout_quantite'])) {
     $code = $appel['code_unique'];
     $id_user = $_SESSION['id_user'];
     $ajout_quantite = htmlspecialchars($_POST['ajout_quantite']);
 
     // Assurez-vous que la quantité est un entier positif
-    if(filter_var($ajout_quantite, FILTER_VALIDATE_INT) && $ajout_quantite > 0) {
+    if (filter_var($ajout_quantite, FILTER_VALIDATE_INT) && $ajout_quantite > 0) {
         // Requête SQL préparée
         $insertQuery = $conn->prepare("INSERT INTO offregroup (qte_prod, id_demander, code_unique) VALUES (:qte_prod, :id_demander, :code_unique)");
 
@@ -115,7 +115,7 @@ if (isset($appel['code_unique'])) {
         $total_quantite = $result['total_quantite'];
 
         // Afficher la somme des quantités
-        echo "La somme des quantités pour le code unique $code_unique est : $total_quantite";
+    
     } else {
         echo "Aucune quantité trouvée pour le code unique $code_unique";
     }
@@ -144,6 +144,45 @@ $nombrePers->execute();
 // Récupération du nombre total de personnes
 $totalPers = $nombrePers->fetchColumn();
 
+
+$recupDatePlusAncienne = $conn->prepare("SELECT MIN(date_ajout) AS date_plus_ancienne FROM appelOffre WHERE code_unique = :code_unique");
+$recupDatePlusAncienne->bindParam(':code_unique', $code, PDO::PARAM_STR); // Utilisez PDO::PARAM_STR pour lier en tant que chaîne de caractères
+$recupDatePlusAncienne->execute();
+
+$datePlusAncienneRow = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
+$datePlusAncienne = $datePlusAncienneRow['date_plus_ancienne'];
+
+$dateDuJour = date("Y-m-d H:i:s");
+$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "-5 days"));
+
+
+if ($dateDuJour > $tempEcoule) {
+    $checkNotification = $conn->prepare("SELECT COUNT(*) FROM notifUser WHERE id_trader = :id_trader AND code_appel = :code_appel");
+    $checkNotification->bindParam(':id_trader', $id_trader, PDO::PARAM_INT);
+    $checkNotification->bindParam(':code_appel', $code, PDO::PARAM_STR);
+    $checkNotification->execute();
+
+    $count = $checkNotification->fetchColumn();
+
+    // Si aucune notification similaire n'existe, alors insérer la nouvelle notification
+    if ($count == 0) {
+
+        if (isset($_GET['id_trader'])) {
+            $id_trader = explode(",", $_GET['id_trader']);
+
+            // Boucler sur chaque id_trader
+            foreach ($id_trader as $id) {
+                $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd , id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?, ?)");
+                $notif_insert->execute(["Vous avez reçu un appel d'offre", $total_quantite ,  $id_demander, $id, "appel", $code]);
+
+                // Ajout du commentaire
+                $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, code_unique) VALUES (?, ?, ?)");
+                $comment_insert->execute([null, $id, $code]);
+            }
+        }
+      
+    }
+}
 
 
 ?>
@@ -740,24 +779,24 @@ $totalPers = $nombrePers->fetchColumn();
 
                     <div class="flex items-center flex-col lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
-                        <form method="post" >
+                        <form method="post" class="w-full">
 
                             <div class="w-full flex mt-8">
 
-                                <input type="number"  name="ajout_quantite" class="w-full mr-2" placeholder="Ajouter votre quantité">
+                                <input type="number" name="ajout_quantite" class="w-full mr-2" placeholder="Ajouter votre quantité">
                                 <button type="submit" name="submit" class="bg-blue-500 text-white rounded-md p-1">Ajouter</button>
-                                
+
 
                             </div>
 
                         </form>
 
-                        
+
                         <div class="w-full box flex justify-between mb-3 p-5">
-                            
+
                             <h4 class="card-title">Nombre de participant</h4>
                             <p> <?= $totalPers ?></p>
-                            
+
                         </div>
                     </div>
 
@@ -780,10 +819,11 @@ $totalPers = $nombrePers->fetchColumn();
                     <script>
                         // Convertir la date de départ et la date cible en objets Date JavaScript
 
-                        const startDate = new Date("<?= $tempEcoule ?>");
+                        // Convertir la date de départ en objet Date JavaScript
+                        const startDate = new Date("<?= $datePlusAncienne; ?>");
 
-                        // Ajouter 6 heures à la date de départ pour obtenir la date cible
-                        const targetDate = new Date(startDate.getTime() + (0 * 60 * 60 * 1000));
+                        // Ajouter 5 jours à la date de départ
+                        startDate.setDate(startDate.getDate() + 5);
 
                         // Mettre à jour le compte à rebours à intervalles réguliers
                         const countdownTimer = setInterval(updateCountdown, 1000);
@@ -793,7 +833,7 @@ $totalPers = $nombrePers->fetchColumn();
                             const currentDate = new Date();
 
                             // Calculer la différence entre la date cible et la date de départ en millisecondes
-                            const difference = 0;
+                            const difference = startDate.getTime() - currentDate.getTime();
 
                             // Convertir la différence en jours, heures, minutes et secondes
                             const days = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -804,16 +844,16 @@ $totalPers = $nombrePers->fetchColumn();
                             // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
                             const countdownElement = document.getElementById('countdown');
                             countdownElement.innerHTML = `
-                             <div>${days}j</div>:
-                             <div>${hours}h</div>:
-                             <div>${minutes}m</div>:
-                             <div>${seconds}s</div>
-                             `;
+        <div>${days}j</div>:
+        <div>${hours}h</div>:
+        <div>${minutes}m</div>:
+        <div>${seconds}s</div>
+    `;
 
                             // Arrêter le compte à rebours lorsque la date cible est atteinte
                             if (difference <= 0) {
                                 clearInterval(countdownTimer);
-                                countdownElement.innerHTML = "Temps ecoulé !";
+                                countdownElement.innerHTML = "Temps écoulé !";
                             }
                         }
                     </script>

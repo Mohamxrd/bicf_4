@@ -195,7 +195,7 @@ if ($dateDuJour > $tempEcoule) {
 
 //recupérer les info des appel d'offre
 
-$recupAppel = $conn->prepare("SELECT * FROM notifUser")
+
 
 
 

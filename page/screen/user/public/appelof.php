@@ -929,9 +929,8 @@ if ($client = $recupUser->fetch()) {
     </div>
 
     <!-- Javascript  -->
-    <script src="assets/js/uikit.min.js">
-        < /> <
-        script src = "assets/js/simplebar.js" >
+    <script src="assets/js/uikit.min.js"></script>
+    <script src="assets/js/simplebar.js">
     </script>
     <script src="assets/js/script.js"></script>
 
