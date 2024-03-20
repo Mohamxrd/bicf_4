@@ -634,7 +634,12 @@ $nombreNotif = $recupNotif->rowCount();
                                     <span class="block text-xs font-medium dark:text-white/70">
                                         Quantité: <?= $quantite ?>
                                     </span>
-
+                                <?php elseif ($confirm == 'group') : ?>
+                                    <?= $nom_produit ?>
+                                    <span class="block text-xs font-medium dark:text-white/70">
+                                      <p>Vous avez été identifier dans un appel d'offre</p>
+                                      Quantité: <?= $quantite ?>
+                                    </span>
                                     <span class="block text-xs font-medium  dark:text-white/70">
                                         <p><?= $message ?></p>
                                     </span>
@@ -653,6 +658,8 @@ $nombreNotif = $recupNotif->rowCount();
                                     <button type="submit" name="annuler" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Annuler</button>
                                 <?php elseif ($confirm == 'appel') : ?>
                                     <a href="detailnegos.php?id=<?= $id_appel ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
+                                <?php elseif ($confirm == 'group') : ?>
+                                    <a href="detailnegos.php?id=<?= $id_appel ?>&quantiteprodtotal=<?= $quantite ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
 
                                 <?php endif; ?>
 

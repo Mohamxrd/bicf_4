@@ -123,13 +123,7 @@ if (isset($appel['code_unique'])) {
     echo "Le code unique n'est pas défini.";
 }
 
-// Vérifier si le temps est écoulé
-$current_time = date("Y-m-d H:i:s");
-if ($current_time > $dateTard) {
-    // Temps écoulé, insérer une notification dans notifUser
-    $notif_insert_time = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
-    $notif_insert_time->execute(["Le temps pour l'appel d'offre est écoulé", $id_demander, $id_trader, "appel", $code]);
-}
+
 
 
 // Requête SQL pour compter le nombre d'ID demandeurs distincts
@@ -172,8 +166,9 @@ if ($dateDuJour > $tempEcoule) {
 
             // Boucler sur chaque id_trader
             foreach ($id_trader as $id) {
+                // Ajout du NOTIF
                 $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd , id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?, ?)");
-                $notif_insert->execute(["Vous avez reçu un appel d'offre", $total_quantite ,  $id_demander, $id, "appel", $code]);
+                $notif_insert->execute(["Vous avez reçu un appel d'offre", $total_quantite ,  $id_demander, $id, "group", $code]);
 
                 // Ajout du commentaire
                 $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, code_unique) VALUES (?, ?, ?)");

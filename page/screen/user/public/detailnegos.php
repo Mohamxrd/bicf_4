@@ -605,7 +605,7 @@ $recupComment->execute();
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title "> Quantité</h4>
-                                <p><?= $quantite ?></p>
+                                <p><?= $quantiteprodtotal = $_GET['quantiteprodtotal']; ?></p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
