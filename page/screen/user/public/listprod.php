@@ -39,6 +39,70 @@ if ($client = $recupUser->fetch()) {
 }
 
 
+$requete = $conn->prepare('SELECT * FROM prodUser WHERE id_user = :id_user');
+$requete->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+$requete->execute();
+
+
+if (isset($_POST['submit'])) {
+    // Récupération du nom de l'article soumis dans le formulaire
+    $titre_prod = $_POST['id_prod'];
+
+    // Requête préparée pour récupérer les id_user et les noms correspondants dans la table consproduser
+    $sql = "SELECT id_user, nom_art FROM consproduser WHERE nom_art = :titre_prod";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':titre_prod', $titre_prod, PDO::PARAM_STR);
+    $stmt->execute();
+
+    // Initialisation du tableau pour stocker les données récupérées
+    $data = array();
+
+    // Vérification du nombre de lignes retournées par la requête
+    if ($stmt->rowCount() > 0) {
+
+        // Récupération de tous les id_user et les noms correspondants
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            // Stockage des données dans le tableau $data
+            $data[] = $row;
+        }
+
+        // Initialisation du tableau associatif pour stocker les id_user par nom
+        $id_users_by_name = array();
+
+        // Récupération de l'id_user de la session active
+        $active_user_id = $_SESSION['id_user'] ?? null;
+
+        // Regrouper les id_user par nom
+        foreach ($data as $row) {
+            $id_user = $row['id_user'];
+            $nom_art = $row['nom_art'];
+            if (!isset($id_users_by_name[$nom_art])) {
+                $id_users_by_name[$nom_art] = array();
+            }
+            // Exclure l'id_user de la session active
+            if ($id_user != $active_user_id) {
+                $id_users_by_name[$nom_art][] = $id_user;
+            }
+        }
+
+        // Affichage du compte des id_user par nom
+        foreach ($id_users_by_name as $nom => $id_users) {
+            // Exclure l'id_user de la session active lors du comptage
+            $count = count(array_filter($id_users, function($id) use ($active_user_id) {
+                return $id != $active_user_id;
+            }));
+            echo "Le nom '$nom' apparaît $count fois avec les id_user : " . implode(', ', $id_users) . "<br>";
+        }
+    } else {
+        // La valeur n'existe pas dans la table consproduser
+        echo "La valeur n'existe pas dans la table consproduser.";
+        // Vous pouvez prendre une action supplémentaire ici si nécessaire
+    }
+}
+
+
+
+
 ?>
 
 
@@ -658,7 +722,7 @@ if ($client = $recupUser->fetch()) {
 
                                 <div class="p-6 py-0">
 
-                                    <p>12 Clients ont ce produits de leur liste de consommation</p>
+                                    <p><?= $count ?> Clients ont ce produits de leur liste de consommation</p>
 
                                     <input type="text" class="w-full mt-3" placeholder="Ecrire un message" name="message">
 
