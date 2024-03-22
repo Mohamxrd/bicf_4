@@ -590,6 +590,7 @@ $nombreNotif = $recupNotif->rowCount();
                     $quantite = $notification['quantiteProd'];
                     $confirm = $notification['confirm'];
                     $id_client = $notification['id_user'];
+                    $id_prod = $notification['id_prod'];
 
                     // Informations sur le produit associé à la notification
                     $nom_produit = $notification['nomArt'];
@@ -637,11 +638,13 @@ $nombreNotif = $recupNotif->rowCount();
                                 <?php elseif ($confirm == 'group') : ?>
                                     <?= $nom_produit ?>
                                     <span class="block text-xs font-medium dark:text-white/70">
-                                     
-                               
-                                      <p>Vous avez été identifier dans un appel d'offre</p>
+                                        <p>Vous avez été identifier dans un appel d'offre</p>
                                     </span>
-                               
+                                <?php elseif ($confirm == 'offre') : ?>
+                                    <?= $nom_produit ?>
+                                    <span class="block text-xs font-medium  dark:text-white/70">
+                                        <p><?= $message ?></p>
+                                    </span>
                                 <?php endif; ?>
 
 
@@ -659,6 +662,8 @@ $nombreNotif = $recupNotif->rowCount();
                                     <a href="detailnegos.php?id=<?= $id_appel ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
                                 <?php elseif ($confirm == 'group') : ?>
                                     <a href="detailnegos.php?id=<?= $id_appel ?>&quantiteprodtotal=<?= $quantite ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
+                                <?php elseif ($confirm == 'offre') : ?>
+                                    <a href="detailprod.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
 
                                 <?php endif; ?>
 
