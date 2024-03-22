@@ -220,10 +220,12 @@ if ($stmt->rowCount() > 0) {
     foreach ($data as $row) {
         $user_id = $row['id_user'];
         $nom_art = $row['nom_art'];
-        if (!isset($user_ids_by_name[$nom_art])) {
-            $user_ids_by_name[$nom_art] = array();
+        if ($user_id != $id_user) {
+            if (!isset($user_ids_by_name[$nom_art])) {
+                $user_ids_by_name[$nom_art] = array();
+            }
+            $user_ids_by_name[$nom_art][] = $user_id;
         }
-        $user_ids_by_name[$nom_art][] = $user_id;
     }
 
     // Requête préparée pour compter le nombre d'utilisateurs distincts
@@ -242,7 +244,9 @@ if ($stmt->rowCount() > 0) {
     }
 } else {
     // La valeur n'existe pas dans la table consproduser
+
     echo "La valeur n'existe pas dans la table consproduser.";
+
     // Vous pouvez prendre une action supplémentaire ici si nécessaire
 }
 
