@@ -241,6 +241,7 @@ if ($stmt->rowCount() > 0) {
     // Affichage du compte des user_id par nom
     foreach ($user_ids_by_name as $nom => $user_ids) {
         echo "Le nom '$nom' apparaît $count fois avec les id_user : " . implode(', ', $user_ids) . "<br>";
+        var_dump($user_ids_by_name);
     }
 } else {
     // La valeur n'existe pas dans la table consproduser
@@ -249,6 +250,26 @@ if ($stmt->rowCount() > 0) {
 
     // Vous pouvez prendre une action supplémentaire ici si nécessaire
 }
+
+if (isset($_POST['submitO'])) {
+    // Assurez-vous que vous avez les données nécessaires, par exemple $user_ids
+    // Insérez les user_id dans la table notifuser pour chaque utilisateur
+    $message = htmlentities($_POST['message']);
+    
+    // Suppose que $user_ids est un tableau contenant les user_id à insérer dans la table notifuser
+    $user_ids = $user_ids_by_name; 
+
+    // Parcourez tous les user_ids et insérez-les un par un
+    foreach ($user_ids as $userid) {
+        $sql_insert = "INSERT INTO notifuser (message, confirm, id_user, id_prod) VALUES (:message, 'offre', ?, ?)";
+        $stmt_insert = $conn->prepare($sql_insert);
+        $stmt_insert->bindParam(':message' , $message, PDO::PARAM_STR);
+        $stmt_insert->bindParam(1, $userid, PDO::PARAM_INT);
+        $stmt_insert->bindParam(2, $id_prod, PDO::PARAM_INT); // Assurez-vous d'avoir $id_prod défini correctement
+        $stmt_insert->execute();
+    }
+}
+
 
 
 
@@ -866,44 +887,49 @@ if ($stmt->rowCount() > 0) {
                                 </a>
 
                             </div>
-                        <?php else : ?>
-                            <!-- Si les conditions ci-dessus ne sont pas remplies, affiche ce message -->
-                            <p class="text-center mt-4 text-gray-500">Ce produit vous appartient</p>
+                            <?php else : ?>
+    <!-- Si les conditions ci-dessus ne sont pas remplies, affiche ce message -->
+    <p class="text-center mt-4 text-gray-500">Ce produit vous appartient</p>
 
-                            <a href="#" uk-toggle="target: #modal" class=" px-10 py-2 m-2 text-center text-white text-sm bg-green-500 rounded">Faire une offre</a>
-                        <?php endif; ?>
+    <a href="#" uk-toggle="target: #modal" class="px-10 py-2 m-2 text-center text-white text-sm bg-green-500 rounded">Faire une offre</a>
+<?php endif; ?>
 
-                        <div class="lg:p-20 p-10" id="modal" uk-modal>
+<div class="lg:p-20 p-10" id="modal" uk-modal>
 
-                            <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+    <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
 
-                                <div class="p-6">
-                                    <h2 class="text-xl font-semibold">Faire une offre</h2>
-                                </div>
+        <div class="p-6">
+            <h2 class="text-xl font-semibold">Faire une offre</h2>
+        </div>
+        
+        <!-- Ajout de la balise de formulaire -->
+        <form method="post">
+            <div class="p-6 py-0">
+                <!-- Utilisation de la variable $count dans la balise p -->
+                <p><?= isset($count) ? $count : '' ?> Clients ont ce produit dans leur liste de consommation</p>
 
-                                <div class="p-6 py-0">
+                <!-- Déplacement de la balise input dans le formulaire -->
+                <input type="text" name="message" class="w-full mt-3" placeholder="Écrire un message">
 
-                                    <p><?= $count ?> Clients ont ce produits de leur liste de consommation</p>
+            </div>
 
-                                    <input type="text" class="w-full mt-3" placeholder="Ecrire un message" name="message">
+            <div class="flex justify-end p-6 text-sm font-medium">
+                <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Annuler</button>
+                <!-- Modification du bouton Envoyer pour qu'il soit de type "submit" -->
+                <button class="px-5 py-1.5 bg-gray-100 rounded-md" type="submit" name="submitO">Envoyer</button>
+            </div>
+        </form>
 
-                                </div>
+        <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
 
-                                <div class="flex justify-end p-6 text-sm font-medium">
-                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Annuler</button>
-                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Envoyer</button>
-                                </div>
+    </div>
 
+</div>
 
-                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-
-                            </div>
-
-                        </div>
 
 
 
