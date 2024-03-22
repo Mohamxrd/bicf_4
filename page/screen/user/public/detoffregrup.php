@@ -118,13 +118,7 @@ if (isset($appel['code_unique'])) {
     echo "Le code unique n'est pas défini.";
 }
 
-// Vérifier si le temps est écoulé
-$current_time = date("Y-m-d H:i:s");
-if ($current_time > $dateTard) {
-    // Temps écoulé, insérer une notification dans notifUser
-    $notif_insert_time = $conn->prepare("INSERT INTO notifUser (message, id_user, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
-    $notif_insert_time->execute(["Le temps pour l'appel d'offre est écoulé", $id_demander, $id_trader, "appel", $code]);
-}
+
 
 
 // Requête SQL pour compter le nombre d'ID demandeurs distincts
@@ -148,8 +142,7 @@ $datePlusAncienneRow = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
 $datePlusAncienne = $datePlusAncienneRow['date_plus_ancienne'];
 
 $dateDuJour = date("Y-m-d H:i:s");
-$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "+5 days"));
-
+$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "-5 days"));
 
 if ($dateDuJour > $tempEcoule) {
     // Vérifier si $_GET['id_trader'] est défini
@@ -160,28 +153,29 @@ if ($dateDuJour > $tempEcoule) {
         $checkNotification = $conn->prepare("SELECT COUNT(*) FROM notifUser WHERE id_trader = :id_trader AND code_appel = :code_appel");
         $checkNotification->bindParam(':code_appel', $code, PDO::PARAM_STR);
 
-        // Préparer les requêtes pour insertion
-        $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd, id_trader, confirm, code_appel) VALUES (?, ?, ?, ?, ?)");
+        // Préparer la requête pour l'insertion du commentaire
         $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, code_unique) VALUES (?, ?, ?)");
 
         // Boucler sur chaque id_trader
         foreach ($id_trader as $id) {
-            // Réinitialiser le compteur de notification pour chaque id_trader
+            // Exécuter la requête pour vérifier si une notification similaire existe déjà
             $checkNotification->bindParam(':id_trader', $id, PDO::PARAM_INT);
             $checkNotification->execute();
             $count = $checkNotification->fetchColumn();
 
-            // Si aucune notification similaire n'existe pas, alors insérer la nouvelle notification
+            // Si aucune notification similaire n'existe pas, alors insérer la nouvelle notification et le commentaire
             if ($count == 0) {
-                // Exécuter la requête pour insérer une nouvelle notification
-                $notif_insert->execute(["Vous avez reçu un appel d'offre", $total_quantite, $id, "appel", $code]);
+                $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd , id_trader, confirm, code_appel) VALUES ( ?, ?, ?, ?, ?)");
+                $notif_insert->execute(["Vous avez reçu un appel d'offre", $total_quantite, $id, "group", $code]);
 
                 // Exécuter la requête pour ajouter un commentaire
                 $comment_insert->execute([null, $id, $code]);
             }
         }
+       
     }
 }
+
 
 
 

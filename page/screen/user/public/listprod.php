@@ -122,7 +122,7 @@ if ($client = $recupUser->fetch()) {
                                 <!-- slider -->
                                 <div class="mt-4" tabindex="-1" uk-slider="finite:true;sets: true">
 
-                                <div class="uk-slider-container pb-1">
+                                    <div class="uk-slider-container pb-1">
                                         <ul class="uk-slider-items grid-small" uk-scrollspy="target: > li; cls: uk-animation-scale-up , uk-animation-slide-right-small; delay: 20 ;repeat: true">
                                             <a href="addprod.php">
                                                 <li class="w-40" uk-scrollspy-class="uk-animation-fade">
@@ -144,7 +144,7 @@ if ($client = $recupUser->fetch()) {
                                             <a href="appelof.php">
                                                 <li class="w-40">
                                                     <div class="p-3 px-4 rounded-lg bg-purple-100/60 text-purple-600 dark:text-white dark:bg-dark4">
-                                                        
+
                                                         <ion-icon name="logo-capacitor" class="text-2xl drop-shadow-md"></ion-icon>
                                                         <div class="mt-1.5 text-sm font-medium"> Appel d'offre </div>
                                                     </div>
@@ -584,7 +584,7 @@ if ($client = $recupUser->fetch()) {
                                         <th scope="col" class="px-6 py-3">Quantité traité</th>
                                         <th scope="col" class="px-6 py-3">Prix par unité</th>
                                         <th scope="col" class="px-6 py-3">
-                                            Details
+                                            Options
                                         </th>
                                         <!-- Ajoutez d'autres colonnes si nécessaire -->
                                     </tr>
@@ -617,13 +617,26 @@ if ($client = $recupUser->fetch()) {
                                                 <?= $user['formatProd']; ?>
                                             </td>
                                             <td class="px-6 py-4">
-                                               [<?= $user['qteProd_min']; ?> -  <?= $user['qteProd_max'] ?>] 
+                                                [<?= $user['qteProd_min']; ?> - <?= $user['qteProd_max'] ?>]
                                             </td>
                                             <td class="px-6 py-4">
                                                 <?= $user['PrixProd']; ?>
                                             </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">modifier</a>
+                                            <td class="px-6 py-4 flex justify-center items-center">
+                                                <a uk-toggle="target: #modal" class="bg-blue-500 text-white p-2 rounded-md flex justify-center mr-2" href="#" title="Faire une offre">
+                                                    <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778" />
+                                                    </svg>
+
+
+                                                </a>
+                                                <a class="bg-yellow-500 text-white p-2 rounded-md flex justify-center" href="#" title="Modifier">
+                                                    <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
+                                                    </svg>
+
+                                                </a>
+
                                             </td>
                                             <!-- Ajoutez d'autres colonnes si nécessaire -->
                                         </tr>
@@ -632,6 +645,38 @@ if ($client = $recupUser->fetch()) {
                                     ?>
                                 </tbody>
                             </table>
+
+                        </div>
+
+                        <div class="lg:p-20 p-10" id="modal" uk-modal>
+
+                            <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+                                <div class="p-6">
+                                    <h2 class="text-xl font-semibold">Faire une offre</h2>
+                                </div>
+
+                                <div class="p-6 py-0">
+
+                                    <p>12 Clients ont ce produits de leur liste de consommation</p>
+
+                                    <input type="text" class="w-full mt-3" placeholder="Ecrire un message" name="message">
+
+                                </div>
+
+                                <div class="flex justify-end p-6 text-sm font-medium">
+                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Annuler</button>
+                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Envoyer</button>
+                                </div>
+
+                                <!-- close button -->
+                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+
+                            </div>
 
                         </div>
 
