@@ -193,13 +193,37 @@ if ($dateDuJour > $tempEcoule) {
     }
 }
 
-//recupérer les info des appel d'offre
 
 
+// Requête préparée pour récupérer les id_user correspondants au nom du produit dans la table consproduser
+$sql = "SELECT id_user FROM consproduser WHERE nom_art = :nom_prod";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':nom_prod', $nom_prod, PDO::PARAM_STR);
+$stmt->execute();
 
+// Initialisation du tableau pour stocker les id_user récupérés
+$id_users = array();
 
+// Vérification du nombre de lignes retournées par la requête
+if ($stmt->rowCount() > 0) {
+    // La valeur existe dans la table consproduser
 
+    // Récupération de tous les id_user correspondants
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // Stockage de l'id_user dans le tableau $id_users
+        $id_users[] = $row['id_user'];
+    }
 
+    // Affichage du nombre d'id_user récupérés
+    $count = count($id_users);
+    echo "La valeur existe dans la table consproduser et apparaît $count fois.<br>";
+    echo "Les id_user correspondants sont : " . implode(', ', $id_users);
+} else {
+    // La valeur n'existe pas dans la table consproduser
+    echo "La valeur n'existe pas dans la table consproduser.";
+    $count = 0;
+    // Vous pouvez prendre une action supplémentaire ici si nécessaire
+}
 
 
 
@@ -833,7 +857,7 @@ if ($dateDuJour > $tempEcoule) {
 
                                 <div class="p-6 py-0">
 
-                                    <p>12 Clients ont ce produits de leur liste de consommation</p>
+                                    <p><?= $count ?> Clients ont ce produits de leur liste de consommation</p>
 
                                     <input type="text" class="w-full mt-3" placeholder="Ecrire un message" name="message">
 
@@ -844,7 +868,7 @@ if ($dateDuJour > $tempEcoule) {
                                     <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Envoyer</button>
                                 </div>
 
-                               
+
                                 <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
