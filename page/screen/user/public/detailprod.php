@@ -819,7 +819,41 @@ if ($dateDuJour > $tempEcoule) {
                         <?php else : ?>
                             <!-- Si les conditions ci-dessus ne sont pas remplies, affiche ce message -->
                             <p class="text-center mt-4 text-gray-500">Ce produit vous appartient</p>
+
+                            <a href="#" uk-toggle="target: #modal" class=" px-10 py-2 m-2 text-center text-white text-sm bg-green-500 rounded">Faire une offre</a>
                         <?php endif; ?>
+
+                        <div class="lg:p-20 p-10" id="modal" uk-modal>
+
+                            <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+                                <div class="p-6">
+                                    <h2 class="text-xl font-semibold">Faire une offre</h2>
+                                </div>
+
+                                <div class="p-6 py-0">
+
+                                    <p>12 Clients ont ce produits de leur liste de consommation</p>
+
+                                    <input type="text" class="w-full mt-3" placeholder="Ecrire un message" name="message">
+
+                                </div>
+
+                                <div class="flex justify-end p-6 text-sm font-medium">
+                                    <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Annuler</button>
+                                    <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Envoyer</button>
+                                </div>
+
+                               
+                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+
+                            </div>
+
+                        </div>
 
 
 

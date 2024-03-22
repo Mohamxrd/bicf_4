@@ -44,63 +44,6 @@ $requete->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $requete->execute();
 
 
-if (isset($_POST['submit'])) {
-    // Récupération du nom de l'article soumis dans le formulaire
-    $titre_prod = $_POST['id_prod'];
-
-    // Requête préparée pour récupérer les id_user et les noms correspondants dans la table consproduser
-    $sql = "SELECT id_user, nom_art FROM consproduser WHERE nom_art = :titre_prod";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':titre_prod', $titre_prod, PDO::PARAM_STR);
-    $stmt->execute();
-
-    // Initialisation du tableau pour stocker les données récupérées
-    $data = array();
-
-    // Vérification du nombre de lignes retournées par la requête
-    if ($stmt->rowCount() > 0) {
-
-        // Récupération de tous les id_user et les noms correspondants
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            // Stockage des données dans le tableau $data
-            $data[] = $row;
-        }
-
-        // Initialisation du tableau associatif pour stocker les id_user par nom
-        $id_users_by_name = array();
-
-        // Récupération de l'id_user de la session active
-        $active_user_id = $_SESSION['id_user'] ?? null;
-
-        // Regrouper les id_user par nom
-        foreach ($data as $row) {
-            $id_user = $row['id_user'];
-            $nom_art = $row['nom_art'];
-            if (!isset($id_users_by_name[$nom_art])) {
-                $id_users_by_name[$nom_art] = array();
-            }
-            // Exclure l'id_user de la session active
-            if ($id_user != $active_user_id) {
-                $id_users_by_name[$nom_art][] = $id_user;
-            }
-        }
-
-        // Affichage du compte des id_user par nom
-        foreach ($id_users_by_name as $nom => $id_users) {
-            // Exclure l'id_user de la session active lors du comptage
-            $count = count(array_filter($id_users, function($id) use ($active_user_id) {
-                return $id != $active_user_id;
-            }));
-            echo "Le nom '$nom' apparaît $count fois avec les id_user : " . implode(', ', $id_users) . "<br>";
-        }
-    } else {
-        // La valeur n'existe pas dans la table consproduser
-        echo "La valeur n'existe pas dans la table consproduser.";
-        // Vous pouvez prendre une action supplémentaire ici si nécessaire
-    }
-}
-
-
 
 
 ?>
@@ -687,7 +630,7 @@ if (isset($_POST['submit'])) {
                                                 <?= $user['PrixProd']; ?>
                                             </td>
                                             <td class="px-6 py-4 flex justify-center items-center">
-                                                <a uk-toggle="target: #modal" class="bg-blue-500 text-white p-2 rounded-md flex justify-center mr-2" href="#" title="Faire une offre">
+                                                <a class="bg-blue-500 text-white p-2 rounded-md flex justify-center mr-2" href="detailprod.php?id=<?= $user['id_prod']; ?>" title="Faire une offre">
                                                     <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 14v4.833A1.166 1.166 0 0 1 16.833 20H5.167A1.167 1.167 0 0 1 4 18.833V7.167A1.166 1.166 0 0 1 5.167 6h4.618m4.447-2H20v5.768m-7.889 2.121 7.778-7.778" />
                                                     </svg>
@@ -712,7 +655,7 @@ if (isset($_POST['submit'])) {
 
                         </div>
 
-                        <div class="lg:p-20 p-10" id="modal" uk-modal>
+                        <!-- <div class="lg:p-20 p-10" id="modal" uk-modal>
 
                             <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
 
@@ -722,7 +665,7 @@ if (isset($_POST['submit'])) {
 
                                 <div class="p-6 py-0">
 
-                                    <p><?= $count ?> Clients ont ce produits de leur liste de consommation</p>
+                                    <p> Clients ont ce produits de leur liste de consommation</p>
 
                                     <input type="text" class="w-full mt-3" placeholder="Ecrire un message" name="message">
 
@@ -733,7 +676,7 @@ if (isset($_POST['submit'])) {
                                     <button class="px-5 py-1.5 bg-gray-100 rounded-md uk-modal-close" type="button">Envoyer</button>
                                 </div>
 
-                                <!-- close button -->
+                               
                                 <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -742,7 +685,7 @@ if (isset($_POST['submit'])) {
 
                             </div>
 
-                        </div>
+                        </div> -->
 
 
 
@@ -821,200 +764,7 @@ if (isset($_POST['submit'])) {
 
 
     <!-- post preview modal -->
-    <div class="hidden lg:p-20 max-lg:!items-start" id="preview_modal" uk-modal="">
-
-        <div class="uk-modal-dialog tt relative mx-auto overflow-hidden shadow-xl rounded-lg lg:flex items-center ax-w-[86rem] w-full lg:h-[80vh]">
-
-            <!-- image previewer -->
-            <div class="lg:h-full lg:w-[calc(100vw-400px)] w-full h-96 flex justify-center items-center relative">
-
-                <div class="relative z-10 w-full h-full">
-                    <img src="assets/images/post/post-1.jpg" alt="" class="w-full h-full object-cover absolute">
-                </div>
-
-                <!-- close button -->
-                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 uk-animation-slide-right-medium z-10 dark:bg-slate-600 uk-modal-close">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-
-            </div>
-
-            <!-- right sidebar -->
-            <div class="lg:w-[400px] w-full bg-white h-full relative  overflow-y-auto shadow-xl dark:bg-dark2 flex flex-col justify-between">
-
-                <div class="p-5 pb-0">
-
-                    <!-- story heading -->
-                    <div class="flex gap-3 text-sm font-medium">
-                        <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-9 h-9 rounded-full">
-                        <div class="flex-1">
-                            <h4 class="text-black font-medium dark:text-white"> Steeve </h4>
-                            <div class="text-gray-500 text-xs dark:text-white/80"> 2 hours ago</div>
-                        </div>
-
-                        <!-- dropdown -->
-                        <div class="-m-1">
-                            <button type="button" class="button__ico w-8 h-8"> <ion-icon class="text-xl" name="ellipsis-horizontal"></ion-icon> </button>
-                            <div class="w-[253px]" uk-dropdown="pos: bottom-right; animation: uk-animation-scale-up uk-transform-origin-top-right; animate-out: true">
-                                <nav>
-                                    <a href="#"> <ion-icon class="text-xl shrink-0" name="bookmark-outline"></ion-icon>
-                                        Add to favorites </a>
-                                    <a href="#"> <ion-icon class="text-xl shrink-0" name="notifications-off-outline"></ion-icon> Mute Notification </a>
-                                    <a href="#"> <ion-icon class="text-xl shrink-0" name="flag-outline"></ion-icon>
-                                        Report this post </a>
-                                    <a href="#"> <ion-icon class="text-xl shrink-0" name="share-outline"></ion-icon>
-                                        Share your profile </a>
-                                    <hr>
-                                    <a href="#" class="text-red-400 hover:!bg-red-50 dark:hover:!bg-red-500/50">
-                                        <ion-icon class="text-xl shrink-0" name="stop-circle-outline"></ion-icon>
-                                        Unfollow </a>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-
-                    <p class="font-normal text-sm leading-6 mt-4"> Photography is the art of capturing light with a
-                        camera. it can be fun, challenging. It can also be a hobby, a passion. 📷 </p>
-
-                    <div class="shadow relative -mx-5 px-5 py-3 mt-3">
-                        <div class="flex items-center gap-4 text-xs font-semibold">
-                            <div class="flex items-center gap-2.5">
-                                <button type="button" class="button__ico text-red-500 bg-red-100 dark:bg-slate-700">
-                                    <ion-icon class="text-lg" name="heart"></ion-icon> </button>
-                                <a href="#">1,300</a>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <button type="button" class="button__ico bg-slate-100 dark:bg-slate-700"> <ion-icon class="text-lg" name="chatbubble-ellipses"></ion-icon> </button>
-                                <span>260</span>
-                            </div>
-                            <button type="button" class="button__ico ml-auto"> <ion-icon class="text-xl" name="share-outline"></ion-icon> </button>
-                            <button type="button" class="button__ico"> <ion-icon class="text-xl" name="bookmark-outline"></ion-icon> </button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="p-5 h-full overflow-y-auto flex-1">
-
-                    <!-- comment list -->
-                    <div class="relative text-sm font-medium space-y-5">
-
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Steeve </a>
-                                <p class="mt-0.5">What a beautiful, I love it. 😍 </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-3.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Monroe </a>
-                                <p class="mt-0.5"> You captured the moment.😎 </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-7.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Alexa </a>
-                                <p class="mt-0.5"> This photo is amazing! </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-4.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> John </a>
-                                <p class="mt-0.5"> Wow, You are so talented 😍 </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Michael </a>
-                                <p class="mt-0.5"> I love taking photos 🌳🐶</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-3.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Monroe </a>
-                                <p class="mt-0.5"> Awesome. 😊😢 </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Jesse </a>
-                                <p class="mt-0.5"> Well done 🎨📸 </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Steeve </a>
-                                <p class="mt-0.5">What a beautiful, I love it. 😍 </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-7.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Alexa </a>
-                                <p class="mt-0.5"> This photo is amazing! </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-4.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> John </a>
-                                <p class="mt-0.5"> Wow, You are so talented 😍 </p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Michael </a>
-                                <p class="mt-0.5"> I love taking photos 🌳🐶</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3 relative">
-                            <img src="assets/images/avatars/avatar-3.jpg" alt="" class="w-6 h-6 mt-1 rounded-full">
-                            <div class="flex-1">
-                                <a href="#" class="text-black font-medium inline-block dark:text-white"> Monroe </a>
-                                <p class="mt-0.5"> Awesome. 😊😢 </p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="bg-white p-3 text-sm font-medium flex items-center gap-2">
-
-                    <img src="assets/images/avatars/avatar-2.jpg" alt="" class="w-6 h-6 rounded-full">
-
-                    <div class="flex-1 relative overflow-hidden ">
-                        <textarea placeholder="Add Comment...." rows="1" class="w-full resize-  px-4 py-2 focus:!border-transparent focus:!ring-transparent resize-y"></textarea>
-
-                        <div class="flex items-center gap-2 absolute bottom-0.5 right-0 m-3">
-                            <ion-icon class="text-xl flex text-blue-700" name="image"></ion-icon>
-                            <ion-icon class="text-xl flex text-yellow-500" name="happy"></ion-icon>
-                        </div>
-
-                    </div>
-
-                    <button type="submit" class="hidden text-sm rounded-full py-1.5 px-4 font-semibold bg-secondery">
-                        Replay</button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
+   
     <!-- create status -->
 
 
