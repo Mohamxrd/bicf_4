@@ -194,36 +194,58 @@ if ($dateDuJour > $tempEcoule) {
 }
 
 
-
-// Requête préparée pour récupérer les id_user correspondants au nom du produit dans la table consproduser
-$sql = "SELECT id_user FROM consproduser WHERE nom_art = :nom_prod";
+// Requête préparée pour récupérer les user_id et les noms correspondants dans la table consproduser
+$sql = "SELECT id_user, nom_art FROM consproduser WHERE nom_art = :nom_prod";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':nom_prod', $nom_prod, PDO::PARAM_STR);
 $stmt->execute();
 
-// Initialisation du tableau pour stocker les id_user récupérés
-$id_users = array();
+// Initialisation du tableau pour stocker les données récupérées
+$data = array();
 
 // Vérification du nombre de lignes retournées par la requête
 if ($stmt->rowCount() > 0) {
-    // La valeur existe dans la table consproduser
+    echo 'La valeur existe dans la table consproduser';
 
-    // Récupération de tous les id_user correspondants
+    // Récupération de tous les user_id et les noms correspondants
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // Stockage de l'id_user dans le tableau $id_users
-        $id_users[] = $row['id_user'];
+        // Stockage des données dans le tableau $data
+        $data[] = $row;
     }
 
-    // Affichage du nombre d'id_user récupérés
-    $count = count($id_users);
-    echo "La valeur existe dans la table consproduser et apparaît $count fois.<br>";
-    echo "Les id_user correspondants sont : " . implode(', ', $id_users);
+    // Initialisation du tableau associatif pour stocker les user_id par nom
+    $user_ids_by_name = array();
+
+    // Regrouper les user_id par nom
+    foreach ($data as $row) {
+        $user_id = $row['id_user'];
+        $nom_art = $row['nom_art'];
+        if (!isset($user_ids_by_name[$nom_art])) {
+            $user_ids_by_name[$nom_art] = array();
+        }
+        $user_ids_by_name[$nom_art][] = $user_id;
+    }
+
+    // Requête préparée pour compter le nombre d'utilisateurs distincts
+    $sql_count = "SELECT COUNT(DISTINCT id_user) AS count FROM consproduser WHERE nom_art = :nom_prod_count";
+    $stmt_count = $conn->prepare($sql_count);
+    $stmt_count->bindParam(':nom_prod_count', $nom_prod, PDO::PARAM_STR);
+    $stmt_count->execute();
+
+    // Récupération du nombre d'utilisateurs distincts
+    $row_count = $stmt_count->fetch(PDO::FETCH_ASSOC);
+    $count = $row_count['count'];
+
+    // Affichage du compte des user_id par nom
+    foreach ($user_ids_by_name as $nom => $user_ids) {
+        echo "Le nom '$nom' apparaît $count fois avec les id_user : " . implode(', ', $user_ids) . "<br>";
+    }
 } else {
     // La valeur n'existe pas dans la table consproduser
     echo "La valeur n'existe pas dans la table consproduser.";
-    $count = 0;
     // Vous pouvez prendre une action supplémentaire ici si nécessaire
 }
+
 
 
 
