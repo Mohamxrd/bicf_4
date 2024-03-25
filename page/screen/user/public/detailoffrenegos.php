@@ -2,18 +2,22 @@
 session_start();
 @include('../../../config.php');
 
+// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['nom_user'])) {
     header('location: ../../../auth/login.php');
+    exit(); // Arrête l'exécution du script après la redirection
 }
 
-
+// Récupérer l'ID de l'utilisateur à partir de la session
 $id_user = $_SESSION['id_user'];
 
+// Récupérer les informations de l'utilisateur à partir de la base de données
 $recupUser = $conn->prepare('SELECT * FROM user WHERE id_user = :id_user');
 $recupUser->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 $recupUser->execute();
 
 if ($client = $recupUser->fetch()) {
+    // Récupérer les champs de l'utilisateur
     $nom_client = $client['nom_user'];
     $username_client = $client['username'];
     $phonenumber = $client['tel_user'];
@@ -22,44 +26,55 @@ if ($client = $recupUser->fetch()) {
     $activSector_user = $client['activSector_user'];
     $adress_user = $client['adress_user'];
     $email_user = $client['email_user'];
+    $pays_user = $client['pays_user'];
+    $local_user = $client['local_user'];
+    $ActivZone_user = $client['ActivZone_user'];
+}
 
-    // Maintenant, récupérez les informations de l'agent
-    $recupAgent = $conn->prepare('SELECT admintable.nom_admin FROM admintable WHERE id_admin = :id_admin');
+// Récupérer le nom de l'agent à partir de son ID
+if (isset($id_agent)) {
+    $recupAgent = $conn->prepare('SELECT nom_admin FROM admintable WHERE id_admin = :id_admin');
     $recupAgent->bindParam(':id_admin', $id_agent, PDO::PARAM_INT);
     $recupAgent->execute();
 
     if ($agent = $recupAgent->fetch()) {
         $nom_agent = $agent['nom_admin'];
     }
-    // ... Ajoutez d'autres champs au besoin ...
-} else {
-    // Gérer le cas où l'utilisateur n'est pas trouvé dans la base de données
-    echo "Erreur: Utilisateur non trouvé dans la base de données.";
-    exit();
 }
 
-// Préparez la requête pour récupérer les notifications de l'utilisateur à partir de la table notifUser
-$recupNotif = $conn->prepare("SELECT notifUser.*, prodUser.*, appelOffre.* 
-FROM notifUser 
-LEFT JOIN prodUser ON notifUser.id_prod = prodUser.id_prod 
-LEFT JOIN appelOffre ON notifUser.code_appel = appelOffre.code_unique AND appelOffre.id_trader = :id_user
-WHERE notifUser.id_trader = :id_user 
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id_appel = $_GET['id'];
 
-ORDER BY notifUser.date_ajout DESC");
+    $recupprods = $conn->prepare("SELECT * FROM prodUser WHERE id_prod = :id_prod ");
+    $recupprods->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+    $recupprods->execute();
 
-$recupNotif->bindParam(':code_appel', $code_appel, PDO::PARAM_STR);
-$recupNotif->bindParam(':id_user', $_SESSION['id_user'], PDO::PARAM_INT);
+    if ($prods = $recupprods->fetch()) {
+        // Récupérer les champs du produit
+        $nom_prod = $prods['nomArt'];
+        $description_prod = $prods['desProd'];
+        $prix_prod = $prods['PrixProd'];
+        $type_prod = $prods['typeProd'];
+        $conditionnement_prod = $prods['condProd'];
+        $format_prod = $prods['formatProd'];
+        $quantite_prodmin = $prods['qteProd_min'];
+        $quatite_promax = $prods['qteProd_max'];
+        $livraison_prod = $prods['LivreCapProd'];
 
+        $id_vendeur = $prods['id_user'];
+    }
+}
 
-// Exécutez la requête préparée
-$recupNotif->execute();
+$recupComment = $conn->prepare("SELECT comment.*, user.* 
+                                FROM comment 
+                                INNER JOIN user ON comment.id_trader = user.id_user
+                                WHERE comment.id_prod = :id_prod ORDER BY comment.prixTrade DESC");
 
-// Récupérez le nombre de notifications
-$nombreNotif = $recupNotif->rowCount();
-
-
+$recupComment->bindParam(':id_prod', $id_prod, PDO::PARAM_STR);
+$recupComment->execute();
 
 ?>
+
 
 
 
@@ -71,6 +86,8 @@ $nombreNotif = $recupNotif->rowCount();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
+
     <!-- Favicon -->
     <link href="assets/images/favicon.png" rel="icon" type="image/png">
 
@@ -78,11 +95,9 @@ $nombreNotif = $recupNotif->rowCount();
     <title>Socialite</title>
     <meta name="description" content="Socialite - Social sharing network HTML Template">
 
-
     <!-- css files -->
     <link rel="stylesheet" href="assets/css/tailwind.css">
     <link rel="stylesheet" href="assets/css/style.css">
-
 
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -176,7 +191,6 @@ $nombreNotif = $recupNotif->rowCount();
                                     </div>
 
 
-
                                     <!-- slide nav icons -->
                                     <div class="dark:hidden">
                                         <a class="absolute -translate-y-1/2 top-1/2 -left-4 flex items-center w-8 h-full px-1.5 justify-start bg-gradient-to-r from-white via-white dark:from-slate-600 dark:via-slate-500 dark:from-transparent dark:via-transparent" href="#" uk-slider-item="previous"> <ion-icon name="chevron-back" class="text-xl dark:text-white"></ion-icon> </a>
@@ -203,12 +217,8 @@ $nombreNotif = $recupNotif->rowCount();
                                     <path d="M5.85 3.5a.75.75 0 00-1.117-1 9.719 9.719 0 00-2.348 4.876.75.75 0 001.479.248A8.219 8.219 0 015.85 3.5zM19.267 2.5a.75.75 0 10-1.118 1 8.22 8.22 0 011.987 4.124.75.75 0 001.48-.248A9.72 9.72 0 0019.266 2.5z" />
                                     <path fill-rule="evenodd" d="M12 2.25A6.75 6.75 0 005.25 9v.75a8.217 8.217 0 01-2.119 5.52.75.75 0 00.298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 107.48 0 24.583 24.583 0 004.83-1.244.75.75 0 00.298-1.205 8.217 8.217 0 01-2.118-5.52V9A6.75 6.75 0 0012 2.25zM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 004.496 0l.002.1a2.25 2.25 0 11-4.5 0z" clip-rule="evenodd" />
                                 </svg>
-                                <?php if ($nombreNotif > 0) : ?>
-                                    <div class="absolute top-0 right-0 -m-1 bg-red-600 text-white text-xs px-1 rounded-full">
-                                        <?= $nombreNotif ?>
-                                    </div>
-                                <?php endif; ?>
-
+                                <div class="absolute top-0 right-0 -m-1 bg-red-600 text-white text-xs px-1 rounded-full">
+                                    6</div>
                                 <ion-icon name="notifications-outline" class="sm:hidden text-2xl"></ion-icon>
                             </button>
                             <div class="hidden bg-white pr-1.5 rounded-lg drop-shadow-xl dark:bg-slate-700 md:w-[365px] w-screen border2" uk-drop="offset:6;pos: bottom-right; mode: click; animate-out: true; animation: uk-animation-scale-up uk-transform-origin-top-right ">
@@ -295,7 +305,7 @@ $nombreNotif = $recupNotif->rowCount();
                                             </div>
                                         </a>
                                         <a href="#" class="relative flex items-center gap-3 p-2 duration-200 rounded-xl pr-10 hover:bg-secondery dark:hover:bg-white/10">
-
+                                            <div class="relative w-12 h-12 shrink-0"> <img src="assets/images/avatars/avatar-2.jpg" alt="" class="object-cover w-full h-full rounded-full"></div>
                                             <div class="flex-1 ">
                                                 <p> <b class="font-bold mr-1"> Lewis Lewis</b> mentioned you in a story.
                                                     Check it out and reply. 📣 </p>
@@ -471,6 +481,7 @@ $nombreNotif = $recupNotif->rowCount();
                                         <path fill-rule="evenodd" d="M4 5a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H4Zm0 6h16v6H4v-6Z" clip-rule="evenodd" />
                                         <path fill-rule="evenodd" d="M5 14c0-.6.4-1 1-1h2a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1Zm5 0c0-.6.4-1 1-1h5a1 1 0 1 1 0 2h-5a1 1 0 0 1-1-1Z" clip-rule="evenodd" />
                                     </svg>
+
                                     <span> Porte-feuille </span>
                                 </a>
                             </li>
@@ -571,203 +582,258 @@ $nombreNotif = $recupNotif->rowCount();
 
         <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
-            <!-- timeline -->
             <div class="mb-3">
-                <h2 class="text-2xl text-center font-bold text-gray-800 dark:text-white">Notifications</h2>
+                <h1 class=" text-center font-bold text-2xl">NEGOCIATION</h1>
             </div>
 
+            <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
 
-            <div class="relative z-20 p-10  overflow-y-auto">
+                <!-- search -->
+                <div class="mb-4 flex-1 mx-auto  ">
 
+                    <div class="md:max-w-[650px] mx-auto flex-1 xl:space-y-6 space-y-3">
 
-                <?php
-                // Boucle sur les notifications récupérées depuis la table notifUser
-                while ($notification = $recupNotif->fetch()) {
-                    // Récupération des informations de la notification
-                    $id_notification = $notification['id_notif'];
-                    $message = $notification['message'];
-                    $localite = $notification['localite'];
-                    $quantite = $notification['quantiteProd'];
-                    $confirm = $notification['confirm'];
-                    $id_client = $notification['id_user'];
-                    $id_prod = $notification['id_prod'];
+                        <div class="flex items-center py-3 dark:border-gray-600 my-3">
 
-                    // Informations sur le produit associé à la notification
-                    $nom_produit = $notification['nomArt'];
-                    $prix_produit = $notification['PrixProd'];
+                            <!--  TITRE DU PRODUIT  -->
+                            <h1 class="text-xl"><?= $nom_prod ?></h1>
 
-                    //information sur l'appel d'offre
-                    $nomAppel = $notification['nomArt_appel'];
-                    $id_appel = $notification['id_appeloffre'];
-
-                ?>
-
-                    <!-- Affichage de chaque notification -->
-                    <div class="mb-3 space-y-3 text-sm font-semibold dark:text-white" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
-                        <div class="flex items-center gap-3 p-4 bg-white shadow rounded-md dark:bg-slate-700">
-                            <div class="flex-1"> <!-- Titre du produit -->
-
-                                <?php if ($confirm == '') : ?>
-                                    <?= $nom_produit ?>
-                                    <span class="block text-xs font-medium dark:text-white/70">
-                                        Quantité: <?= $quantite ?>
-                                    </span>
-                                    <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p><?= $message ?></p>
-                                    </span>
-                                <?php elseif ($confirm == 'accepte') : ?>
-                                    <?= $nom_produit ?>
-                                    <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p>Votre demande a été acceptée par le fournisseur</p>
-                                    </span>
-                                <?php elseif ($confirm == 'refus') : ?>
-                                    <?= $nom_produit ?>
-                                    <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p>Le fournisseur a refusé votre demande</p>
-                                    </span>
-                                <?php elseif ($confirm == 'appel') : ?>
-                                    <?= $nomAppel ?>
-                                    <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p>Vous avez été identifier dans un appel d'offre</p>
-                                    </span>
-                                <?php elseif ($confirm == 'groupeDirect') : ?>
-                                    <?= $nom_produit ?>
-                                    <span class="block text-xs font-medium dark:text-white/70">
-                                        Quantité: <?= $quantite ?>
-                                    </span>
-                                <?php elseif ($confirm == 'group') : ?>
-                                    <?= $nom_produit ?>
-                                    <span class="block text-xs font-medium dark:text-white/70">
-                                        <p>Vous avez été identifier dans un appel d'offre</p>
-                                    </span>
-                                <?php elseif ($confirm == 'offre') : ?>
-                                    <?= $nom_produit ?>
-                                    <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p><?= $message ?></p>
-                                    </span>
-                                <?php elseif ($confirm == 'offreGroup') : ?>
-                                    <?= $nom_produit ?>
-                                    <span class="block text-xs font-medium  dark:text-white/70">
-                                        <p><?= $message ?></p>
-                                    </span>
-                                <?php endif; ?>
-
-
-                            </div>
-
-                            <form method="post">
-                                <?php if ($confirm == '' || $confirm == 'groupeDirect') : ?>
-                                    <input type="hidden" name="id_notification" value="<?= $id_notification ?>">
-                                    <button type="submit" name="accepter" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Accepter</button>
-                                    <button type="submit" name="refus" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Refuser</button>
-                                <?php elseif ($confirm == 'accepte') : ?>
-                                    <button type="submit" name="confirmer" class="px-3 py-1 text-white text-sm bg-green-500 rounded">Confirmer</button>
-                                    <button type="submit" name="annuler" class="px-3 py-1 text-white text-sm bg-red-500 rounded" style="background: red; color:white;">Annuler</button>
-                                <?php elseif ($confirm == 'appel') : ?>
-                                    <a href="detailnegos.php?id=<?= $id_appel ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
-                                <?php elseif ($confirm == 'group') : ?>
-                                    <a href="detailnegos.php?id=<?= $id_appel ?>&quantiteprodtotal=<?= $quantite ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
-                                <?php elseif ($confirm == 'offre') : ?>
-                                    <a href="detailprod.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
-                                <?php elseif ($confirm == 'offreGroup') : ?>
-                                    <a href="detailoffrenegos.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
-
-                                <?php endif; ?>
-
-
-                            </form>
                         </div>
                     </div>
-                <?php
-                }
 
-                // if (isset($_POST['accepter'])) {
-                //     // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
-                //     if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
-                //         // Récupérez l'ID de la notification à partir du formulaire posté
-                //         $id_notification = $_POST['id_notification'];
-                //         // Récupérez l'ID de l'utilisateur depuis la session
-                //         $id_user = $_SESSION['id_user'];
+                    <div class="mb-4 grid sm:grid-cols-2 gap-3" uk-scrollspy="target: > div; cls: uk-animation-scale-up; delay: 100 ;repeat: true">
 
-                //         // Exécutez la requête SQL pour mettre à jour les valeurs dans la table notifUser
-                //         $updateNotif = $conn->prepare("UPDATE notifUser SET confirm = 'accepte', id_trader = id_user, id_user = null WHERE id_notif = :id_notification AND id_trader = :id_user");
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title "> Type du produit </h4>
+                                <p><?= $type_prod ?></p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> conditionnement </h4>
+                                <p><?= $conditionnement_prod ?></p>
+                            </div>
+                        </div>
 
-                //         // Liez les valeurs aux paramètres de la requête
-                //         $updateNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
-                //         $updateNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> format </h4>
+                                <p><?= $format_prod ?></p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Quantité traité</h4>
+                                <p>[<?= $quantite_prodmin ?> - <?= $quatite_promax ?>]</p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Prix par unité </h4>
+                                <p><?= $prix_prod ?></p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title">Capacité de livré</h4>
+                                <p><?= $livraison_prod ?></p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Zone economique </h4>
+                                <p><?= $ActivZone_user ?></p>
+                            </div>
+                        </div>
+                        <div class="card flex space-x-5 p-5">
+                            <div class="card-body flex-1 p-0">
+                                <h4 class="card-title"> Ville, Commune</h4>
+                                <p><?= $local_user ?>, <?= $adress_user  ?></p>
+                            </div>
+                        </div>
 
-                //         // Exécutez la requête préparée
-                //         $updateNotif->execute();
-                //     }
-                // }
+                    </div>
+                    <div class=" card flex space-x-5 p-5">
+                        <div class="card-body flex-1 p-0">
+                            <h4 class="card-title"> Description</h4>
+                            <p><?= $description_prod ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- image -->
+
+                <div class="flex-1 items-center justify-center">
+
+                    <div class="flex items-center flex-col lg:space-y-4 lg:pb-8 max-lg:w-full  sm:grid-cols-2 max-lg:gap-6 sm:mt-2" uk-sticky="media: 1024; end: #js-oversized; offset: 80">
 
 
-                if (isset($_POST['refus'])) {
-                    // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
-                    if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
-                        // Récupérez l'ID de la notification à partir du formulaire posté
-                        $id_notification = $_POST['id_notification'];
 
-                        // Récupérez l'ID de l'utilisateur depuis la session
-                        $id_user = $_SESSION['id_user'];
-
-                        // Exécutez la requête SQL pour mettre à jour les valeurs dans la table notifUser
-                        $updateNotif = $conn->prepare("UPDATE notifUser SET confirm = 'refus', id_trader = id_user, id_user = null WHERE id_notif = :id_notification AND id_trader = :id_user");
-
-                        // Liez les valeurs aux paramètres de la requête
-                        $updateNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
-                        $updateNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
-
-                        // Exécutez la requête préparée
-                        $updateNotif->execute();
-                    }
-                }
+                        <div class="bg-white rounded-xl shadow-sm text-sm font-medium border1 dark:bg-dark2 w-full">
 
 
-                if (isset($_POST['annuler'])) {
-                    // Assurez-vous que $_POST['id_notification'] est défini et est un nombre entier
-                    if (isset($_POST['id_notification']) && is_numeric($_POST['id_notification'])) {
-                        // Récupérez l'ID de la notification à partir du formulaire posté
-                        $id_notification = $_POST['id_notification'];
 
-                        // Récupérez l'ID de l'utilisateur depuis la session
-                        $id_user = $_SESSION['id_user'];
+                            <!-- comments -->
+                            <div class="h-[400px] overflow-y-auto sm:p-4 p-4 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40">
 
-                        // Exécutez la requête SQL pour supprimer l'entrée de la table notifUser
-                        $deleteNotif = $conn->prepare("DELETE FROM notifUser WHERE id_notif = :id_notification AND id_trader = :id_user");
+                                <?php
+                                $auMoinsUneOffreSoumise = false;
 
-                        // Liez les valeurs aux paramètres de la requête
-                        $deleteNotif->bindParam(':id_notification', $id_notification, PDO::PARAM_INT);
-                        $deleteNotif->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                                while ($comment = $recupComment->fetch()) {
+                                    $prixNegos = $comment['prixTrade'];
+                                    $nomTrader = $comment['nom_user'];
+                                    if ($prixNegos !== null) {
+                                        $auMoinsUneOffreSoumise = true;
+                                ?>
+                                        <div class="flex items-start gap-3 relative">
+                                            <a href="timeline.html"> <img src="assets/images/avatars/avatar-5.jpg" alt="" class="w-6 h-6 mt-1 rounded-full"> </a>
+                                            <div class="flex-1">
+                                                <a href="timeline.html" class="text-black font-medium inline-block dark:text-white"> <?= $nomTrader ?> </a>
+                                                <p class="mt-0.5"> <?= $prixNegos ?> FCFA</p>
+                                            </div>
+                                        </div>
+                                    <?php
+                                    }
+                                }
 
-                        // Exécutez la requête préparée
-                        $deleteNotif->execute();
-                    }
-                }
+                                // Vérifier si aucune offre n'a été soumise
+                                if (!$auMoinsUneOffreSoumise) {
+                                    ?>
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <p class="text-gray-800"> Aucune offre n'a été soumise</p>
+                                    </div>
+                                <?php
+                                }
+                                ?>
+                            </div>
+                            <?php
+                            // Vérifier si le formulaire a été soumis
+                            if (isset($_POST['submit'])) {
+                                // Assurez-vous que les variables POST sont correctement récupérées
+                                $prixSoumis = isset($_POST['prix']) ? $_POST['prix'] : null;
+                                $id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : null;
 
-                ?>
+                                // Vérifiez si les variables sont définies
+                                if ($id_user !== null) {
+                                    // Vérifiez si le prix soumis est supérieur au prix maximum
+                                    if ($prixSoumis > $prixMax) {
+                                        // Afficher un message d'erreur
+                                        $errorMsg = "Le prix soumis est supérieur au prix maximum autorisé.";
+                                    } elseif ($prixSoumis == 0) {
+                                        // Afficher un message d'erreur si aucun prix n'a été soumis
+                                        $errorMsg = "Aucun prix n'a été soumis";
+                                    } else {
+                                        // Préparation de la requête de mise à jour
+                                        $updateprix = $conn->prepare('UPDATE comment SET prixTrade = :prixSoumis WHERE id_trader = :id_user AND code_unique = :code_unique');
 
+                                        // Liaison des valeurs aux paramètres de la requête
+                                        $updateprix->bindParam(':code_unique', $code, PDO::PARAM_STR);
+                                        $updateprix->bindParam(':prixSoumis', $prixSoumis, PDO::PARAM_INT);
+                                        $updateprix->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+
+
+                                        // Exécution de la requête
+                                        $updateprix->execute();
+                                    }
+                                } else {
+                                    // Si l'identifiant de l'utilisateur n'est pas défini, afficher un message d'erreur
+                                    $errorMsg = "L'identifiant de l'utilisateur n'est pas défini.";
+                                }
+                            }
+                            ?>
+
+                            <!-- add comment -->
+                            <form id="myForm" action="" method="post">
+                                <div class="sm:px-4 sm:py-3 p-2.5 border-t border-gray-100 flex items-center gap-1 dark:border-slate-700/40">
+                                    <img src="assets/images/avatars/avatar-7.jpg" alt="" class="w-6 h-6 rounded-full">
+                                    <div class="flex-1 relative overflow-hidden h-10">
+                                        <input name="prix" type="number" placeholder="Faire une offre..." rows="1" class="w-full resize-none bg-transparent px-4 py-2 focus:!border-transparent focus:!ring-transparent" aria-haspopup="true" aria-expanded="false">
+                                    </div>
+                                    <button type="submit" name="submit" class="text-sm text-white rounded-full py-1.5 px-3.5 bg-blue-500">Envoyer</button>
+                                </div>
+
+                                <?php
+                                // Condition pour afficher le message d'erreur
+                                if (isset($errorMsg)) {
+                                    echo "<p class='text-red-500 text-center p-3'>$errorMsg</p>";
+                                }
+                                ?>
+                            </form>
+
+
+
+
+                        </div>
+
+                    </div>
+
+                    <div id="countdown-container" class="flex flex-col justify-center items-center ">
+
+                    <span class="mb-2">Temps restant pour cette negociatiation</span>
+
+                        <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
+                            <div>-</div>:
+                            <div>-</div>:
+                            <div>-</div>:
+                            <div>-</div>
+                        </div>
+
+
+                    </div>
+
+
+                    <script>
+                        // Convertir la date de départ et la date cible en objets Date JavaScript
+
+                        const startDate = new Date("<?= $date_ajout; ?>");
+
+                        // Ajouter 6 heures à la date de départ pour obtenir la date cible
+                        const targetDate = new Date(startDate.getTime() + (6 * 60 * 60 * 1000));
+
+                        // Mettre à jour le compte à rebours à intervalles réguliers
+                        const countdownTimer = setInterval(updateCountdown, 1000);
+
+                        function updateCountdown() {
+                            // Obtenir la date et l'heure actuelles
+                            const currentDate = new Date();
+
+                            // Calculer la différence entre la date cible et la date de départ en millisecondes
+                            const difference = targetDate.getTime() - currentDate.getTime();
+
+                            // Convertir la différence en jours, heures, minutes et secondes
+                            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                            // Afficher le compte à rebours dans l'élément HTML avec l'id "countdown"
+                            const countdownElement = document.getElementById('countdown');
+                            countdownElement.innerHTML = `
+                             <div>${days}j</div>:
+                             <div>${hours}h</div>:
+                             <div>${minutes}m</div>:
+                             <div>${seconds}s</div>
+                             `;
+
+                            // Arrêter le compte à rebours lorsque la date cible est atteinte
+                            if (difference <= 0) {
+                                clearInterval(countdownTimer);
+                                countdownElement.innerHTML = "Temps ecoulé !";
+                            }
+                        }
+                    </script>
+
+                </div>
 
 
 
             </div>
+
 
         </main>
 
     </div>
-
-
-    <!-- open chat box -->
-
-
-
-    <!-- post preview modal -->
-
-
-    <!-- create status -->
-
-
-    <!-- create story -->
 
 
     <!-- Javascript  -->
@@ -786,6 +852,16 @@ $nombreNotif = $recupNotif->rowCount();
                 window.history.replaceState(null, null, window.location.href);
             }
         }
+
+        function refreshOnce() {
+            // Actualiser la page
+            window.location.reload();
+            // Désactiver l'événement de soumission du formulaire pour éviter l'actualisation infinie
+            document.getElementById("myForm").removeEventListener("submit", refreshOnce);
+        }
+
+        // Attacher l'événement de soumission du formulaire à la fonction de rafraîchissement une fois
+        document.getElementById("myForm").addEventListener("submit", refreshOnce);
     </script>
 
 
