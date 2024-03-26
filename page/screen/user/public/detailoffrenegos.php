@@ -66,9 +66,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 }
 
 $recupComment = $conn->prepare("SELECT comment.*, user.* 
-                                FROM comment 
-                                INNER JOIN user ON comment.id_trader = user.id_user
-                                WHERE comment.id_prod = :id_prod ORDER BY comment.prixTrade DESC");
+FROM comment 
+INNER JOIN user ON comment.id_trader = user.id_user
+WHERE comment.id_prod = :id_prod ORDER BY comment.prixTrade DESC");
 
 $recupComment->bindParam(':id_prod', $id_prod, PDO::PARAM_STR);
 $recupComment->execute();
@@ -676,7 +676,6 @@ $recupComment->execute();
 
                             <!-- comments -->
                             <div class="h-[400px] overflow-y-auto sm:p-4 p-4 border-t border-gray-100 font-normal space-y-3 relative dark:border-slate-700/40">
-
                                 <?php
                                 $auMoinsUneOffreSoumise = false;
 
@@ -715,30 +714,34 @@ $recupComment->execute();
                                 $id_user = isset($_SESSION['id_user']) ? $_SESSION['id_user'] : null;
 
                                 // Vérifiez si les variables sont définies
-                                if ($id_user !== null) {
-                                    // Vérifiez si le prix soumis est supérieur au prix maximum
-                                    if ($prixSoumis > $prixMax) {
+                                if ($id_user !== null && $prixSoumis !== null) {
+                                    // Vérifiez si le prix soumis est inférieur au prix maximum
+                                    if ($prixSoumis < $prix_prod) {
                                         // Afficher un message d'erreur
-                                        $errorMsg = "Le prix soumis est supérieur au prix maximum autorisé.";
+                                        $errorMsg = "Le prix soumis est inférieur au prix maximum autorisé.";
                                     } elseif ($prixSoumis == 0) {
                                         // Afficher un message d'erreur si aucun prix n'a été soumis
                                         $errorMsg = "Aucun prix n'a été soumis";
                                     } else {
                                         // Préparation de la requête de mise à jour
-                                        $updateprix = $conn->prepare('UPDATE comment SET prixTrade = :prixSoumis WHERE id_trader = :id_user AND code_unique = :code_unique');
+                                        $updateprix = $conn->prepare('UPDATE comment SET prixTrade = :prixSoumis WHERE id_trader = :id_user AND id_prod = :id_prod');
 
                                         // Liaison des valeurs aux paramètres de la requête
-                                        $updateprix->bindParam(':code_unique', $code, PDO::PARAM_STR);
+                                        $updateprix->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
                                         $updateprix->bindParam(':prixSoumis', $prixSoumis, PDO::PARAM_INT);
                                         $updateprix->bindParam(':id_user', $id_user, PDO::PARAM_INT);
 
-
                                         // Exécution de la requête
-                                        $updateprix->execute();
+                                        if ($updateprix->execute()) {
+                                            // La requête s'est exécutée avec succès, effectuez toute action supplémentaire si nécessaire
+                                        } else {
+                                            // Afficher un message d'erreur si la requête a échoué
+                                            $errorMsg = "Une erreur s'est produite lors de la mise à jour du prix.";
+                                        }
                                     }
                                 } else {
-                                    // Si l'identifiant de l'utilisateur n'est pas défini, afficher un message d'erreur
-                                    $errorMsg = "L'identifiant de l'utilisateur n'est pas défini.";
+                                    // Si l'identifiant de l'utilisateur ou le prix soumis n'est pas défini, afficher un message d'erreur
+                                    $errorMsg = "L'identifiant de l'utilisateur ou le prix soumis n'est pas défini.";
                                 }
                             }
                             ?>
@@ -770,7 +773,7 @@ $recupComment->execute();
 
                     <div id="countdown-container" class="flex flex-col justify-center items-center ">
 
-                    <span class="mb-2">Temps restant pour cette negociatiation</span>
+                        <span class="mb-2">Temps restant pour cette negociatiation</span>
 
                         <div id="countdown" class="flex items-center gap-2 text-3xl font-semibold text-red-500 bg-red-100  p-3 rounded-xl w-auto">
                             <div>-</div>:

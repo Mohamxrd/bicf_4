@@ -142,7 +142,7 @@ $datePlusAncienneRow = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
 $datePlusAncienne = $datePlusAncienneRow['date_plus_ancienne'];
 
 $dateDuJour = date("Y-m-d H:i:s");
-$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "-5 days"));
+$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "+5 days"));
 
 if ($dateDuJour > $tempEcoule) {
     // Vérifier si $_GET['id_trader'] est défini
