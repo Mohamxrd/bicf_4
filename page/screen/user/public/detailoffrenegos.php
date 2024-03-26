@@ -583,7 +583,7 @@ $recupComment->execute();
         <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
             <div class="mb-3">
-                <h1 class=" text-center font-bold text-2xl">NEGOCIATION<?= $id_appel ?></h1>
+                <h1 class=" text-center font-bold text-2xl">NEGOCIATION OFFRE GROUPER</h1>
             </div>
 
             <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
