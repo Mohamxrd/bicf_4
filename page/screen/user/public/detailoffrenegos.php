@@ -61,6 +61,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $quatite_promax = $prods['qteProd_max'];
         $livraison_prod = $prods['LivreCapProd'];
 
+        $id_prod = $prods['id_prod'];
         $id_vendeur = $prods['id_user'];
     }
 }
