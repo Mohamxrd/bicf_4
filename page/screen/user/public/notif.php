@@ -645,7 +645,7 @@ $nombreNotif = $recupNotif->rowCount();
                                     <span class="block text-xs font-medium  dark:text-white/70">
                                         <p><?= $message ?></p>
                                     </span>
-                                <?php elseif ($confirm == 'offreGroup') : ?>
+                                <?php elseif ($confirm == 'offreNegos') : ?>
                                     <?= $nom_produit ?>
                                     <span class="block text-xs font-medium  dark:text-white/70">
                                         <p><?= $message ?></p>
