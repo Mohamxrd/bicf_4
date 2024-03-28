@@ -194,7 +194,7 @@ if ($dateDuJour > $tempEcoule) {
 }
 
 
-// Requête préparée pour récupérer les user_id et les noms correspondants dans la table consproduser
+// Requête préparée pour récupérer les user_id et les noms correspondants dans la table consproduser pour les consommateur
 $sql = "SELECT id_user, nom_art FROM consproduser WHERE nom_art = :nom_prod";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(':nom_prod', $nom_prod, PDO::PARAM_STR);
@@ -244,6 +244,56 @@ if ($stmt->rowCount() > 0) {
 
 }
 
+// Requête préparée pour récupérer les user_id et les noms correspondants dans la table produser pour les vendeurs du produits
+$sql = "SELECT id_user, nomArt FROM produser WHERE nomArt = :nom_prod";
+$stmt = $conn->prepare($sql);
+$stmt->bindParam(':nom_prod', $nom_prod, PDO::PARAM_STR);
+$stmt->execute();
+
+// Initialisation du tableau pour stocker les données récupérées
+$data = array();
+
+$countproduser = 0;
+
+// Vérification du nombre de lignes retournées par la requête
+if ($stmt->rowCount() > 0) {
+    // Récupération de tous les user_id et les noms correspondants
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // Stockage des données dans le tableau $data
+        $data[] = $row;
+    }
+
+    // Initialisation du tableau associatif pour stocker les user_id par nom
+    $user_ids_by_name = array();
+
+    // Regrouper les user_id par nom
+    foreach ($data as $row) {
+        $user_id = $row['id_user'];
+        $nomArt = $row['nomArt'];
+        if ($user_id != $id_user) {
+            if (!isset($user_ids_by_name[$nomArt])) {
+                $user_ids_by_name[$nomArt] = array();
+            }
+            $user_ids_by_name[$nomArt][] = $user_id;
+        }
+    }
+
+    // Initialisation de $countUser à zéro par défaut
+   
+
+
+    // Requête préparée pour compter le nombre d'utilisateurs distincts
+    $sql_count = "SELECT COUNT(DISTINCT id_user) AS count FROM produser WHERE nomArt = :nom_prod_count";
+    $stmt_count = $conn->prepare($sql_count);
+    $stmt_count->bindParam(':nom_prod_count', $nom_prod, PDO::PARAM_STR);
+    $stmt_count->execute();
+
+    // Récupération du nombre d'utilisateurs distincts
+    $countproduser = $stmt_count->fetchColumn();
+
+
+}
+
 
 //
 if (isset($_POST['submitO'])) {
@@ -266,6 +316,35 @@ if (isset($_POST['submitO'])) {
 }
 
 if (isset($_POST['submitX'])) {
+    $message2 = htmlspecialchars($_POST['message2']);
+    $id_prod = $_GET['id']; // Récupérer l'identifiant du produit
+
+    // Insérer les user_id dans la table notifuser pour chaque utilisateur
+    foreach ($user_ids_by_name as $nom_art => $user_ids) {
+        foreach ($user_ids as $userid) {
+
+            $sql_insert = "INSERT INTO notifUser (message, confirm, id_user, id_trader, id_prod) VALUES (:message2, 'offreNegos', :id_user , :id_trader, :id_prod)";
+            $stmt_insert = $conn->prepare($sql_insert);
+            $stmt_insert->execute([
+                ':message2' => $message2,
+                ':id_user' => $id_user, // Utilisation de ':id_user' au lieu de '$id_user'
+                ':id_trader' => $userid,
+                ':id_prod' => $id_prod,
+            ]);
+
+            // Ajout du commentaire
+            $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, id_prod) VALUES (:prixTrade, :id_trader, :id_prod)");
+
+            $comment_insert->execute([
+                ':prixTrade' => null,
+                ':id_trader' => $userid,
+                ':id_prod' => $id_prod
+            ]);
+        }
+    }
+}
+
+if (isset($_POST['submitY'])) {
     $message2 = htmlspecialchars($_POST['message2']);
     $id_prod = $_GET['id']; // Récupérer l'identifiant du produit
 
@@ -1008,7 +1087,7 @@ if (isset($_POST['submitX'])) {
                                 <form method="post">
                                     <div class="p-6 py-0">
                                         <!-- Utilisation de la variable $count dans la balise p -->
-                                        <p> Clients ont ce produit dans leur liste de consommation</p>
+                                        <p> <?= $countproduser ?> Clients ont ce produit dans leur liste de consommation</p>
 
                                         <!-- Déplacement de la balise input dans le formulaire -->
                                         <input type="text" name="message2" class="w-full mt-3" placeholder="Écrire un message">
@@ -1018,7 +1097,7 @@ if (isset($_POST['submitX'])) {
                                     <div class="flex justify-end p-6 text-sm font-medium">
                                         <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Annuler</button>
                                         <!-- Modification du bouton Envoyer pour qu'il soit de type "submit" -->
-                                        <button class="px-5 py-1.5 bg-gray-100 rounded-md" type="submit" name="submitX">Envoyer</button>
+                                        <button class="px-5 py-1.5 bg-gray-100 rounded-md" type="submit" name="submitY">Envoyer</button>
                                     </div>
                                 </form>
 
