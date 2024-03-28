@@ -650,6 +650,11 @@ $nombreNotif = $recupNotif->rowCount();
                                     <span class="block text-xs font-medium  dark:text-white/70">
                                         <p><?= $message ?></p>
                                     </span>
+                                <?php elseif ($confirm == 'offreGroup') : ?>
+                                    <?= $nom_produit ?>
+                                    <span class="block text-xs font-medium  dark:text-white/70">
+                                        <p><?= $message ?></p>
+                                    </span>
                                 <?php endif; ?>
 
 
@@ -669,9 +674,11 @@ $nombreNotif = $recupNotif->rowCount();
                                     <a href="detailnegos.php?id=<?= $id_appel ?>&quantiteprodtotal=<?= $quantite ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
                                 <?php elseif ($confirm == 'offre') : ?>
                                     <a href="detailprod.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
+                                <?php elseif ($confirm == 'offreNegos') : ?>
+                                    <a href="detailoffrenegos.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
                                 <?php elseif ($confirm == 'offreGroup') : ?>
                                     <a href="detailoffrenegos.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
-
+                                
                                 <?php endif; ?>
 
 
