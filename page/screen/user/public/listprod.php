@@ -645,7 +645,7 @@ $requete->execute();
                                                 </a>
 
                                             </td>
-                                            <!-- Ajoutez d'autres colonnes si nécessaire -->
+                                          
                                         </tr>
                                     <?php
                                     }

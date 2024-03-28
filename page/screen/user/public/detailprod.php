@@ -203,10 +203,10 @@ $stmt->execute();
 // Initialisation du tableau pour stocker les données récupérées
 $data = array();
 
+$countUser = 0;
+
 // Vérification du nombre de lignes retournées par la requête
 if ($stmt->rowCount() > 0) {
-
-
     // Récupération de tous les user_id et les noms correspondants
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         // Stockage des données dans le tableau $data
@@ -228,6 +228,10 @@ if ($stmt->rowCount() > 0) {
         }
     }
 
+    // Initialisation de $countUser à zéro par défaut
+   
+
+
     // Requête préparée pour compter le nombre d'utilisateurs distincts
     $sql_count = "SELECT COUNT(DISTINCT id_user) AS count FROM consproduser WHERE nom_art = :nom_prod_count";
     $stmt_count = $conn->prepare($sql_count);
@@ -235,8 +239,9 @@ if ($stmt->rowCount() > 0) {
     $stmt_count->execute();
 
     // Récupération du nombre d'utilisateurs distincts
-    $row_count = $stmt_count->fetch(PDO::FETCH_ASSOC);
-    $count = $row_count['count'];
+    $countUser = $stmt_count->fetchColumn();
+
+
 }
 
 
@@ -911,8 +916,8 @@ if (isset($_POST['submitX'])) {
                             <!-- Si les conditions ci-dessus ne sont pas remplies, affiche ce message -->
                             <p class="text-center mt-4 text-gray-500">Ce produit vous appartient</p>
 
-                            <a href="#" uk-toggle="target: #modal" class="px-10 py-2 m-2 text-center text-white text-sm bg-green-500 rounded">Faire une offre</a>
-                            <a href="#" uk-toggle="target: #modalx" class="px-10 py-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Faire une offre grouper</a>
+                            <a href="#" uk-toggle="target: #modal" class="w-1/2 py-2 m-2 text-center text-white text-sm bg-green-500 rounded">Faire une offre</a>
+                            <a href="#" uk-toggle="target: #modalx" class="w-1/2 py-2 m-2 text-center text-white text-sm bg-blue-500 rounded">Faire une offre grouper</a>
                         <?php endif; ?>
 
                         <!-- faire une offre direct form  -->
@@ -928,7 +933,7 @@ if (isset($_POST['submitX'])) {
                                 <form method="post">
                                     <div class="p-6 py-0">
                                         <!-- Utilisation de la variable $count dans la balise p -->
-                                        <p><?= isset($count) ? $count : '' ?> Clients ont ce produit dans leur liste de consommation</p>
+                                        <p><?= $countUser ?> Clients ont ce produit dans leur liste de consommation</p>
 
                                         <!-- Déplacement de la balise input dans le formulaire -->
                                         <input type="text" name="message" class="w-full mt-3" placeholder="Écrire un message">
@@ -965,7 +970,7 @@ if (isset($_POST['submitX'])) {
                                 <form method="post">
                                     <div class="p-6 py-0">
                                         <!-- Utilisation de la variable $count dans la balise p -->
-                                        <p><?= isset($count) ? $count : '' ?> Clients ont ce produit dans leur liste de consommation</p>
+                                        <p><?= $countUser ?> Clients ont ce produit dans leur liste de consommation</p>
 
                                         <!-- Déplacement de la balise input dans le formulaire -->
                                         <input type="text" name="message2" class="w-full mt-3" placeholder="Écrire un message">
