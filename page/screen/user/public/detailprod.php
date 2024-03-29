@@ -1000,6 +1000,7 @@ if (isset($_POST['submitY'])) {
                             <a href="#" uk-toggle="target: #modal" class="w-1/2 py-2 m-2 text-center text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre</a>
                             <a href="#" uk-toggle="target: #modalx" class="w-1/2 py-2 m-2 text-center  text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre negocié</a>
                             <a href="#" uk-toggle="target: #modaly" class="w-1/2 py-2 m-2 text-center  text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre grouper</a>
+                            <a href="#" uk-toggle="target: #modaly" class="w-1/2 py-2 m-2 text-center  text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre grouper negocié</a>
                         <?php endif; ?>
 
                         <!-- faire une offre direct form  -->

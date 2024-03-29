@@ -65,9 +65,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     }
 }
 
-// $dateDuJour = date("Y-m-d H:i:s");
-// $tempEcoule = date("Y-m-d H:i:s", strtotime($date_ajout . "+5 days"));
-
 //insertion de la requete d'ajout de quantite
 // Assurez-vous que les variables sont définies et non vides
 
@@ -115,16 +112,15 @@ if (isset($_GET['id'])) {
         // Afficher la somme des quantités
         // Requête SQL pour compter le nombre d'ID demandeurs distincts
         $nombrePers = $conn->prepare("SELECT COUNT(DISTINCT id_demander) AS totalPers FROM offregroup WHERE id_prod = :id_prod");
-        
+
         // Liaison du paramètre
         $nombrePers->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
-        
+
         // Exécution de la requête
         $nombrePers->execute();
-        
+
         // Récupération du nombre total de personnes
         $totalPers = $nombrePers->fetchColumn();
-
     }
 }
 
@@ -139,41 +135,97 @@ $datePlusAncienne = $datePlusAncienneRow['date_plus_ancienne'];
 $dateDuJour = date("Y-m-d H:i:s");
 $tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "+5 days"));
 
+
+
+
 if ($dateDuJour > $tempEcoule) {
     // Vérifier si $_GET['id_trader'] est défini
-    if (isset($_GET['id_trader'])) {
-        $id_trader = explode(",", $_GET['id_trader']);
+    if (isset($_GET['id'])) {
+        $id_prod =  $_GET['id'];
+        $nom_prod = $prods['nomArt'];
 
-        // Préparer la requête pour vérifier si une notification similaire existe déjà
-        $checkNotification = $conn->prepare("SELECT COUNT(*) FROM notifUser WHERE id_trader = :id_trader AND id_prod = :id_prod");
-        $checkNotification->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+        // Requête préparée pour récupérer les user_id et les noms correspondants dans la table consproduser pour les consommateurs
+        $sql = "SELECT id_user, nom_art FROM consproduser WHERE nom_art = :nom_prod";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':nom_prod', $nom_prod, PDO::PARAM_STR);
+        $stmt->execute();
 
-        // Préparer la requête pour l'insertion du commentaire
-        $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, id_prod) VALUES (?, ?, ?)");
+        // Initialisation du tableau pour stocker les données récupérées
+        $data = array();
 
-        // Boucler sur chaque id_trader
-        foreach ($id_trader as $id) {
-            // Exécuter la requête pour vérifier si une notification similaire existe déjà
-            $checkNotification->bindParam(':id_trader', $id, PDO::PARAM_INT);
-            $checkNotification->execute();
-            $count = $checkNotification->fetchColumn();
+        // Vérification du nombre de lignes retournées par la requête
+        if ($stmt->rowCount() > 0) {
+            // Récupération de tous les user_id et les noms correspondants
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                // Stockage des données dans le tableau $data
+                $data[] = $row;
+            }
 
-            // Si aucune notification similaire n'existe pas, alors insérer la nouvelle notification et le commentaire
-            if ($count == 0) {
-                $notif_insert = $conn->prepare("INSERT INTO notifUser (message, quantiteProd , id_trader, confirm, id_prod) VALUES ( ?, ?, ?, ?, ?)");
-                $notif_insert->execute(["Vous avez reçu un appel d'offre", $total_quantite, $id, "group", $id_prod]);
+            // Initialisation du tableau associatif pour stocker les user_id par nom
+            $user_ids_by_name = array();
 
-                // Exécuter la requête pour ajouter un commentaire
-                $comment_insert->execute([null, $id, $id_prod]);
+            // Regrouper les user_id par nom
+            foreach ($data as $row) {
+                $user_id = $row['id_user'];
+                $nom_art = $row['nom_art'];
+                if ($user_id != $id_user) {
+                    // Vérifier si la clé existe déjà dans le tableau
+                    if (!isset($user_ids_by_name[$nom_art])) {
+                        $user_ids_by_name[$nom_art] = array();
+                    }
+                    // Ajouter l'user_id à la liste sous la clé nom_art
+                    $user_ids_by_name[$nom_art][] = $user_id;
+                }
             }
         }
-       
+        
+        //verifie si la notification existe deja 
+        $checkNotification = $conn->prepare("SELECT COUNT(*) FROM notifUser WHERE id_trader = :id_trader AND id_prod = :id_prod");
+        $checkNotification->bindParam(':id_trader', $userid, PDO::PARAM_INT);
+        $checkNotification->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
+        $checkNotification->execute();//je dois revenir dessus
+
+        $count = $checkNotification->fetchColumn();
+        //////////
+        if (isset($quatite_promax) && isset($total_quantite)) {
+            // Addition des deux valeurs
+            $somme_totale = $quatite_promax + $total_quantite;
+
+            // Affichage de la somme totale
+            echo "La somme totale est : " . $somme_totale;
+        }
+        $message = 'Vous avez  un achat groupé sur cet article pour un stocke';
+        $confirm = 'notifGroup';
+
+        // Si aucune notification similaire n'existe, alors insérer la nouvelle notification
+        if ($count == 0) {
+            // Insérer les user_id dans la table notifuser pour chaque utilisateur
+            foreach ($user_ids_by_name as $nom_art => $user_ids) {
+                foreach ($user_ids as $userid) {
+
+                    $sql_insert = "INSERT INTO notifUser (message, confirm, id_trader, id_prod, quantiteProd) VALUES (:message, :confirm, :id_trader, :id_prod, :quantiteProd)";
+                    $stmt_insert = $conn->prepare($sql_insert);
+                    $stmt_insert->execute([
+                        ':message' => $message,
+                        ':confirm' => $confirm,
+                        ':id_trader' => $userid,
+                        ':id_prod' => $id_prod,
+                        ':quantiteProd' => $somme_totale
+                    ]);
+                }
+            }
+        }
     }
 }
 
 
+if (isset($quatite_promax) && isset($total_quantite)) {
+    // Addition des deux valeurs
+    $somme_totale = $quatite_promax + $total_quantite;
 
-
+    // Affichage de la somme totale
+    echo "La somme totale est : " . $somme_totale;
+}
 
 
 ?>
@@ -728,7 +780,7 @@ if ($dateDuJour > $tempEcoule) {
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title"> Quantité traité</h4>
-                                <p>[<?= $quantite_prodmin ?> - <?= $quatite_promax ?>]</p>
+                                <p>[<?= $quantite_prodmin ?> - <?= $somme_totale ?>]</p>
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
@@ -763,7 +815,7 @@ if ($dateDuJour > $tempEcoule) {
                             <p><?= $description_prod ?></p>
                         </div>
                     </div>
-                
+
 
                     <?php if (!empty($joint)) : ?>
                         <div class="flex flex-col justify-center items-center mt-4 w-full" uk-lightbox="">
@@ -824,7 +876,7 @@ if ($dateDuJour > $tempEcoule) {
                         const startDate = new Date("<?= $datePlusAncienne; ?>");
 
                         // Ajouter 5 jours à la date de départ
-                        startDate.setDate(startDate.getDate() + 5);
+                        startDate.setDate(startDate.getDate() + 0);
 
                         // Mettre à jour le compte à rebours à intervalles réguliers
                         const countdownTimer = setInterval(updateCountdown, 1000);
