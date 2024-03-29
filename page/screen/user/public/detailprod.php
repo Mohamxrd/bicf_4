@@ -346,19 +346,21 @@ if (isset($_POST['submitX'])) {
 
 if (isset($_POST['submitY'])) {
     $message2 = htmlspecialchars($_POST['message2']);
+    $quantiteB = htmlspecialchars($_POST['quantiteB']);
     $id_prod = $_GET['id']; // Récupérer l'identifiant du produit
 
     // Insérer les user_id dans la table notifuser pour chaque utilisateur
     foreach ($user_ids_by_name as $nom_art => $user_ids) {
         foreach ($user_ids as $userid) {
 
-            $sql_insert = "INSERT INTO notifUser (message, confirm, id_user, id_trader, id_prod) VALUES (:message2, 'offreGroup', :id_user , :id_trader, :id_prod)";
+            $sql_insert = "INSERT INTO notifUser (message, confirm, id_user, id_trader, id_prod, quantiteProd) VALUES (:message2, 'offreGroup', :id_user , :id_trader, :id_prod, :quantiteProd)";
             $stmt_insert = $conn->prepare($sql_insert);
             $stmt_insert->execute([
                 ':message2' => $message2,
                 ':id_user' => $id_user, // Utilisation de ':id_user' au lieu de '$id_user'
                 ':id_trader' => $userid,
                 ':id_prod' => $id_prod,
+                ':quantiteProd' => $quantiteB
             ]);
 
             // Ajout du commentaire
@@ -1091,6 +1093,7 @@ if (isset($_POST['submitY'])) {
 
                                         <!-- Déplacement de la balise input dans le formulaire -->
                                         <input type="text" name="message2" class="w-full mt-3" placeholder="Écrire un message">
+                                        <input type="number" name="quantiteB" class="w-full mt-3" placeholder="Inserer la quantité que vous avez besoin">
 
                                     </div>
 
