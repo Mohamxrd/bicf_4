@@ -375,6 +375,35 @@ if (isset($_POST['submitY'])) {
     }
 }
 
+if (isset($_POST['submitZ'])) {
+    $message2 = htmlspecialchars($_POST['message2']);
+    $id_prod = $_GET['id']; // Récupérer l'identifiant du produit
+
+    // Insérer les user_id dans la table notifuser pour chaque utilisateur
+    foreach ($user_ids_by_name as $nom_art => $user_ids) {
+        foreach ($user_ids as $userid) {
+
+            $sql_insert = "INSERT INTO notifUser (message, confirm, id_user, id_trader, id_prod) VALUES (:message2, 'offreGroupNegos', :id_user , :id_trader, :id_prod)";
+            $stmt_insert = $conn->prepare($sql_insert);
+            $stmt_insert->execute([
+                ':message2' => $message2,
+                ':id_user' => $id_user, // Utilisation de ':id_user' au lieu de '$id_user'
+                ':id_trader' => $userid,
+                ':id_prod' => $id_prod
+            ]);
+
+            // Ajout du commentaire
+            $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, id_prod) VALUES (:prixTrade, :id_trader, :id_prod)");
+
+            $comment_insert->execute([
+                ':prixTrade' => null,
+                ':id_trader' => $userid,
+                ':id_prod' => $id_prod
+            ]);
+        }
+    }
+}
+
 
 
 
@@ -1000,7 +1029,7 @@ if (isset($_POST['submitY'])) {
                             <a href="#" uk-toggle="target: #modal" class="w-1/2 py-2 m-2 text-center text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre</a>
                             <a href="#" uk-toggle="target: #modalx" class="w-1/2 py-2 m-2 text-center  text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre negocié</a>
                             <a href="#" uk-toggle="target: #modaly" class="w-1/2 py-2 m-2 text-center  text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre grouper</a>
-                            <a href="#" uk-toggle="target: #modaly" class="w-1/2 py-2 m-2 text-center  text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre grouper negocié</a>
+                            <a href="#" uk-toggle="target: #modalz" class="w-1/2 py-2 m-2 text-center  text-sm bg-teal-100/60 text-teal-600  rounded">Faire une offre  negocié</a>
                         <?php endif; ?>
 
                         <!-- faire une offre direct form  -->
@@ -1102,6 +1131,43 @@ if (isset($_POST['submitY'])) {
                                         <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Annuler</button>
                                         <!-- Modification du bouton Envoyer pour qu'il soit de type "submit" -->
                                         <button class="px-5 py-1.5 bg-gray-100 rounded-md" type="submit" name="submitY">Envoyer</button>
+                                    </div>
+                                </form>
+
+                                <button type="button" class="bg-white rounded-full p-2 absolute right-0 top-0 m-3 dark:bg-slate-600 uk-modal-close">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <!-- faire une offre grouper negocier form -->
+                        <div class="lg:p-20 p-10" id="modalz" uk-modal>
+
+                            <div class="uk-modal-dialog tt relative mx-auto bg-white rounded-lg shadow-xl w-[400px]">
+
+                                <div class="p-6">
+                                    <h2 class="text-xl font-semibold">Faire une offre groupé</h2>
+                                </div>
+
+                                <!-- Ajout de la balise de formulaire -->
+                                <form method="post">
+                                    <div class="p-6 py-0">
+                                        <!-- Utilisation de la variable $count dans la balise p -->
+                                        <p> <?= $countproduser ?> Clients ont ce produit dans leur liste de consommation</p>
+
+                                        <!-- Déplacement de la balise input dans le formulaire -->
+                                        <input type="text" name="message2" class="w-full mt-3" placeholder="Écrire un message">
+
+                                    </div>
+
+                                    <div class="flex justify-end p-6 text-sm font-medium">
+                                        <button class="px-4 py-1.5 rounded-md uk-modal-close" type="button">Annuler</button>
+                                        <!-- Modification du bouton Envoyer pour qu'il soit de type "submit" -->
+                                        <button class="px-5 py-1.5 bg-gray-100 rounded-md" type="submit" name="submitZ">Envoyer</button>
                                     </div>
                                 </form>
 
