@@ -133,11 +133,12 @@ $datePlusAncienneRow = $recupDatePlusAncienne->fetch(PDO::FETCH_ASSOC);
 $datePlusAncienne = $datePlusAncienneRow['date_plus_ancienne'];
 
 $dateDuJour = date("Y-m-d H:i:s");
-$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "+5 days"));
+$tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "-5 days"));
 
 
 
 
+// Vérifier si la date actuelle est supérieure à la date d'échéance
 if ($dateDuJour > $tempEcoule) {
     // Vérifier si $_GET['id_trader'] est défini
     if (isset($_GET['id'])) {
@@ -179,23 +180,16 @@ if ($dateDuJour > $tempEcoule) {
             }
         }
         
-        //verifie si la notification existe deja 
+        // Vérifier si la notification existe déjà
         $checkNotification = $conn->prepare("SELECT COUNT(*) FROM notifUser WHERE id_trader = :id_trader AND id_prod = :id_prod");
         $checkNotification->bindParam(':id_trader', $userid, PDO::PARAM_INT);
         $checkNotification->bindParam(':id_prod', $id_prod, PDO::PARAM_INT);
-        $checkNotification->execute();//je dois revenir dessus
+        $checkNotification->execute();
 
         $count = $checkNotification->fetchColumn();
-        //////////
-        if (isset($quatite_promax) && isset($total_quantite)) {
-            // Addition des deux valeurs
-            $somme_totale = $quatite_promax + $total_quantite;
 
-            // Affichage de la somme totale
-            echo "La somme totale est : " . $somme_totale;
-        }
-        $message = 'Vous avez  un achat groupé sur cet article pour un stocke';
         $confirm = 'notifGroup';
+        $message = 'vous avez ete cibler';
 
         // Si aucune notification similaire n'existe, alors insérer la nouvelle notification
         if ($count == 0) {
@@ -203,14 +197,13 @@ if ($dateDuJour > $tempEcoule) {
             foreach ($user_ids_by_name as $nom_art => $user_ids) {
                 foreach ($user_ids as $userid) {
 
-                    $sql_insert = "INSERT INTO notifUser (message, confirm, id_trader, id_prod, quantiteProd) VALUES (:message, :confirm, :id_trader, :id_prod, :quantiteProd)";
+                    $sql_insert = "INSERT INTO notifUser (message, confirm, id_trader, id_prod) VALUES (:message, :confirm, :id_trader, :id_prod)";
                     $stmt_insert = $conn->prepare($sql_insert);
                     $stmt_insert->execute([
                         ':message' => $message,
                         ':confirm' => $confirm,
                         ':id_trader' => $userid,
-                        ':id_prod' => $id_prod,
-                        ':quantiteProd' => $somme_totale
+                        ':id_prod' => $id_prod
                     ]);
                 }
             }
@@ -218,14 +211,16 @@ if ($dateDuJour > $tempEcoule) {
     }
 }
 
-
-if (isset($quatite_promax) && isset($total_quantite)) {
+// Vérifier si la somme des quantités et le nombre total de personnes sont définis
+if (isset($total_quantite) && isset($totalPers)) {
     // Addition des deux valeurs
-    $somme_totale = $quatite_promax + $total_quantite;
+    $somme_totale = $total_quantite + $totalPers;
 
     // Affichage de la somme totale
     echo "La somme totale est : " . $somme_totale;
 }
+
+
 
 
 ?>
@@ -780,7 +775,8 @@ if (isset($quatite_promax) && isset($total_quantite)) {
                         <div class="card flex space-x-5 p-5">
                             <div class="card-body flex-1 p-0">
                                 <h4 class="card-title"> Quantité traité</h4>
-                                <p>[<?= $quantite_prodmin ?> - <?= $somme_totale ?>]</p>
+                                <p>[<?= $quantite_prodmin ?> - <?= isset($somme_totale) ? $somme_totale + $quatite_promax  : $quatite_promax ?>]</p>
+
                             </div>
                         </div>
                         <div class="card flex space-x-5 p-5">
