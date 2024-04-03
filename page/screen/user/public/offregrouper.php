@@ -124,6 +124,7 @@ if (isset($_GET['id'])) {
     }
 }
 
+
 //pour gerer le temps 
 $recupDatePlusAncienne = $conn->prepare("SELECT MIN(date_ajout) AS date_plus_ancienne FROM offregroup WHERE id_prod = :id_prod");
 $recupDatePlusAncienne->bindParam(':id_prod', $id_prod, PDO::PARAM_INT); // Utilisez PDO::PARAM_STR pour lier en tant que chaîne de caractères
@@ -139,47 +140,30 @@ $tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "-5 days"));
 
 
 // Vérifier si la date actuelle est supérieure à la date d'échéance
-if ($dateDuJour > $tempEcoule) {
-    // Vérifier si $_GET['id_trader'] est défini
-    if (isset($_GET['id'])) {
-        $id_prod =  $_GET['id'];
-        $nom_prod = $prods['nomArt'];
+if ($dateDuJour > $tempEcoule && isset($_GET['id']) && isset($_GET['confirm'])) {
+    // Assurez-vous que les paramètres sont correctement récupérés depuis l'URL
+    $id_prod = $_GET['id'];
+    $confirm = 'notifGroupNegos';
 
-        // Requête préparée pour récupérer les user_id et les noms correspondants dans la table consproduser pour les consommateurs
-        $sql = "SELECT id_user, nom_art FROM consproduser WHERE nom_art = :nom_prod";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':nom_prod', $nom_prod, PDO::PARAM_STR);
-        $stmt->execute();
+    // Requête préparée pour récupérer les user_id des consommateurs ayant ce produit
+    $sql = "SELECT id_user FROM consproduser WHERE nom_art = :nom_prod";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':nom_prod', $nom_prod, PDO::PARAM_STR);
+    $stmt->execute();
 
-        // Initialisation du tableau pour stocker les données récupérées
-        $data = array();
+    // Initialisation du tableau pour stocker les user_id des consommateurs
+    $user_ids = array();
 
-        // Vérification du nombre de lignes retournées par la requête
-        if ($stmt->rowCount() > 0) {
-            // Récupération de tous les user_id et les noms correspondants
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                // Stockage des données dans le tableau $data
-                $data[] = $row;
-            }
+    // Récupération des user_id
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $user_ids[] = $row['id_user'];
+    }
 
-            // Initialisation du tableau associatif pour stocker les user_id par nom
-            $user_ids_by_name = array();
+    // Supprimer les doublons des user_id
+    $user_ids = array_unique($user_ids);
 
-            // Regrouper les user_id par nom
-            foreach ($data as $row) {
-                $user_id = $row['id_user'];
-                $nom_art = $row['nom_art'];
-                if ($user_id != $id_user) {
-                    // Vérifier si la clé existe déjà dans le tableau
-                    if (!isset($user_ids_by_name[$nom_art])) {
-                        $user_ids_by_name[$nom_art] = array();
-                    }
-                    // Ajouter l'user_id à la liste sous la clé nom_art
-                    $user_ids_by_name[$nom_art][] = $user_id;
-                }
-            }
-        }
-        
+    // Vérifier si des user_id ont été trouvés
+    if (!empty($user_ids)) {
         // Vérifier si la notification existe déjà
         $checkNotification = $conn->prepare("SELECT COUNT(*) FROM notifUser WHERE id_trader = :id_trader AND id_prod = :id_prod");
         $checkNotification->bindParam(':id_trader', $userid, PDO::PARAM_INT);
@@ -188,28 +172,37 @@ if ($dateDuJour > $tempEcoule) {
 
         $count = $checkNotification->fetchColumn();
 
-        $confirm = 'notifGroup';
-        $message = 'vous avez ete cibler';
+        $message = 'vous avez été ciblé';
+        $confirm = 'notifGroupNegos';
 
         // Si aucune notification similaire n'existe, alors insérer la nouvelle notification
         if ($count == 0) {
             // Insérer les user_id dans la table notifuser pour chaque utilisateur
-            foreach ($user_ids_by_name as $nom_art => $user_ids) {
-                foreach ($user_ids as $userid) {
+            foreach ($user_ids as $userid) {
+                $sql_insert = "INSERT INTO notifUser (message, confirm, id_trader, id_prod) VALUES (:message, :confirm, :id_trader, :id_prod)";
+                $stmt_insert = $conn->prepare($sql_insert);
+                $stmt_insert->execute([
+                    ':message' => $message,
+                    ':confirm' => $confirm,
+                    ':id_trader' => $userid,
+                    ':id_prod' => $id_prod
+                ]);
 
-                    $sql_insert = "INSERT INTO notifUser (message, confirm, id_trader, id_prod) VALUES (:message, :confirm, :id_trader, :id_prod)";
-                    $stmt_insert = $conn->prepare($sql_insert);
-                    $stmt_insert->execute([
-                        ':message' => $message,
-                        ':confirm' => $confirm,
-                        ':id_trader' => $userid,
-                        ':id_prod' => $id_prod
-                    ]);
-                }
+                // Ajout du commentaire
+                $comment_insert = $conn->prepare("INSERT INTO comment (prixTrade, id_trader, id_prod) VALUES (:prixTrade, :id_trader, :id_prod)");
+
+                $comment_insert->execute([
+                    ':prixTrade' => null,
+                    ':id_trader' => $userid,
+                    ':id_prod' => $id_prod
+                ]);
             }
         }
     }
 }
+
+
+
 
 // Vérifier si la somme des quantités et le nombre total de personnes sont définis
 if (isset($total_quantite) && isset($totalPers)) {
@@ -733,7 +726,9 @@ if (isset($total_quantite) && isset($totalPers)) {
         <main id="site__main" class="2xl:ml-[--w-side]  xl:ml-[--w-side-sm] p-5 h-[calc(100vh-var(--m-top))] mt-[--m-top]">
 
             <div class="mb-3">
-                <h1 class=" text-center font-bold text-2xl">DETAILS ET GROUPAGE DES FOURNISSEURS</h1>
+                <h1 class=" text-center font-bold text-2xl">DETAILS ET GROUPAGE DES FOURNISSEURS <?php if (isset($_GET['offreGroupNegos'])) {
+                                                                                                        echo 'NEGOCIER';
+                                                                                                    } ?></h1>
             </div>
 
             <div class="lg:flex 2xl:gap-16 gap-12 max-w-[1065px] mx-auto" id="js-oversized">
