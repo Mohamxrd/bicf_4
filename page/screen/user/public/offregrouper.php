@@ -143,7 +143,7 @@ $tempEcoule = date("Y-m-d H:i:s", strtotime($datePlusAncienne . "-5 days"));
 if ($dateDuJour > $tempEcoule && isset($_GET['id']) && isset($_GET['confirm'])) {
     // Assurez-vous que les paramètres sont correctement récupérés depuis l'URL
     $id_prod = $_GET['id'];
-    $confirm = 'notifGroupNegos';
+    $confirm = isset($_GET['confirm']) ? $_GET['confirm'] : 'notifGroupNegos';
 
     // Requête préparée pour récupérer les user_id des consommateurs ayant ce produit
     $sql = "SELECT id_user FROM consproduser WHERE nom_art = :nom_prod";
@@ -173,7 +173,7 @@ if ($dateDuJour > $tempEcoule && isset($_GET['id']) && isset($_GET['confirm'])) 
         $count = $checkNotification->fetchColumn();
 
         $message = 'vous avez été ciblé';
-        $confirm = 'notifGroupNegos';
+        $confirm = isset($_GET['confirm']) ? $_GET['confirm'] : 'notifGroupNegos';
 
         // Si aucune notification similaire n'existe, alors insérer la nouvelle notification
         if ($count == 0) {

@@ -309,10 +309,7 @@ $requete->execute();
                                 <div class="w-3 h-3 absolute -top-1.5 right-3 bg-white border-l border-t rotate-45 max-md:hidden dark:bg-dark3 dark:border-transparent">
                                 </div>
                             </div>
-
-                            <!-- messages -->
-
-
+                            
                             <!-- profile -->
                             <div class="rounded-full relative bg-secondery cursor-pointer shrink-0">
                                 <img src="assets/images/avatars/avatar-2.jpg" alt="" class="sm:w-9 sm:h-9 w-7 h-7 rounded-full shadow shrink-0">

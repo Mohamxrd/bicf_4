@@ -696,14 +696,16 @@ $nombreNotif = $recupNotif->rowCount();
                                     <a href="detailprod.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
                                 <?php elseif ($confirm == 'offreNegos') : ?>
                                     <a href="detailoffrenegos.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
+
+                                    
                                 <?php elseif ($confirm == 'offreGroup') : ?>
-                                    <a href="offregrouper.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
+                                    <a href="offregrouper.php?id=<?= $id_prod ?>&confirm=<?= 'notifGroup' ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
                                 <?php elseif ($confirm == 'notifGroup') : ?>
                                     <a href="detailprod.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
                                 
                 
                                 <?php elseif ($confirm == 'offreGroupNegos') : ?>
-                                <a href="offregrouper.php?id=<?= $id_prod ?>&confirm=<?= $confirm ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
+                                <a href="offregrouper.php?id=<?= $id_prod ?>&confirm=<?= 'notifGroupNegos' ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
                                 
                                 <?php elseif ($confirm == 'notifGroupNegos') : ?>
                                 <a href="detailoffrenegos.php?id=<?= $id_prod ?>" type="button" class="px-3 py-1 bg-blue-500 text-white text-sm rounded">Voir</a>
